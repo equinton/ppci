@@ -1,0 +1,27 @@
+{
+"name": "equinton/ppci",
+    "type": "library",
+    "description": "PrototypePHP - implementation for CodeIgniter",
+    "keywords": [
+        "framework"
+    ],
+    "homepage": "https://smarty-php.github.io/smarty/",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Eric Quinton",
+            "email": "quinton.eric@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/equinton/ppci/issues"
+    },
+    "require": {
+        "php": "^7.1 || ^8.0"
+    },
+    "autoload": {
+        "classmap": [
+            "libs/"
+        ]
+    }
+}
