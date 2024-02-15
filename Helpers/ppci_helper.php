@@ -26,9 +26,13 @@ function printr($tableau, $mode_dump = 0, $force = false)
 function test($content = "")
 {
   global $testOccurrence;
-  $retour .= "test $testOccurrence : $content  <br>";
+  $nl = getLineFeed();
+  if (!isset($testOccurrence)) {
+    $testOccurrence == 1;
+  }
+  $retour = "test $testOccurrence : $content  <br>";
   $testOccurrence++;
-  return $retour;
+  echo $retour.$nl;
 }
 /**
  * Display the content of a variable
