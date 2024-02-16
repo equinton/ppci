@@ -18,8 +18,10 @@ class Defaultpage extends PpciController
         $this->session->set(array("i"=> $i++));
         printA($this->session->get());
         $this->message->setSyslog("test d'erreur dans syslog", false);
-        $this->message->displaySyslog();
+        // $this->message->displaySyslog();
         printA($this->message->get());
+        printA("Variables d'environnement");
+        printA($_ENV);
         return $vue->send();
     }
 }
