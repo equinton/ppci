@@ -1,5 +1,6 @@
 <?php
 namespace Ppci\Controllers;
+use Ppci\Config\Identification;
 
 class Defaultpage extends PpciController
 {
@@ -22,6 +23,9 @@ class Defaultpage extends PpciController
         printA($this->message->get());
         printA("Variables d'environnement");
         printA($_ENV);
+
+        $config = new Identification();
+        printA($config->organizationsGranted);
         return $vue->send();
     }
 }
