@@ -184,7 +184,7 @@ class PpciModel extends Model
             }
         }
         if (count($create) > 0) {
-            $sql = "insert into " . $tablename . "(" . $k1 . "," . $k2 . ") values ( :key1, :key2)";
+            $sql = "insert into " . $this->qi . $tablename . $this->qi . "(" . $k1 . "," . $k2 . ") values ( :key1, :key2)";
             foreach ($create as $key2) {
                 $param["key2"] = $key2;
                 $this->executeQuery($sql, $param);
@@ -194,6 +194,28 @@ class PpciModel extends Model
     function ecrireTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void
     {
         $this->writeTableNN($tablename, $firstKey, $secondKey, $id, $data);
+    }
+
+    /**
+     * Update a binary field
+     *
+     * @param int $id
+     * @param string $fieldName
+     * @param $data
+     * @return 
+     */
+    function updateBinary(int $id, string $fieldName, $data)
+    {
+        $sql = "update " . $this->qi . $this->tablename . $this->qi .
+            "set " . $this->qi . $fieldName . $this->qi .
+            " = :data where " . $this->key . " = :id";
+        return $this->executeQuery(
+            $sql,
+            [
+                "data" => pg_escape_bytea($data),
+                "id" => $id
+            ]
+        );
     }
     /******************
      * Read functions *
@@ -208,7 +230,7 @@ class PpciModel extends Model
      * @param integer $parentKey
      * @return array
      */
-    public function lire(int $id, bool $getDefault = true, $parentKey = 0): array
+    public function read(int $id, bool $getDefault = true, $parentKey = 0): array
     {
         if ($id == 0) {
             $data = $this->getDefaultValues($parentKey);
@@ -218,11 +240,14 @@ class PpciModel extends Model
                 $data = $this->getDefaultValues($parentKey);
             }
         }
+        if ($this->autoFormatDate) {
+            $data = $this->formatDatesToLocale($data);
+        }
         return $data;
     }
-    public function read(int $id, bool $getDefault = true, $parentKey = 0): array
+    public function lire(int $id, bool $getDefault = true, $parentKey = 0): array
     {
-        return $this->lire($id, $getDefault, $parentKey);
+        return $this->read($id, $getDefault, $parentKey);
     }
 
     /**
@@ -259,16 +284,30 @@ class PpciModel extends Model
      * @param string $order
      * @return array
      */
-    public function getListe($order = ""): array
+    public function getList(string $order = ""): array
     {
-        $result = array();
-        if (empty($order)) {
-            $data = $this->findAll();
-        } else {
-            $sql = "select * from " . $this->qi . $this->table . $this->qi . " order by $order";
-            $query = $this->db->query($sql);
-            $data = $query->getResult("array");
+        $sql = "select * from " . $this->qi . $this->table . $this->qi;
+        if (!empty($order)) {
+            $sql .= " order by $order";
         }
+        return $this->getListParam($sql);
+    }
+    function getListe(string $order = ""): array
+    {
+        return $this->getList($order);
+    }
+
+    /**
+     * Execute a request to get a list of records
+     *
+     * @param string $sql
+     * @param array|null $param
+     * @return array
+     */
+    function getListParam(string $sql, array $param = null): array
+    {
+        $query = $this->db->query($sql, $param);
+        $data = $query->getResult("array");
         if ($this->autoFormatDate) {
             foreach ($data as $row) {
                 $result[] = $this->formatDatesToLocale($row);
@@ -278,17 +317,25 @@ class PpciModel extends Model
         }
         return $result;
     }
-    function getList($order = ""): array
-    {
-        return $this->getListe($order);
-    }
 
-    function getListFromParent(int $parentId, $order = "")
+    /**
+     * Get the list of children for a parent record
+     *
+     * @param integer $parentId
+     * @param string $order
+     * @return array
+     */
+    function getListFromParent(int $parentId, $order = ""): array
     {
         if ($parentId > 0 && !empty($this->parentKeyName)) {
-            $sql = "select * from " . $this->qi . $this->table . $this->qi;
-
-
+            $sql = "select * from " . $this->qi . $this->table . $this->qi .
+                "where " . $this->qi . $this->parentKeyName . $this->qi . "= :id";
+            if (!empty($order)) {
+                $sql .= "order by $order";
+            }
+            return $this->getListParam($sql);
+        } else {
+            return array();
         }
     }
 
@@ -337,6 +384,25 @@ class PpciModel extends Model
         }
         return $row;
     }
+
+
+    function getBinaryField(int $id, string $fieldName)
+    {
+        $sql = "select " . $this->db->escape($fieldName) .
+            "from " . $this->db->escape($this->tablename) .
+            " where " . $this->db->escape($this->key) . " = :id";
+        return $this->executeQuery(
+            $sql,
+            [
+                "id" => $id
+            ]
+        );
+    }
+
+    /**************************
+     * Micellaneous functions *
+     **************************/
+
     /**
      * Format all date and datetime columns from locale to database format
      *
@@ -359,10 +425,6 @@ class PpciModel extends Model
         }
         return $row;
     }
-
-    /**************************
-     * Micellaneous functions *
-     **************************/
     function getUUID(): string
     {
         $sql = "select gen_random_uuid() as uuid";
