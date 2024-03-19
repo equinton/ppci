@@ -56,8 +56,8 @@ class SmartyPpci
         }
         $config = new SmartyParam();
         $this->smarty->caching = false;
-        $this->smarty->setTemplateDir(ROOTPATH . $config->templateDir);
-        $this->smarty->setCompileDir(ROOTPATH . $config->compileDir);
+        $this->smarty->setTemplateDir(ROOTPATH . SmartyParam::$templateDir);
+        $this->smarty->setCompileDir(ROOTPATH . SmartyParam::$compileDir);  
         //$this->setConfigDir($config['application_dir'] . 'third_party/Smarty-3.1.8/configs');
         $this->smarty->setCacheDir('cache');
         foreach ($this->SMARTY_variables as $k => $v) {

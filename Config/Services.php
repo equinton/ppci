@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseService;
 
 use Ppci\Libraries\MessagePpci;
 use Ppci\Libraries\SmartyPpci;
-use Ppci\Libraries\SmartyParam;
+use Ppci\Libraries\PpciInit;
 
 /**
  * Services Configuration file.
@@ -33,14 +33,21 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
-    public static function Smarty($getShared = true){
+    public static function Smarty($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance('Smarty') : new SmartyPpci());
     }
 
-    public static function MessagePpci($getShared = true) {
+    public static function MessagePpci($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance('MessagePpci') : new MessagePpci());
     }
     // public static function LoggerPpci($getShared = true) {
     //     return ($getShared === true ? static::getSharedInstance('LoggerPpci') : new LoggerPpci());
     // }
+
+    public static function PpciInit($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('PpciInit') : new PpciInit());
     }
+}

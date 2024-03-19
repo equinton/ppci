@@ -1,7 +1,7 @@
 <?php
 namespace Ppci\Config;
 use CodeIgniter\Config\BaseConfig;
-class Identification extends BaseConfig {
+class IdentificationConfig extends BaseConfig {
 /**
  * Identification mode
  * BDD : logins in database

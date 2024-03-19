@@ -14,7 +14,9 @@ class PpciController extends \App\Controllers\BaseController
 {
     protected $session;
     protected $message;
+    protected $init;
     /**
+     * 
      * Systematic code used
      *
      * @param RequestInterface $request
@@ -48,6 +50,8 @@ class PpciController extends \App\Controllers\BaseController
                 "APPLI_code" => "Ppci"
             )
         );
+        $this->init = service("PpciInit");
+        $this->init::Init();
 
     }
 }

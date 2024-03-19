@@ -5,7 +5,7 @@ use CodeIgniter\Config\BaseConfig;
 class SmartyParam extends BaseConfig
 {
 
-    public $templateDir = 'app/Views/templates';
-    public $compileDir = 'writable/templates_c';
+    public static $templateDir = 'app/Views/templates';
+    public static $compileDir = 'writable/templates_c';
 
 }

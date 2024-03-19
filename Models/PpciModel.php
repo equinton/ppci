@@ -110,6 +110,7 @@ class PpciModel extends Model
      */
     public function save(array $row): int
     {
+        $id = 0;
         $isInsert = false;
         if ($row[$this->primaryKey] == 0) {
             unset($row[$this->primaryKey]);
