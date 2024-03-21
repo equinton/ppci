@@ -8,4 +8,18 @@ class Rights extends BaseConfig {
      * @var integer
      */
     public $GACL_disable_new_right = 1;
+    /**
+     * List of rights by module
+     */
+    protected array $rights = [
+        "admin"=>["admin"]
+    ];
+
+    function getRights(string $moduleName):array {
+        if (isset($this->rights[$moduleName])) {
+            return $this->rights[$moduleName];
+        } else {
+            return [];
+        }
+    }
 }

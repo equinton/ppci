@@ -20,17 +20,19 @@ class SmartyPpci
         "favicon" => "/favicon.png",
         "APPLI_title" => "Ppci",
         "APPLI_titre" => "Ppci",
-        "LANG" => array("date" => array(
-            "locale" => "fr",
-            "formatdate" => "DD/MM/YYYY",
-            "formatdatetime" => "DD/MM/YYYY HH:mm:ss",
-            "formatdatecourt" => "dd/mm/yy"
+        "LANG" => array(
+            "date" => array(
+                "locale" => "fr",
+                "formatdate" => "DD/MM/YYYY",
+                "formatdatetime" => "DD/MM/YYYY HH:mm:ss",
+                "formatdatecourt" => "dd/mm/yy"
             )
         ),
         "menu" => "",
         "isConnected" => 0,
         "appliAssist" => "",
-        "developpementMode" => 1
+        "developpementMode" => 1,
+        "messageError" => 0
     );
     /**
      * Variables that must not encoded before send
@@ -51,13 +53,13 @@ class SmartyPpci
     protected \Smarty $smarty;
     public function __construct()
     {
-        if (!isset($this->smarty)) {
+        if (!isset ($this->smarty)) {
             $this->smarty = new \Smarty();
         }
-        $config = new SmartyParam();
+        new SmartyParam();
         $this->smarty->caching = false;
-        $this->smarty->setTemplateDir(ROOTPATH . SmartyParam::$templateDir);
-        $this->smarty->setCompileDir(ROOTPATH . SmartyParam::$compileDir);  
+        $this->smarty->setTemplateDir(SmartyParam::$templateDir);
+        $this->smarty->setCompileDir(ROOTPATH . SmartyParam::$compileDir);
         //$this->setConfigDir($config['application_dir'] . 'third_party/Smarty-3.1.8/configs');
         $this->smarty->setCacheDir('cache');
         foreach ($this->SMARTY_variables as $k => $v) {
@@ -83,6 +85,9 @@ class SmartyPpci
     function send()
     {
         $message = service('MessagePpci');
+        if ($message->is_error) {
+            $this->SMARTY_variables["messageError"] = 1;
+        }
         /**
          * Encode data before send
          */

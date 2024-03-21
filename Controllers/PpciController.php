@@ -30,28 +30,33 @@ class PpciController extends \App\Controllers\BaseController
         LoggerInterface $logger
     ) {
         parent::initController($request, $response, $logger);
-        /**
-         * Start the session
-         */
+
+        $this->init = service("PpciInit");
+        $this->init::Init();
         $this->session = session();
-        /**
-         * Add generic functions
-         */
-        helper('ppci');
         /**
          * Add messages to user and syslog
          */
         $this->message = service('MessagePpci');
-        /**
-         * Set default parameters
-         */
-        $this->session->set(
-            array(
-                "APPLI_code" => "Ppci"
-            )
-        );
-        $this->init = service("PpciInit");
-        $this->init::Init();
+    }
 
+    protected function isAuthorized(bool $hasConnected = false, array $rights = [])
+    {
+        $ok = true;
+        if (!$this->init::isDbversionOk) {
+            $ok = false;
+        } elseif ($hasConnected && !$this->session->isConnected) {
+            $ok = false;
+            $this->message->set(_("Vous devez vous connecter avant de pouvoir accéder au module demandé"), true);
+        }
+
+        $security = \Config\Services::security();
+        if (!$this->request->is('post')) {
+            $ok = false;
+        }
+        if (!$ok) {
+            $this->message->set(_("L'exécution du module demandé n'est pas autorisé"), true);
+            return redirect()->to(site_url())->withCookies();
+        }
     }
 }
