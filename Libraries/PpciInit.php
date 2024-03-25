@@ -32,7 +32,6 @@ class PpciInit
                     "APPLI_code" => "Ppci"
                 )
             );
-            $message = service('MessagePpci');
             
             /**
              * set the connection

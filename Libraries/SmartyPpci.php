@@ -86,7 +86,7 @@ class SmartyPpci
     {
         $message = service('MessagePpci');
         if ($message->is_error) {
-            $this->SMARTY_variables["messageError"] = 1;
+            $this->set(1, "messageError");
         }
         /**
          * Encode data before send

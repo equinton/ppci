@@ -5,6 +5,9 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
+/**
+ * Test if the user has sufficient rights to execute the module
+ */
 class RightFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)

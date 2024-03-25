@@ -1,7 +1,11 @@
 <?php
 namespace Ppci\Config;
-use CodeIgniter\Config\BaseConfig;
-class Rights extends BaseConfig {
+
+/**
+ * List of all rights required by Ppci modules
+ */
+class Rights extends RightsPpci
+{
     /**
      * Set 1 to disable the creation of new rights in table aclaco
      *
@@ -12,14 +16,7 @@ class Rights extends BaseConfig {
      * List of rights by module
      */
     protected array $rights = [
-        "admin"=>["admin"]
+        "admin" => ["admin"]
     ];
 
-    function getRights(string $moduleName):array {
-        if (isset($this->rights[$moduleName])) {
-            return $this->rights[$moduleName];
-        } else {
-            return [];
-        }
-    }
 }
