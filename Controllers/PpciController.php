@@ -38,6 +38,7 @@ class PpciController extends \App\Controllers\BaseController
          * Add messages to user and syslog
          */
         $this->message = service('MessagePpci');
+                        
     }
 
     protected function isAuthorized(bool $hasConnected = false, array $rights = [])

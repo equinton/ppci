@@ -2,8 +2,8 @@
 namespace Ppci\Libraries;
 
 use Config\App;
-use Ppci\Models\Ppciexception;
-use Ppci\Models\Dbversion;
+use \Ppci\Models\Ppciexception;
+use \Ppci\Models\Dbversion;
 
 class PpciInit
 {
@@ -56,7 +56,7 @@ class PpciInit
                         true
                     );
                 }
-            } catch (Ppciexception $e) {
+            } catch (\Ppciexception $e) {
                 $message->set($e->getMessage());
             }
 
