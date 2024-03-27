@@ -2,6 +2,7 @@
 namespace Ppci\Libraries;
 
 use Config\App;
+use \Ppci\Models\Log;
 use \Ppci\Models\Ppciexception;
 use \Ppci\Models\Dbversion;
 
@@ -32,7 +33,7 @@ class PpciInit
                     "APPLI_code" => "Ppci"
                 )
             );
-            
+
             /**
              * set the connection
              */
@@ -56,7 +57,22 @@ class PpciInit
                         true
                     );
                 }
-            } catch (\Ppciexception $e) {
+                /**
+                 * Set locale parameters
+                 */
+                if (!isset($_SESSION["locale"])) {
+                    $locale = service('Locale');
+                    $locale->setLocale("fr");
+                }
+                /**
+                 * purge logs
+                 */
+                if (!isset($_SESSION["log_purged"]) || !$_SESSION["log_purged"]) {
+                    $log = service('Log');
+                    $log->purge($paramApp->logDuration);
+                    $_SESSION["log_purged"] = true;
+                }
+            } catch (Ppciexception $e) {
                 $message->set($e->getMessage());
             }
 

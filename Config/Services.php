@@ -4,9 +4,11 @@ namespace Ppci\Config;
 
 use CodeIgniter\Config\BaseService;
 
+use Ppci\Libraries\Locale;
 use Ppci\Libraries\MessagePpci;
 use Ppci\Libraries\SmartyPpci;
 use Ppci\Libraries\PpciInit;
+use Ppci\Models\Log;
 
 /**
  * Services Configuration file.
@@ -49,5 +51,11 @@ class Services extends BaseService
     public static function PpciInit($getShared = true)
     {
         return ($getShared === true ? static::getSharedInstance('PpciInit') : new PpciInit());
+    }
+    public static function Log($getShared = true) {
+        return ($getShared === true ? static::getSharedInstance('Log') : new Log());
+    }
+    public static function Locale($getShared = true) {
+        return ($getShared === true ? static::getSharedInstance('Locale') : new Locale());
     }
 }

@@ -96,9 +96,15 @@ class PpciModel extends Model
         if ($query->hasError()) {
             $this->message->set($query->getErrorMessage(), true);
             $this->message->setSyslog($query->getErrorMessage());
-            throw new \Exception($query->getErrorMessage(), $query->getErrorCode());
+            throw new Ppciexception($query->getErrorMessage(), $query->getErrorCode());
         } else {
             return $query;
+        }
+    }
+    protected function executeSQL (string $sql) {
+        $query = $this->db->query($sql);
+        if (!$query) {
+            throw new Ppciexception(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
         }
     }
 
@@ -162,11 +168,11 @@ class PpciModel extends Model
     function writeTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void
     {
         if (!$id > 0) {
-            throw new \Exception(sprintf(_("La clé principale %s n'est pas renseignée ou vaut zéro"), $firstKey));
+            throw new Ppciexception(sprintf(_("La clé principale %s n'est pas renseignée ou vaut zéro"), $firstKey));
         }
         foreach ($data as $value) {
             if (!is_numeric($value)) {
-                throw new \Exception(sprintf(_("Une valeur fournie n'est pas numérique (%s)"), $value));
+                throw new Ppciexception(sprintf(_("Une valeur fournie n'est pas numérique (%s)"), $value));
             }
         }
         $tablename = $this->qi . $tablename . $this->qi;
@@ -351,6 +357,9 @@ class PpciModel extends Model
             $result = $data;
         }
         return $result;
+    }
+    function getListeParamAsPrepared(string $sql, array $param = null): array {
+        return $this->getListParam($sql, $param);
     }
 
     /**
