@@ -27,10 +27,6 @@ class Defaultpage extends PpciController
 
         $config = new IdentificationConfig();
         printA($config->organizationsGranted);
-        $security = service("Security");
-        $security->generateHash();
-        printA(csrf_field());
-        printA(csrf_token().":".csrf_hash());
         return $vue->send();
     }
 }

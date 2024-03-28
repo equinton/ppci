@@ -1,5 +1,6 @@
 <?php
 namespace Ppci\Models;
+use Config\App;
 use Ppci\Models\PpciModel;
 /**
  * Classe permettant d'enregistrer toutes les operations effectuees dans la base
@@ -54,7 +55,8 @@ class Log extends PpciModel
      */
     public function setLog($login, $module, $commentaire = null)
     {
-        global $GACL_aco;
+        $paramApp = new App();
+        $GACL_aco = $paramApp->GACL_aco;
         $data = array(
             "log_id" => 0,
             "commentaire" => $commentaire,
@@ -121,11 +123,12 @@ class Log extends PpciModel
      */
     public function getLastConnexion()
     {
-        global $GACL_aco;
+        $paramApp = new App();
+        $GACL_aco = $paramApp->GACL_aco;
         if (isset($_SESSION["login"])) {
             $module = $GACL_aco . "-connection%";
-            $sql = "select log_date, ipaddress from log where login = :login
-            and nom_module like :module and commentaire like 'ok%'
+            $sql = "select log_date, ipaddress from log where login = :login:
+            and nom_module like :module: and commentaire like 'ok%'
             order by log_id desc limit 2";
             $data = $this->getListeParamAsPrepared(
                 $sql,
@@ -147,12 +150,14 @@ class Log extends PpciModel
      */
     public function getLastConnections($duration = 36000)
     {
-        global $GACL_aco;
+        $paramApp = new App();
+        $GACL_aco = $paramApp->GACL_aco;
         $connections = array();
         if (isset($_SESSION["login"])) {
             $module = $GACL_aco . "-connection%";
             $token = $GACL_aco . "-connection-token";
-            $sql = "select log_date, ipaddress from log where login = :login
+            $sql = "select log_date, ipaddress from log 
+            where login = :login:
             and nom_module like :module: and commentaire like 'ok%' and commentaire <> :token:
             and log_date > :datefrom:
             order by log_id desc";
@@ -182,7 +187,8 @@ class Log extends PpciModel
     {
 
         if (!empty($login)) {
-            global $GACL_aco;
+            $paramApp = new App();
+        $GACL_aco = $paramApp->GACL_aco;
             $like = " like '" . $GACL_aco . "-connection%'";
             $sql = "select nom_module from log";
             $sql .= " where login = :login: and nom_module $like and commentaire = 'ok' and nom_module <> 'connection-token'";
@@ -214,7 +220,8 @@ class Log extends PpciModel
      */
     public function isAccountBlocked($login, $maxtime = 600, $nbMax = 10)
     {
-        global $GACL_aco;
+        $paramApp = new App();
+        $GACL_aco = $paramApp->GACL_aco;
         $is_blocked = true;
         /*
          * Verification si le compte est bloque, et depuis quand
@@ -307,7 +314,10 @@ class Log extends PpciModel
      */
     public function getCallsToModule($moduleName, $maxNumber, $duration)
     {
-        global $APPLI_address, $GACL_aco, $message;
+        $APPLI_address = base_url(uri_string()) ;
+        $paramApp = new App();
+        $message = service('MessagePpci');
+        $GACL_aco = $paramApp->GACL_aco;
         $sql = "select count(*) as nombre from log
                 where nom_module = :moduleName:
                 and lower(login) = lower(:login:)
@@ -345,7 +355,13 @@ class Log extends PpciModel
      */
     public function sendMailToAdmin($subject, $templateName, $data, $moduleName, $login)
     {
-        global $message, $MAIL_enabled, $APPLI_mail, $APPLI_mailToAdminPeriod, $GACL_aco;
+        $message = service('MessagePpci');
+        $paramApp = new App();
+        $APP_mail = $paramApp->APP_mail;
+        $MAIL_enabled = $paramApp->MAIL_enabled;
+        $APP_mailToAdminPeriod = $paramApp->APP_mailToAdminPeriod;
+        GACL_aco = $paramApp->GACL_aco;
+
         $moduleNameComplete = $GACL_aco . "-" . $moduleName;
 
         if ($MAIL_enabled == 1) {

@@ -30,10 +30,9 @@ class PpciController extends \App\Controllers\BaseController
         LoggerInterface $logger
     ) {
         parent::initController($request, $response, $logger);
-
+        $this->session = session();
         $this->init = service("PpciInit");
         $this->init::Init();
-        $this->session = session();
         /**
          * Add messages to user and syslog
          */
