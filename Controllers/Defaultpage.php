@@ -14,7 +14,7 @@ class Defaultpage extends PpciController
         } else {
             $i++;
         }
-
+        printA(_("Requêtes SQL"));
         $this->session->set(array("i"=> $i++));
         printA($this->session->get());
         $this->message->setSyslog("test d'erreur dans syslog", true);

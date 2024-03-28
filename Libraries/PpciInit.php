@@ -60,10 +60,26 @@ class PpciInit
                 /**
                  * Set locale parameters
                  */
-                if (!isset($_SESSION["locale"])) {
-                    $locale = service('Locale');
-                    $locale->setLocale("fr");
+                if (isset($_SESSION["locale"])) {
+                    $language = $_SESSION["locale"];
+                } else {
+                    if (isset($_COOKIE["locale"])) {
+                        $language = $_COOKIE["locale"];
+                    } else {
+                        /*
+                         * Recuperation de la langue du navigateur
+                         */
+                        $language = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+                        $language = substr($language[0], 0, 2);
+                    }
                 }
+                if (in_array($language, $paramApp->languages)) {
+                    $locale = service('Locale');
+                    $locale->setLocale($language);
+                    helper('cookie');
+                    set_cookie("locale",$language,31536000);
+                }
+
                 /**
                  * purge logs
                  */
@@ -78,7 +94,5 @@ class PpciInit
 
             self::$isInitialized = true;
         }
-
-
     }
 }
