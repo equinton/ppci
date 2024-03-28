@@ -1,11 +1,17 @@
 <?php
 namespace Ppci\Config;
+
 use CodeIgniter\Config\BaseConfig;
 
 class SmartyParam extends BaseConfig
 {
 
-    public static $templateDir = [ROOTPATH.'app/Views/templates',ROOTPATH.'vendor/equinton/ppci/Views/templates'];
-    public static $compileDir = 'writable/templates_c';
+    public $params = [
+        $templateDir => [ROOTPATH . 'app/Views/templates', ROOTPATH . 'vendor/equinton/ppci/Views/templates'],
+        $compileDir => 'writable/templates_c',
+        "cache" => false,
+        "cache_dir" => "display/smarty_cache",
+        "template_main" => "main.htm"
+    ];
 
 }

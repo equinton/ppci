@@ -110,7 +110,7 @@ public $APPLI_mailToAdminPeriod = 7200;
  * Maximum period of inactivity for accessing an administration module
  */
 public $APPLI_admin_ttl = 600; 
-public $APPLI_passwordMinLength = 12;
+public $APP_passwordMinLength = 12;
 /**
  * If set to 1, authorises recovery of a new password in the event of loss
  *

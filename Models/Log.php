@@ -360,7 +360,7 @@ class Log extends PpciModel
         $APP_mail = $paramApp->APP_mail;
         $MAIL_enabled = $paramApp->MAIL_enabled;
         $APP_mailToAdminPeriod = $paramApp->APP_mailToAdminPeriod;
-        GACL_aco = $paramApp->GACL_aco;
+        $GACL_aco = $paramApp->GACL_aco;
 
         $moduleNameComplete = $GACL_aco . "-" . $moduleName;
 
@@ -369,7 +369,7 @@ class Log extends PpciModel
             include_once 'framework/droits/droits.class.php';
             include_once 'framework/identification/loginGestion.class.php';
             $MAIL_param = array(
-                "from" => "$APPLI_mail"
+                "from" => "$APP_mail"
             );
             /*
              * Recherche de la liste des administrateurs
@@ -466,7 +466,7 @@ class Log extends PpciModel
      */
     function getDistinctValuesFromField($field)
     {
-        if (array_key_exists($field, $this->colonnes)) {
+        if (array_key_exists($field, $this->fields)) {
             $sql = "select distinct $field as val from log order by $field";
             return $this->getListeParam($sql);
         } else {

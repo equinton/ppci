@@ -3,7 +3,7 @@ namespace Ppci\Libraries;
 
 use Config\App;
 use \Ppci\Models\Log;
-use \Ppci\Models\Ppciexception;
+use \Ppci\Models\PpciException;
 use \Ppci\Models\Dbversion;
 
 class PpciInit
@@ -88,7 +88,7 @@ class PpciInit
                     $log->purge($paramApp->logDuration);
                     $_SESSION["log_purged"] = true;
                 }
-            } catch (Ppciexception $e) {
+            } catch (PpciException $e) {
                 $message->set($e->getMessage());
             }
 

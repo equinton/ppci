@@ -9,6 +9,7 @@ use Ppci\Libraries\MessagePpci;
 use Ppci\Libraries\SmartyPpci;
 use Ppci\Libraries\PpciInit;
 use Ppci\Models\Log;
+use Ppci\Models\DbParam;
 
 /**
  * Services Configuration file.
@@ -57,5 +58,8 @@ class Services extends BaseService
     }
     public static function Locale($getShared = true) {
         return ($getShared === true ? static::getSharedInstance('Locale') : new Locale());
+    }
+    public static function Dbparam($getShared = true) {
+        return ($getShared === true ? static::getSharedInstance('Dbparam') : new Dbparam());
     }
 }

@@ -86,25 +86,22 @@ class PpciModel extends Model
      * @param array|null $data
      * @return 
      */
-    protected function executeQuery(string $sql, array $data = null)
+    protected function executeQuery(string $sql, array $data = null, $onlyExecute = false)
     {
         if (isset ($data)) {
             $query = $this->db->query($sql, $data);
         } else {
             $query = $this->db->query($sql);
         }
-        if ($query->hasError()) {
+        if ($onlyExecute && !$query) {
+            throw new PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
+        }
+        if (!$onlyExecute && $query->hasError()) {
             $this->message->set($query->getErrorMessage(), true);
             $this->message->setSyslog($query->getErrorMessage());
-            throw new Ppciexception($query->getErrorMessage(), $query->getErrorCode());
+            throw new PpciException($query->getErrorMessage(), $query->getErrorCode());
         } else {
             return $query;
-        }
-    }
-    protected function executeSQL (string $sql) {
-        $query = $this->db->query($sql);
-        if (!$query) {
-            throw new Ppciexception(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
         }
     }
 
@@ -126,7 +123,7 @@ class PpciModel extends Model
          */
         foreach ($this->mandatoryFields as $fieldName) {
             if (!isset ($row[$fieldName]) || strlen($row[$fieldName]) == 0) {
-                throw new Ppciexception(sprintf(_("Le champ %s est obligatoire mais n'a pas été renseigné"), $fieldName));
+                throw new PpciException(sprintf(_("Le champ %s est obligatoire mais n'a pas été renseigné"), $fieldName));
             }
         }
         $isInsert = false;
@@ -168,11 +165,11 @@ class PpciModel extends Model
     function writeTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void
     {
         if (!$id > 0) {
-            throw new Ppciexception(sprintf(_("La clé principale %s n'est pas renseignée ou vaut zéro"), $firstKey));
+            throw new PpciException(sprintf(_("La clé principale %s n'est pas renseignée ou vaut zéro"), $firstKey));
         }
         foreach ($data as $value) {
             if (!is_numeric($value)) {
-                throw new Ppciexception(sprintf(_("Une valeur fournie n'est pas numérique (%s)"), $value));
+                throw new PpciException(sprintf(_("Une valeur fournie n'est pas numérique (%s)"), $value));
             }
         }
         $tablename = $this->qi . $tablename . $this->qi;
@@ -227,7 +224,7 @@ class PpciModel extends Model
     {
         $sql = "update " . $this->qi . $this->tablename . $this->qi .
             "set " . $this->qi . $fieldName . $this->qi .
-            " = :data where " . $this->key . " = :id";
+            " = :data: where " . $this->key . " = :id:";
         return $this->executeQuery(
             $sql,
             [
@@ -236,6 +233,11 @@ class PpciModel extends Model
             ]
         );
     }
+
+    function supprimer($id) {
+        return parent::delete($id);
+    }
+
     /******************
      * Read functions *
      ******************/

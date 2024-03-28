@@ -63,7 +63,7 @@ class Dbversion extends PpciModel
         $sql = "select * from dbversion order by dbversion_date desc limit 1";
         try {
             $result = $this->lireParam($sql);
-        } catch (Ppciexception $e) {
+        } catch (PpciException $e) {
             $result = array(
                 "dbversion_id" => 0,
                 "dbversion_number" => "unknown",

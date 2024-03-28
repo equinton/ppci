@@ -49,7 +49,7 @@ class SmartyPpci
         "markdownContent"
     );
     //protected $templateMain = "about_fr.tpl";
-    public $templateMain = "main.htm";
+    public $templateMain = SmartyParam::$params["template_main"];
     protected \Smarty $smarty;
     public function __construct()
     {
@@ -58,8 +58,8 @@ class SmartyPpci
         }
         new SmartyParam();
         $this->smarty->caching = false;
-        $this->smarty->setTemplateDir(SmartyParam::$templateDir);
-        $this->smarty->setCompileDir(ROOTPATH . SmartyParam::$compileDir);
+        $this->smarty->setTemplateDir(SmartyParam::$params["templateDir"]);
+        $this->smarty->setCompileDir(ROOTPATH . SmartyParam::$params["compileDir"]);
         //$this->setConfigDir($config['application_dir'] . 'third_party/Smarty-3.1.8/configs');
         $this->smarty->setCacheDir('cache');
         foreach ($this->SMARTY_variables as $k => $v) {
@@ -132,5 +132,8 @@ class SmartyPpci
     function encodehtml($data)
     {
         return esc($data);
+    }
+    function fetch(string $template) {
+        return $this->smarty->fetch($template);
     }
 }

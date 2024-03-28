@@ -2,7 +2,7 @@
 namespace Ppci\Libraries;
 
 use Ppci\Config\Ppci;
-use Ppci\Models\Ppciexception;
+use Ppci\Models\PpciException;
 
 class Locale
 {
@@ -23,11 +23,9 @@ class Locale
 
     function setLocale(string $locale)
     {
-        $localeGettext = "fr_FR";
         if ($locale = "en") {
             $this->LANG["locale"] = "en";
             $this->LANG["date"]["locale"] = "en";
-            $localeGettext = "en_GB";
         } else if ($locale = "us") {
             $this->LANG["locale"] = "us";
             $this->LANG["date"] = [
@@ -39,7 +37,6 @@ class Locale
                 "maskdate" => "m/d/Y",
                 "maskdateexport" => 'Y-m-d'
             ];
-            $localeGettext = "en_US";
         }
         session()->set($this->LANG);
         /**
@@ -47,7 +44,22 @@ class Locale
          */
         $param = new Ppci();
         if (!setlocale(LC_ALL, "C")) {
-            throw new Ppciexception("Locale not initialized");
+            throw new PpciException("Locale not initialized");
+        }
+        ;
+        bindtextdomain($locale, $param->localePath);
+        bind_textdomain_codeset($locale, "UTF-8");
+        textdomain($locale);
+        $this->initGettext($locale);
+    }
+
+    function initGettext($locale) {
+        /**
+         * Parameters for gettext
+         */
+        $param = new Ppci();
+        if (!setlocale(LC_ALL, "C")) {
+            throw new PpciException("Locale not initialized");
         }
         ;
         bindtextdomain($locale, $param->localePath);
