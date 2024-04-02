@@ -43,7 +43,7 @@ class PpciInit
              * Verify the database version
              */
             $dbversion = new Dbversion();
-            $paramApp = new App();
+            $paramApp = service("AppConfig");
             try {
                 if ($dbversion->verifyVersion($paramApp->dbversion)) {
                     self::$isDbversionOk = true;

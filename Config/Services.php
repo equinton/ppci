@@ -4,6 +4,7 @@ namespace Ppci\Config;
 
 use CodeIgniter\Config\BaseService;
 
+use Config\App;
 use Ppci\Libraries\Locale;
 use Ppci\Libraries\MessagePpci;
 use Ppci\Libraries\SmartyPpci;
@@ -61,5 +62,8 @@ class Services extends BaseService
     }
     public static function Dbparam($getShared = true) {
         return ($getShared === true ? static::getSharedInstance('Dbparam') : new Dbparam());
+    }
+    public static function AppConfig($getShared = true) {
+        return ($getShared === true ? static::getSharedInstance('AppConfig') : new App());
     }
 }

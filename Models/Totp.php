@@ -53,7 +53,7 @@ class Gacltotp
         $this->otp->setLabel($_SESSION["login"]);
         $this->otp->setIssuer($_SESSION["otp_issuer"]);
         include_once 'plugins/phpqrcode/qrlib.php';
-        $paramApp = new App();
+        $paramApp = service("AppConfig");
         $filename = $paramApp->APP_temp . "/" . $_SESSION["login"] . "_totp.png";
         \QRcode::png($this->otp->getProvisioningUri(), $filename);
     }

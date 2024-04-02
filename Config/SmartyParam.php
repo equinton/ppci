@@ -7,8 +7,8 @@ class SmartyParam extends BaseConfig
 {
 
     public $params = [
-        $templateDir => [ROOTPATH . 'app/Views/templates', ROOTPATH . 'vendor/equinton/ppci/Views/templates'],
-        $compileDir => 'writable/templates_c',
+        "templateDir" => [ROOTPATH . 'app/Views/templates', ROOTPATH . 'vendor/equinton/ppci/Views/templates'],
+        "compileDir" => 'writable/templates_c',
         "cache" => false,
         "cache_dir" => "display/smarty_cache",
         "template_main" => "main.htm"

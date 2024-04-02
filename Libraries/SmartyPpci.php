@@ -39,7 +39,7 @@ class SmartyPpci
      *
      * @var array
      */
-    protected $htmlVars = array(
+    public $htmlVars = array(
         "menu",
         "LANG",
         "message",
@@ -48,19 +48,19 @@ class SmartyPpci
         "phpinfo",
         "markdownContent"
     );
-    //protected $templateMain = "about_fr.tpl";
-    public $templateMain = SmartyParam::$params["template_main"];
+    public $templateMain ;
     protected \Smarty $smarty;
     public function __construct()
     {
         if (!isset ($this->smarty)) {
             $this->smarty = new \Smarty();
         }
-        new SmartyParam();
+        $smp = new SmartyParam();
         $this->smarty->caching = false;
-        $this->smarty->setTemplateDir(SmartyParam::$params["templateDir"]);
-        $this->smarty->setCompileDir(ROOTPATH . SmartyParam::$params["compileDir"]);
+        $this->smarty->setTemplateDir($smp->params["templateDir"]);
+        $this->smarty->setCompileDir(ROOTPATH . $smp->params["compileDir"]);
         //$this->setConfigDir($config['application_dir'] . 'third_party/Smarty-3.1.8/configs');
+        $this->templateMain = $smp->params["template_main"];
         $this->smarty->setCacheDir('cache');
         foreach ($this->SMARTY_variables as $k => $v) {
             $this->smarty->assign($k, $v);

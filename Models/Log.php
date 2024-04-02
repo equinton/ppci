@@ -1,6 +1,5 @@
 <?php
 namespace Ppci\Models;
-use Config\App;
 use Ppci\Models\PpciModel;
 /**
  * Classe permettant d'enregistrer toutes les operations effectuees dans la base
@@ -55,7 +54,7 @@ class Log extends PpciModel
      */
     public function setLog($login, $module, $commentaire = null)
     {
-        $paramApp = new App();
+        $paramApp = service("AppConfig");
         $GACL_aco = $paramApp->GACL_aco;
         $data = array(
             "log_id" => 0,
@@ -123,7 +122,7 @@ class Log extends PpciModel
      */
     public function getLastConnexion()
     {
-        $paramApp = new App();
+        $paramApp = service("AppConfig");
         $GACL_aco = $paramApp->GACL_aco;
         if (isset($_SESSION["login"])) {
             $module = $GACL_aco . "-connection%";
@@ -150,7 +149,7 @@ class Log extends PpciModel
      */
     public function getLastConnections($duration = 36000)
     {
-        $paramApp = new App();
+        $paramApp = service("AppConfig");
         $GACL_aco = $paramApp->GACL_aco;
         $connections = array();
         if (isset($_SESSION["login"])) {
@@ -187,7 +186,7 @@ class Log extends PpciModel
     {
 
         if (!empty($login)) {
-            $paramApp = new App();
+            $paramApp = service("AppConfig");
         $GACL_aco = $paramApp->GACL_aco;
             $like = " like '" . $GACL_aco . "-connection%'";
             $sql = "select nom_module from log";
@@ -220,7 +219,7 @@ class Log extends PpciModel
      */
     public function isAccountBlocked($login, $maxtime = 600, $nbMax = 10)
     {
-        $paramApp = new App();
+        $paramApp = service("AppConfig");
         $GACL_aco = $paramApp->GACL_aco;
         $is_blocked = true;
         /*
@@ -315,7 +314,7 @@ class Log extends PpciModel
     public function getCallsToModule($moduleName, $maxNumber, $duration)
     {
         $APPLI_address = base_url(uri_string()) ;
-        $paramApp = new App();
+        $paramApp = service("AppConfig");
         $message = service('MessagePpci');
         $GACL_aco = $paramApp->GACL_aco;
         $sql = "select count(*) as nombre from log
@@ -356,7 +355,7 @@ class Log extends PpciModel
     public function sendMailToAdmin($subject, $templateName, $data, $moduleName, $login)
     {
         $message = service('MessagePpci');
-        $paramApp = new App();
+        $paramApp = service("AppConfig");
         $APP_mail = $paramApp->APP_mail;
         $MAIL_enabled = $paramApp->MAIL_enabled;
         $APP_mailToAdminPeriod = $paramApp->APP_mailToAdminPeriod;

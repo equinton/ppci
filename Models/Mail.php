@@ -31,7 +31,7 @@ class Mail
     {
         $this->setParam($param);
         if (!isset($this->param["from"])) {
-            $paramApp = new App();
+            $paramApp = service("AppConfig");
             $this->param["from"] = $paramApp->APP_mail;
         }
     }

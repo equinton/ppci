@@ -2,7 +2,6 @@
 namespace Ppci\Models;
 
 use ZxcvbnPhp\Zxcvbn;
-use Config\App;
 use ppci\Config\SmartyParam;
 
 /**
@@ -65,7 +64,7 @@ class LoginGestion extends PpciModel
             "nbattempts" => array("type" => 1),
             "lastattempt" => array("type" => 3)
         );
-        $this->paramApp = new App();
+        $this->paramApp = service("AppConfig");
         parent::__construct();
     }
 

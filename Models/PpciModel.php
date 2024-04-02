@@ -61,16 +61,16 @@ class PpciModel extends Model
             } elseif ($field["type"] == 4) {
                 $this->geomFields[] = $fieldName;
             }
-            if (isset ($field["key"])) {
+            if (isset($field["key"])) {
                 $this->primaryKey = $fieldName;
             }
-            if (isset ($field["defaultValue"])) {
+            if (isset($field["defaultValue"])) {
                 $this->defaultValues[$fieldName] = $field["defaultValue"];
             }
-            if (isset ($field["parentAttrib"])) {
+            if (isset($field["parentAttrib"])) {
                 $this->parentKeyName = $field["parentAttrib"];
             }
-            if (isset ($field["mandatory"]) || isset ($field["requis"])) {
+            if (isset($field["mandatory"]) || isset($field["requis"])) {
                 $this->mandatoryFields[] = $fieldName;
             }
         }
@@ -88,21 +88,26 @@ class PpciModel extends Model
      */
     protected function executeQuery(string $sql, array $data = null, $onlyExecute = false)
     {
-        if (isset ($data)) {
+        if (isset($data)) {
             $query = $this->db->query($sql, $data);
         } else {
             $query = $this->db->query($sql);
         }
         if ($onlyExecute && !$query) {
+            $this->message->setSyslog(sprintf(_("Erreur SQL pour la requête %s"), $sql));
             throw new PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
-        }
-        if (!$onlyExecute && $query->hasError()) {
-            $this->message->set($query->getErrorMessage(), true);
-            $this->message->setSyslog($query->getErrorMessage());
-            throw new PpciException($query->getErrorMessage(), $query->getErrorCode());
         } else {
-            return $query;
+            if (!is_bool($query) && $query->hasError()) {
+                $this->message->set($query->getErrorMessage(), true);
+                $this->message->setSyslog($query->getErrorMessage());
+                throw new PpciException($query->getErrorMessage(), $query->getErrorCode());
+            }
         }
+        return $query;
+    }
+    protected function executeSQL(string $sql, array $data = null, $onlyExecute = false)
+    {
+        return $this->executeQuery($sql, $data, $onlyExecute);
     }
 
     /*******************
@@ -122,7 +127,7 @@ class PpciModel extends Model
          * Verify mandatory fields
          */
         foreach ($this->mandatoryFields as $fieldName) {
-            if (!isset ($row[$fieldName]) || strlen($row[$fieldName]) == 0) {
+            if (!isset($row[$fieldName]) || strlen($row[$fieldName]) == 0) {
                 throw new PpciException(sprintf(_("Le champ %s est obligatoire mais n'a pas été renseigné"), $fieldName));
             }
         }
@@ -234,7 +239,8 @@ class PpciModel extends Model
         );
     }
 
-    function supprimer($id) {
+    function supprimer($id)
+    {
         return parent::delete($id);
     }
 
@@ -257,7 +263,7 @@ class PpciModel extends Model
             $data = $this->getDefaultValues($parentKey);
         } else {
             $data = $this->find($id);
-            if (empty ($data)) {
+            if (empty($data)) {
                 $data = $this->getDefaultValues($parentKey);
             }
         }
@@ -274,7 +280,7 @@ class PpciModel extends Model
     public function readParam(string $sql, array $param = null)
     {
         $data = $this->getListParam($sql, $param);
-        if (!empty ($data)) {
+        if (!empty($data)) {
             return $data[0];
         } else {
             return array();
@@ -329,7 +335,7 @@ class PpciModel extends Model
     public function getList(string $order = ""): array
     {
         $sql = "select * from " . $this->qi . $this->table . $this->qi;
-        if (!empty ($order)) {
+        if (!empty($order)) {
             $sql .= " order by $order";
         }
         return $this->getListParam($sql);
@@ -360,7 +366,8 @@ class PpciModel extends Model
         }
         return $result;
     }
-    function getListeParamAsPrepared(string $sql, array $param = null): array {
+    function getListeParamAsPrepared(string $sql, array $param = null): array
+    {
         return $this->getListParam($sql, $param);
     }
 
@@ -373,10 +380,10 @@ class PpciModel extends Model
      */
     function getListFromParent(int $parentId, $order = ""): array
     {
-        if ($parentId > 0 && !empty ($this->parentKeyName)) {
+        if ($parentId > 0 && !empty($this->parentKeyName)) {
             $sql = "select * from " . $this->qi . $this->table . $this->qi .
                 "where " . $this->qi . $this->parentKeyName . $this->qi . "= :id";
-            if (!empty ($order)) {
+            if (!empty($order)) {
                 $sql .= "order by $order";
             }
             return $this->getListParam($sql);
@@ -417,13 +424,13 @@ class PpciModel extends Model
     protected function formatDatesToLocale(array $row): array
     {
         foreach ($this->dateFields as $field) {
-            if (!empty ($row[$field])) {
+            if (!empty($row[$field])) {
                 $date = date_create_from_format("Y-m-d h:i:s", $row[$field]);
                 $row[$field] = date_format($date, $this->dateFormatMask);
             }
         }
         foreach ($this->datetimeFields as $field) {
-            if (!empty ($row[$field])) {
+            if (!empty($row[$field])) {
                 $date = date_create_from_format("Y-m-d h:i:s", $row[$field]);
                 $row[$field] = date_format($date, $this->datetimeFormat);
             }
@@ -458,13 +465,13 @@ class PpciModel extends Model
     protected function formatDatesToDB(array $row): array
     {
         foreach ($this->dateFields as $field) {
-            if (!empty ($row[$field])) {
+            if (!empty($row[$field])) {
                 $date = date_create_from_format($this->dateFormatMask, $row[$field]);
                 $row[$field] = date_format($date, "Y-m-d");
             }
         }
         foreach ($this->datetimeFields as $field) {
-            if (!empty ($row[$field])) {
+            if (!empty($row[$field])) {
                 $date = date_create_from_format($this->datetimeFormat, $row[$field]);
                 $row[$field] = date_format($date, "Y-m-d h:i:s");
             }

@@ -18,7 +18,7 @@ class Login
     {
 
         global $privateKey, $pubKey, $identificationMode;
-        $this->paramApp = new App();
+        $this->paramApp = service("AppConfig");
         $this->loginGestion = new LoginGestion();
         $this->loginGestion->setKeys($privateKey, $pubKey);
         $this->acllogin = new Acllogin();
