@@ -33,7 +33,23 @@ class PpciInit
                     "APPLI_code" => "Ppci"
                 )
             );
-
+            /**
+             * Get parameters stored in ini file
+             * and populate App/Config/App class
+             */
+            $appConfig = service("AppConfig");
+            if (is_file($appConfig->paramIniFile)) {
+                $params = parse_ini_file($appConfig->paramIniFile, true);
+                foreach ($params as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $k => $v) {
+                            $appConfig->$key[$k]=$v;
+                        }
+                    } else {
+                    $appConfig->$key = $value;
+                    }
+                }
+            }
             /**
              * set the connection
              */
