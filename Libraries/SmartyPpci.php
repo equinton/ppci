@@ -13,8 +13,8 @@ class SmartyPpci
      * @var array
      */
     protected $SMARTY_variables = array(
-        "entete" => "entete.tpl",
-        "enpied" => "enpied.tpl",
+        "header" => "ppci/header.tpl",
+        "footer" => "ppci/footer.tpl",
         "corps" => "main.tpl",
         "display" => "/display",
         "favicon" => "/favicon.png",
@@ -32,7 +32,8 @@ class SmartyPpci
         "isConnected" => 0,
         "appliAssist" => "",
         "developpementMode" => 1,
-        "messageError" => 0
+        "messageError" => 0,
+        "copyright" => "Copyright © 2024"
     );
     /**
      * Variables that must not encoded before send
@@ -48,20 +49,32 @@ class SmartyPpci
         "phpinfo",
         "markdownContent"
     );
-    public $templateMain ;
+    public $templateMain;
     protected \Smarty $smarty;
     public function __construct()
     {
-        if (!isset ($this->smarty)) {
+        if (!isset($this->smarty)) {
             $this->smarty = new \Smarty();
         }
         $smp = new SmartyParam();
         $this->smarty->caching = false;
         $this->smarty->setTemplateDir($smp->params["templateDir"]);
         $this->smarty->setCompileDir(ROOTPATH . $smp->params["compileDir"]);
-        //$this->setConfigDir($config['application_dir'] . 'third_party/Smarty-3.1.8/configs');
         $this->templateMain = $smp->params["template_main"];
         $this->smarty->setCacheDir('cache');
+        /**
+         * Assign variables from app/Config/App
+         */
+        $appConfig = service("AppConfig");
+        $this->SMARTY_variables["copyright"] = $appConfig->copyright;
+        /**
+         * Assign variables from dbparam table
+         */
+        $dbparam = service("Dbparam");
+        $this->SMARTY_variables["APPLI_title"] = $dbparam->getParam("APPLI_title");
+        /**
+         * Assign all variables to Smarty class
+         */
         foreach ($this->SMARTY_variables as $k => $v) {
             $this->smarty->assign($k, $v);
         }
@@ -133,7 +146,8 @@ class SmartyPpci
     {
         return esc($data);
     }
-    function fetch(string $template) {
+    function fetch(string $template)
+    {
         return $this->smarty->fetch($template);
     }
 }

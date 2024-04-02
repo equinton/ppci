@@ -10,7 +10,7 @@ use Ppci\Libraries\MessagePpci;
 use Ppci\Libraries\SmartyPpci;
 use Ppci\Libraries\PpciInit;
 use Ppci\Models\Log;
-use Ppci\Models\DbParam;
+use Ppci\Models\Dbparam;
 
 /**
  * Services Configuration file.

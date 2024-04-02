@@ -39,6 +39,7 @@ class DbParam extends PpciModel
         );
         $this->id_auto = 0;
         parent::__construct();
+        $this->readParams();
     }
 
     function getParam($name)

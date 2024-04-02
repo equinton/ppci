@@ -38,6 +38,7 @@ class PpciInit
              * and populate App/Config/App class
              */
             $appConfig = service("AppConfig");
+            $appConfig->setParameters();
             if (is_file($appConfig->paramIniFile)) {
                 $params = parse_ini_file($appConfig->paramIniFile, true);
                 foreach ($params as $key => $value) {
@@ -49,6 +50,32 @@ class PpciInit
                     $appConfig->$key = $value;
                     }
                 }
+            }
+            /**
+             * Set the locale
+             */
+            $locale = service("Locale");
+            if (isset($_SESSION["locale"]) && $_ENV["CI_ENVIRONMENT"] != "development") {
+                $locale->setLocale($_SESSION["locale"]);
+            } else {
+                /*
+                 * Recuperation le cas echeant du cookie
+                 */
+                if (isset($_COOKIE["locale"])) {
+                    $lenguage = $_COOKIE["locale"];
+                } else {    
+                    /*
+                     * Recuperation de la langue du navigateur
+                     */
+                    $lenguage = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+                    $lenguage = substr($lenguage[0], 0, 2);
+                }
+                /*
+                 * Mise a niveau du langage
+                 */
+                if (in_array($lenguage, array("fr","en", "us"))) {
+                    $locale->setLocale($lenguage);
+                }  
             }
             /**
              * set the connection

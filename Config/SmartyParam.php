@@ -11,7 +11,7 @@ class SmartyParam extends BaseConfig
         "compileDir" => 'writable/templates_c',
         "cache" => false,
         "cache_dir" => "display/smarty_cache",
-        "template_main" => "main.htm"
+        "template_main" => "ppci/main.html"
     ];
 
 }
