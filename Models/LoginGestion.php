@@ -289,7 +289,7 @@ class LoginGestion extends PpciModel
                 }
                 $SMARTY_param = new SmartyParam();
                 $APPLI_address = "https://" . $_SERVER["HTTP_HOST"];
-                $subject = $_SESSION["APPLI_title"] . " - " . _("Activation de votre compte");
+                $subject = $_SESSION["APP_title"] . " - " . _("Activation de votre compte");
                 $this->mail->SendMailSmarty(
                         $SMARTY_param::params,
                     $data["mail"],
@@ -298,7 +298,7 @@ class LoginGestion extends PpciModel
                     array(
                         "prenom" => $data["prenom"],
                         "nom" => $data["nom"],
-                        "applicationName" => $_SESSION["APPLI_title"],
+                        "applicationName" => $_SESSION["APP_title"],
                         "APPLI_address" => $APPLI_address
                     )
                 );
@@ -489,7 +489,7 @@ class LoginGestion extends PpciModel
                     }
                     $SMARTY_param = new SmartyParam();
                     $dbparam = service("Dbparam");
-                    $subject = $dbparam->params["APPLI_title"] . " - " . _("Modification de votre mot de passe");
+                    $subject = $dbparam->params["APP_title"] . " - " . _("Modification de votre mot de passe");
                     $this->mail->SendMailSmarty(
                         $SMARTY_param->params,
                         $data["mail"],
@@ -498,7 +498,7 @@ class LoginGestion extends PpciModel
                         array(
                             "prenom" => $data["prenom"],
                             "nom" => $data["nom"],
-                            "applicationName" => $_SESSION["APPLI_title"],
+                            "applicationName" => $_SESSION["APP_title"],
                             "APPLI_address" => $APPLI_address
                         )
                     );

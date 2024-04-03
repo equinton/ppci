@@ -1,5 +1,5 @@
 <?php
-
+namespace PPCI\Models;
 /**
  * @author Eric Quinton
  * @copyright Copyright (c) 2015, IRSTEA / Eric Quinton
@@ -59,7 +59,7 @@ class Menu
             $ok = false;
             $tdroits = explode(",", $attributes["droits"]);
             foreach ($tdroits as $droit) {
-                if ($_SESSION["droits"][$droit] == 1) {
+                if (isset ($_SESSION["droits"]) && isset($_SESSION["droits"][$droit])) {
                     $ok = true;
                 }
             }
@@ -67,19 +67,19 @@ class Menu
         /*
          * Recherche si le login est requis
          */
-        if ($attributes["loginrequis"] == 1 && !$_SESSION["is_authenticated"]) {
+        if (isset($attributes["loginrequis"]) && !$_SESSION["is_authenticated"]) {
             $ok = false;
         }
         /*
          * Recherche si l'utilisateur n'est pas connecte
          */
-        if ($attributes["onlynoconnect"] == 1 && $_SESSION["is_authenticated"]) {
+        if (isset ($attributes["onlynoconnect"]) && $_SESSION["is_authenticated"]) {
             $ok = false;
         }
         /**
          * Search for language
          */
-        if (isset($attributes["language"]) && $attributes["language"] != $_SESSION["FORMATDATE"]) {
+        if (isset($attributes["language"]) && $attributes["language"] != $_SESSION["locale"]) {
             $ok = false;
         }
         if ($ok) {

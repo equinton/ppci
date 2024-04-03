@@ -3,6 +3,7 @@ namespace Ppci\Libraries;
 
 use \Smarty\Smarty;
 use \Ppci\Config\SmartyParam;
+use \Ppci\Models\Menu;
 
 
 class SmartyPpci
@@ -18,7 +19,7 @@ class SmartyPpci
         "corps" => "main.tpl",
         "display" => "/display",
         "favicon" => "/favicon.png",
-        "APPLI_title" => "Ppci",
+        "APP_title" => "Ppci",
         "APPLI_titre" => "Ppci",
         "LANG" => array(
             "date" => array(
@@ -30,7 +31,7 @@ class SmartyPpci
         ),
         "menu" => "",
         "isConnected" => 0,
-        "appliAssist" => "",
+        "APP_help_address" => "",
         "developpementMode" => 1,
         "messageError" => 0,
         "copyright" => "Copyright © 2024"
@@ -63,21 +64,40 @@ class SmartyPpci
         $this->templateMain = $smp->params["template_main"];
         $this->smarty->setCacheDir('cache');
         /**
-         * Assign variables from app/Config/App
-         */
-        $appConfig = service("AppConfig");
-        $this->SMARTY_variables["copyright"] = $appConfig->copyright;
-        /**
-         * Assign variables from dbparam table
-         */
-        $dbparam = service("Dbparam");
-        $this->SMARTY_variables["APPLI_title"] = $dbparam->getParam("APPLI_title");
-        /**
-         * Assign all variables to Smarty class
+         * Assign default variables to Smarty class
          */
         foreach ($this->SMARTY_variables as $k => $v) {
             $this->smarty->assign($k, $v);
         }
+        /**
+         * Assign variables from app/Config/App
+         */
+        $appConfig = service("AppConfig");
+        $this->set( $appConfig->copyright, "copyright");
+        $this->set( $appConfig->APP_help_address,"APP_help_address");
+        /**
+         * Assign variables from dbparam table
+         */
+        $dbparam = service("Dbparam");
+        $this->set($dbparam->getParam("APPLI_title"), "APP_title");
+        /**
+         * Development mode
+         */
+        if ($_ENV["CI_ENVIRONMENT"] == "development") {
+            $content = sprintf(
+                _("Mode développement - base de données : pgsql:host=%1s;dbname=%2s - schema : %3s"),
+                $_ENV["database.default.hostname"],
+                $_ENV["database.default.database"],
+                $_ENV["database.default.searchpath"]
+            );
+            $this->set($content, "developmentMode");
+        }
+        /** Add the menu */
+        if (!isset($_SESSION["menu"]) || $_ENV["CI_ENVIRONMENT"] == "development") {
+            $menu = new Menu($appConfig->APP_menufile);
+            $_SESSION["menu"] = $menu->generateMenu();
+        }
+        $this->set($_SESSION["menu"], "menu");
     }
     /**
      * Add variable to Smarty

@@ -18,6 +18,15 @@ class PpciInit
              */
             $session = session();
             /**
+             * Generate default variables in $_SESSION
+             */
+            $sessionVars = ["is_authenticated", "locale"];
+            foreach ($sessionVars as $v) {
+                if (!isset($_SESSION[$v])) {
+                    $_SESSION[$v] = 0;
+                }
+            }
+            /**
              * Add generic functions
              */
             helper('ppci');

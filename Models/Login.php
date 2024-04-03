@@ -167,12 +167,12 @@ class Login
                                  */
                                 $APPLI_address = base_url();
                                 $dbparam = service("Dbparam");
-                                $subject = $dbparam->params["APPLI_title"] . " - " . _("Nouvel utilisateur");
+                                $subject = $dbparam->params["APP_title"] . " - " . _("Nouvel utilisateur");
                                 $template = "ppci/mail/newUser.tpl";
                                 $data = array(
                                     "login" => $login,
                                     "name" => $this->dacllogin["logindetail"],
-                                    "appName" => $dbparam->params["APPLI_title"],
+                                    "appName" => $dbparam->params["APP_title"],
                                     "organization" => $userparams[$ident_header_vars["organization"]],
                                     "link" => $APPLI_address
                                 );
