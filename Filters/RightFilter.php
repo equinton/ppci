@@ -14,25 +14,32 @@ class RightFilter implements FilterInterface
     {
         // Do something here
         echo base_url(uri_string()) . "<br>";
-        echo $_SERVER['QUERY_STRING'] . "<br>";
-        $query = explode("/", $_SERVER['QUERY_STRING']);
-        if (!empty ($query)) {
+        //echo $_SERVER['QUERY_STRING'] . "<br>";
+        $query = explode("/", uri_string());
+        if (!empty($query)) {
             $moduleName = $query[0];
-            if (!empty ($query[1])) {
+            if (!empty($query[1])) {
                 $moduleName .= ucfirst($query[1]);
             }
             $appRights = new \App\Config\Rights();
             $requiredRights = $appRights->getRights($moduleName);
-            if (empty ($requiredRights)) {
+            if (empty($requiredRights)) {
                 $ppciRights = new \Ppci\Config\Rights();
                 $requiredRights = $ppciRights->getRights($moduleName);
             }
-            if (!empty ($requiredRights)) {
+            if (!empty($requiredRights)) {
                 $session = \Config\Services::session();
-                $testRights = array_intersect($requiredRights, $session->get("userRights"));
+                $userRights = $session->get("userRights");
+                if (is_null($userRights)) {
+                    $userRights = [];
+                }
+                $testRights = array_intersect($requiredRights, $userRights);
                 if (count($testRights) == 0) {
-                    $message = service('MessagePpci');
-                    $message->set(_("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction"), true);
+                    /*$message = service('MessagePpci');
+                    $message->set(_("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction"), true);*/
+                    $_SESSION["filterMessage"][] = _("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction");
+                    helper("ppci");
+                    setLogRequest($request,"ko: insufficient rights");
                     return redirect()->to(site_url());
                 }
             }

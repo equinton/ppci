@@ -13,7 +13,7 @@ class IdentificationConfig extends BaseConfig {
  *
  * @var string
  */
-public $identification_type = "BDD";
+public $identificationType = "BDD";
 /**
  * List of parameters to use SAML identification with apache2-mellon
  *
@@ -112,9 +112,15 @@ public $APPLI_mailToAdminPeriod = 7200;
 public $APPLI_admin_ttl = 600; 
 public $APP_passwordMinLength = 12;
 /**
- * If set to 1, authorises recovery of a new password in the event of loss
+ * If set to 1, authorises recovery of a new password in the event of loss. The send of emails must be activated too
  *
  * @var integer
  */
 public $APPLI_lostPassword = 1; 
+
+/**
+ * Duration of validity of the token used to reidentify the user
+ */
+public $tokenIdentityValidity = 36000; // 10 hours
+
 }

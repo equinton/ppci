@@ -84,5 +84,6 @@ class DbParam extends PpciModel
         foreach ($data as $param) {
             $this->params[$param["dbparam_name"]] = $param["dbparam_value"] ;
         }
+        $_SESSION["dbparams"] = $this->params;
     }
 }

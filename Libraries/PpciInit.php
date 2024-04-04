@@ -34,6 +34,9 @@ class PpciInit
              * Add messages to user and syslog
              */
             $message = service('MessagePpci');
+            if ($_ENV["CI_ENVIRONMENT"] == "development") {
+                $message->displaySyslog();
+            }
             /**
              * Set default parameters
              */

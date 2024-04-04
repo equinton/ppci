@@ -1,9 +1,11 @@
 <?php
 
-$routes->get("/", "\Ppci\Controllers\Defaultpage::index");
-$routes->add('default', '\Ppci\Controllers\Defaultpage::index');
+$routes->add("/", "\Ppci\Controllers\Defaultpage");
+$routes->add('default', '\Ppci\Controllers\Defaultpage');
 $routes->add('droitko', '\Ppci\Controllers\Droitko::index');
 $routes->add('gestiondroits', '\Ppci\Controllers\Identification\Gestiondroits::index');
+$routes->add('login', '\Ppci\Controllers\Login::index');
+$routes->add('loginValid', '\Ppci\controllers\Login::valid');
 $routes->add('loginList', '\Ppci\Controllers\Identification\Login::list');
 $routes->add('loginChange', '\Ppci\Controllers\Identification\Login::change');
 $routes->add('loginWrite', '\Ppci\Controllers\Identification\Login::write');

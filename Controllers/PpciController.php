@@ -12,9 +12,7 @@ use Ppci\Libraries;
  */
 class PpciController extends \App\Controllers\BaseController
 {
-    protected $session;
-    protected $message;
-    protected $init;
+
     /**
      * 
      * Systematic code used
@@ -30,33 +28,11 @@ class PpciController extends \App\Controllers\BaseController
         LoggerInterface $logger
     ) {
         parent::initController($request, $response, $logger);
-        $this->session = session();
-        $this->init = service("PpciInit");
-        $this->init::Init();
         /**
-         * Add messages to user and syslog
+         * Record the call into the log table
          */
-        $this->message = service('MessagePpci');
-                        
+        helper("ppci");
+        setLogRequest($request);                
     }
 
-    protected function isAuthorized(bool $hasConnected = false, array $rights = [])
-    {
-        $ok = true;
-        if (!$this->init::isDbversionOk) {
-            $ok = false;
-        } elseif ($hasConnected && !$this->session->isConnected) {
-            $ok = false;
-            $this->message->set(_("Vous devez vous connecter avant de pouvoir accéder au module demandé"), true);
-        }
-
-        $security = \Config\Services::security();
-        if (!$this->request->is('post')) {
-            $ok = false;
-        }
-        if (!$ok) {
-            $this->message->set(_("L'exécution du module demandé n'est pas autorisé"), true);
-            return redirect()->to(site_url())->withCookies();
-        }
-    }
 }

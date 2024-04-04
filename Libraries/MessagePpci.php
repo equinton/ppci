@@ -20,6 +20,12 @@ class MessagePpci
     function __construct($displaySyslog = false)
     {
         $this->_displaySyslog = $displaySyslog;
+        if (isset($_SESSION["filterMessage"])) {
+            foreach ($_SESSION["filterMessage"] as $message) {
+                $this->set($message, true);
+            }
+            unset($_SESSION["filterMessage"]);
+        }
     }
 
     /**
@@ -61,7 +67,7 @@ class MessagePpci
         /**
          * Write log in system log
          */
-        openlog("[$date] [" . $_SESSION["APPLI_code"] . ":$level]", LOG_PID|LOG_PERROR, LOG_LOCAL7);
+        openlog("[$date] [" . $_SESSION["APPLI_code"] . ":$level]", LOG_PID | LOG_PERROR, LOG_LOCAL7);
         syslog($priority, $message);
         closelog();
     }

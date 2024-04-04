@@ -1,13 +1,15 @@
 <?php
 namespace Ppci\Controllers;
-use CodeIgniter\Security\Security;
-use Ppci\Config\IdentificationConfig;
+use CodeIgniter\Controller;
 
 class Defaultpage extends PpciController
 {
+
+    
     public function index()
     {
-        $vue = service('Smarty');
+
+        /*$vue = service('Smarty');
         $i = $this->session->get("i");
         if (empty($i)) {
             $i = 1;
@@ -22,11 +24,16 @@ class Defaultpage extends PpciController
         printA($this->message->get());
         printA("Variables d'environnement");
         printA($_ENV);
+        echo "<br>";
         printA("Variables de session :");
         printA($_SESSION);
-
+        echo "<br>";
         $config = new IdentificationConfig();
         printA($config->organizationsGranted);
+        printA($config->identificationType);
         return $vue->send();
+        */
+        $lib = new \Ppci\Libraries\DefaultPage();
+        return ($lib->display());
     }
 }

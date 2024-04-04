@@ -143,7 +143,9 @@ class PpciModel extends Model
         }
         if ($this->transformComma) {
             foreach ($this->numericFields as $field) {
-                $row[$field] = str_replace(",", ".", $row[$field]);
+                if (isset($row[$field])) {
+                    $row[$field] = str_replace(",", ".", $row[$field]);
+                }
             }
         }
         if (parent::save($row) && $isInsert) {
