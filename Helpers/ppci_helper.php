@@ -104,3 +104,21 @@ function setLogRequest($request, $comment = null)
     $db->query("set search_path = " . $_ENV["database.default.searchpath"]);
     $log->setLog($login, $module, $comment);
 }
+
+/**
+ * decode html vars
+ *
+ * @param [type] $data
+ * @return 
+ */
+function htmlDecode($data)
+{
+    if (is_array($data)) {
+        foreach ($data as $key => $value) {
+            $data[$key] = htmlDecode($value);
+        }
+    } else {
+        $data = htmlspecialchars_decode($data, ENT_QUOTES);
+    }
+    return $data;
+}

@@ -32,7 +32,11 @@ class PpciController extends \App\Controllers\BaseController
          * Record the call into the log table
          */
         helper("ppci");
-        setLogRequest($request);                
+        setLogRequest($request);
+        /**
+         * Uncode html vars
+         */
+        $_REQUEST = htmlDecode($_REQUEST);
     }
 
 }

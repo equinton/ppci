@@ -38,6 +38,14 @@ class PpciInit
                 $message->displaySyslog();
             }
             /**
+             * Add filter messages
+             */
+            if (isset ($_SESSION["filterMessage"])) {
+                foreach ($_SESSION["filterMessage"] as $mes) {
+                    $message->set($mes, true);
+                }
+            }
+            /**
              * Set default parameters
              */
             $session->set(
