@@ -31,7 +31,8 @@ class PpciController extends \App\Controllers\BaseController
         /**
          * Record the call into the log table
          */
-        helper("ppci");
+        $init = service("PpciInit");
+        $init::init();
         setLogRequest($request);
         /**
          * Uncode html vars

@@ -52,6 +52,9 @@ class PpciModel extends Model
     {
         foreach ($this->fields as $fieldName => $field) {
             $this->allowedFields[] = $fieldName;
+            if (!isset($field["type"])) {
+                $field["type"] = 0;
+            }
             if ($field["type"] == 1) {
                 $this->numericFields[] = $fieldName;
             } elseif ($field["type"] == 2) {
@@ -475,7 +478,9 @@ class PpciModel extends Model
         foreach ($this->datetimeFields as $field) {
             if (!empty($row[$field])) {
                 $date = date_create_from_format($this->datetimeFormat, $row[$field]);
-                $row[$field] = date_format($date, "Y-m-d h:i:s");
+                if ($date) {
+                    $row[$field] = date_format($date, "Y-m-d h:i:s");
+                }
             }
         }
         return $row;

@@ -28,7 +28,17 @@ class RightFilter implements FilterInterface
                 $requiredRights = $ppciRights->getRights($moduleName);
             }
             if (!empty($requiredRights)) {
+
+
                 $session = \Config\Services::session();
+                if (!isset($_SESSION["isLogged"])) {
+                    $login = new \Ppci\Libraries\Login();
+                    $retour = $login->getLogin();
+                    if (isset($retour)) {
+                        return redirect()->to(site_url($retour));
+                    }
+                }
+
                 $userRights = $session->get("userRights");
                 if (is_null($userRights)) {
                     $userRights = [];
@@ -39,7 +49,7 @@ class RightFilter implements FilterInterface
                     $message->set(_("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction"), true);
                     $_SESSION["filterMessage"][] = _("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction");
                     helper("ppci");
-                    setLogRequest($request, "ko: unsufficient rights");
+                    setLogRequest($request, "ko: insufficient rights");
                     return redirect()->to(site_url());
                 }
             }

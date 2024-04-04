@@ -9,7 +9,7 @@ class Login
     public Log $log;
     public Acllogin $acllogin;
     public Aclgroup $aclgroup;
-    public Message $message;
+    public $message;
     private array $dacllogin;
     public string $identificationMode;
     public App $paramApp;
@@ -17,10 +17,9 @@ class Login
     function __construct()
     {
 
-        global $privateKey, $pubKey, $identificationMode;
         $this->paramApp = service("AppConfig");
         $this->loginGestion = new LoginGestion();
-        $this->loginGestion->setKeys($privateKey, $pubKey);
+        $this->loginGestion->setKeys($this->paramApp->privateKey, $this->paramApp->pubKey);
         $this->acllogin = new Acllogin();
         $this->aclgroup = new Aclgroup();
         $this->log = service("Log");
