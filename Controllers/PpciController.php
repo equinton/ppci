@@ -28,16 +28,7 @@ class PpciController extends \App\Controllers\BaseController
         LoggerInterface $logger
     ) {
         parent::initController($request, $response, $logger);
-        /**
-         * Record the call into the log table
-         */
-        $init = service("PpciInit");
-        $init::init();
-        setLogRequest($request);
-        /**
-         * Uncode html vars
-         */
-        $_REQUEST = htmlDecode($_REQUEST);
+
     }
 
 }

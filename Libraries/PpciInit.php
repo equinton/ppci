@@ -40,7 +40,7 @@ class PpciInit
             /**
              * Add filter messages
              */
-            if (isset ($_SESSION["filterMessage"])) {
+            if (isset($_SESSION["filterMessage"])) {
                 foreach ($_SESSION["filterMessage"] as $mes) {
                     $message->set($mes, true);
                 }
@@ -64,10 +64,10 @@ class PpciInit
                 foreach ($params as $key => $value) {
                     if (is_array($value)) {
                         foreach ($value as $k => $v) {
-                            $appConfig->$key[$k]=$v;
+                            $appConfig->$key[$k] = $v;
                         }
                     } else {
-                    $appConfig->$key = $value;
+                        $appConfig->$key = $value;
                     }
                 }
             }
@@ -83,7 +83,7 @@ class PpciInit
                  */
                 if (isset($_COOKIE["locale"])) {
                     $lenguage = $_COOKIE["locale"];
-                } else {    
+                } else {
                     /*
                      * Recuperation de la langue du navigateur
                      */
@@ -93,32 +93,35 @@ class PpciInit
                 /*
                  * Mise a niveau du langage
                  */
-                if (in_array($lenguage, array("fr","en", "us"))) {
+                if (in_array($lenguage, array("fr", "en", "us"))) {
                     $locale->setLocale($lenguage);
-                }  
+                }
             }
-            /**
-             * set the connection
-             */
-            $db = db_connect();
-            $db->query("set search_path = " . $_ENV["database.default.searchpath"]);
-            /**
-             * Verify the database version
-             */
-            $dbversion = new Dbversion();
-            $paramApp = service("AppConfig");
             try {
-                if ($dbversion->verifyVersion($paramApp->dbversion)) {
-                    self::$isDbversionOk = true;
-                } else {
-                    $message->set(
-                        sprintf(
-                            _('La base de données n\'est pas dans la version attendue (%1$s). Version actuelle : %2$s'),
-                            $paramApp->dbversion,
-                            $dbversion->getLastVersion()["dbversion_number"]
-                        ),
-                        true
-                    );
+                $paramApp = service("AppConfig");
+                /**
+                 * set the connection
+                 */
+                $db = db_connect();
+                $db->query("set search_path = " . $_ENV["database.default.searchpath"]);
+                /**
+                 * Verify the database version
+                 */
+                if (!isset($_SESSION["dbversionCheck"])) {
+                    $dbversion = new Dbversion();
+                    if ($dbversion->verifyVersion($paramApp->dbversion)) {
+                        self::$isDbversionOk = true;
+                    } else {
+                        $message->set(
+                            sprintf(
+                                _('La base de données n\'est pas dans la version attendue (%1$s). Version actuelle : %2$s'),
+                                $paramApp->dbversion,
+                                $dbversion->getLastVersion()["dbversion_number"]
+                            ),
+                            true
+                        );
+                    }
+                    $_SESSION["dbversionCheck"] = true;
                 }
                 /**
                  * Set locale parameters
@@ -140,7 +143,7 @@ class PpciInit
                     $locale = service('Locale');
                     $locale->setLocale($language);
                     helper('cookie');
-                    set_cookie("locale",$language,31536000);
+                    set_cookie("locale", $language, 31536000);
                 }
 
                 /**
