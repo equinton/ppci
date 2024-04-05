@@ -97,7 +97,8 @@ $(document).ready(function() {
 					{/if}
 				</div>
 			</div>
-		</form>
+		{$csrf}
+</form>
 	</div>
 </div>
 {if !empty($result)}

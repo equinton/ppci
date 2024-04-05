@@ -41,7 +41,8 @@
                     </div>
 
                 </div>
-            </form>
+            {$csrf}
+</form>
         </div>
         {if !empty($logs)}
             <div class="row">

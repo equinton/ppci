@@ -39,7 +39,8 @@
 </fieldset>
 </div>
 
- </form>
+ {$csrf}
+</form>
 </div>
 </div>
 

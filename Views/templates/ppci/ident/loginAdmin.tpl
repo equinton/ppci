@@ -45,5 +45,6 @@
 		<div class="form-group center">
 			<button type="submit" class="btn btn-primary button-valid input-lg">{t}Se connecter{/t}</button>
 			</div>
-	</form>
+	{$csrf}
+</form>
 </div>

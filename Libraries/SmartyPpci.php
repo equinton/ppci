@@ -129,6 +129,10 @@ class SmartyPpci
                 $this->smarty->assign($key, esc($value));
             }
         }
+        /**
+         * Generate the CSRF Field
+         */
+        $this->smarty->assign("csrf", csrf_field());
 
         /**
          * Get messages

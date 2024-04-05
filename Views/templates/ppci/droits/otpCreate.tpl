@@ -28,6 +28,7 @@
         <div class="center">
           <button type="submit" class="bg-primary btn">{t}Valider{/t}</button>
         </div>
-    </form>
+    {$csrf}
+</form>
   </div>
   </div>

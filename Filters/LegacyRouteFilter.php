@@ -25,7 +25,7 @@ class LegacyRouteFilter implements FilterInterface
             unset($_REQUEST["action"]);
         }
         if (!empty ($newroute)) {
-            return redirect($newroute);
+            return redirect($newroute)->withCookies();
         }
     }
 

@@ -74,6 +74,7 @@
 				</div>
 			</div>
 			{/if}
-	</form>
+	{$csrf}
+</form>
 </div>
 </div>

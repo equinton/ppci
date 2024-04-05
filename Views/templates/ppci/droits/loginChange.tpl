@@ -31,6 +31,7 @@
       <button class="btn btn-danger button-delete">{t}Supprimer{/t}</button>
       {/if}
  </div>
+{$csrf}
 </form>
 </div>
 </div>

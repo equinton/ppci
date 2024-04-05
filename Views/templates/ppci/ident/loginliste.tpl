@@ -72,6 +72,7 @@ $(document).ready(function() {
 			<div class="col-md-1">
 				<img src="display/images/copy.png" height="24" id="copyMails">
 			</div>
-		</form>
+		{$csrf}
+</form>
 	</div>
 </div>

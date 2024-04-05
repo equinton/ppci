@@ -54,6 +54,7 @@
 {/section}
 </fieldset>
 </div>
+{$csrf}
 </form>
 </div>
 </div>

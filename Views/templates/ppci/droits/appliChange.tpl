@@ -28,6 +28,7 @@
       {/if}
  </div>
 
+{$csrf}
 </form>
 </div>
 </div>

@@ -138,6 +138,7 @@ $("#pass1").on('input', function()
 	<br>
 {t}Il doit comprendre au minimum 3 types de caractères différents
 (minuscule, majuscule, chiffre, ponctuation et autre symboles){/t}</span>
+{$csrf}
 </form>
 </div>
 </div>
