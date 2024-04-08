@@ -96,7 +96,7 @@ class Menu
                 if ($level == 0) {
                     $level = 1;
                 }
-                $texte = '<li><a href="index.php?module=' . $attributes["module"] . '" title="' . gettext($attributes["tooltip"]) . '">' . $label . '</a>';
+                $texte = '<li><a href="' . $attributes["module"] . '" title="' . gettext($attributes["tooltip"]) . '">' . $label . '</a>';
                 if (isset($valeur["item"])) {
                     /*
                      * Il s'agit d'un tableau imbrique
