@@ -15,7 +15,8 @@ class Login extends PpciController
             return ($login->display());
         } else {
             $this->message->set(_("Le mode d'identification dans l'application ne vous permet pas d'accéder à la page de connexion"), true);
-            return redirect()->to(site_url());
+            $defaultPage = new \Ppci\Libraries\DefaultPage();
+            return ($defaultPage->display());
         }
     }
     public function LoginExec()
@@ -27,5 +28,13 @@ class Login extends PpciController
         } else {
             return redirect()->to($login->getLogin());
         }
+    }
+    public function disconnect()
+    {
+        $login = new \Ppci\Models\Login();
+        $login->disconnect();
+        $this->message->set(_("Vous avez été déconnecté"));
+        $defaultPage = new \Ppci\Libraries\DefaultPage();
+        return ($defaultPage->display());
     }
 }

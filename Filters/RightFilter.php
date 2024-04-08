@@ -47,10 +47,10 @@ class RightFilter implements FilterInterface
                 if (count($testRights) == 0) {
                     $message = service('MessagePpci');
                     $message->set(_("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction"), true);
-                    $_SESSION["filterMessage"][] = _("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction");
                     helper("ppci");
                     setLogRequest($request, "ko: insufficient rights");
-                    return redirect()->to(site_url());
+                    $defaultPage = new \Ppci\Libraries\DefaultPage();
+                    return ($defaultPage->display());
                 }
             }
         }

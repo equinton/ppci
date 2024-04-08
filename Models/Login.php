@@ -406,6 +406,7 @@ class Login
         }
         // Finalement, on détruit la session.
         session()->destroy();
+        $_SESSION = array();
         if ($this->identificationMode == "CAS") {
             \phpCAS::client(
                 CAS_VERSION_2_0,

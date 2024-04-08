@@ -20,7 +20,7 @@ $routes->add('gestion', 'Gestion\Index::index');
 $routes->add('errorbefore', '\Ppci\Controllers\Errorbefore::index');
 $routes->add('errorlogin', '\Ppci\Controllers\Errorlogin::index');
 $routes->add('test', 'Test::index');
-$routes->add('disconnect', '\Ppci\Controllers\Identification\Disconnect::index');
+$routes->add('disconnect', '\Ppci\Controllers\Login::disconnect');
 $routes->add('apropos', '\Ppci\Controllers\Utils\About::index');
 $routes->add('about', '\Ppci\Controllers\Utils\About::index');
 $routes->add('phpinfo', '\Ppci\Controllers\Phpinfo::index');

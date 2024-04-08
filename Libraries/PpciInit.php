@@ -18,15 +18,6 @@ class PpciInit
              */
             $session = session();
             /**
-             * Generate default variables in $_SESSION
-             */
-            $sessionVars = ["is_authenticated", "locale"];
-            foreach ($sessionVars as $v) {
-                if (!isset($_SESSION[$v])) {
-                    $_SESSION[$v] = 0;
-                }
-            }
-            /**
              * Add generic functions
              */
             helper('ppci');
@@ -45,14 +36,6 @@ class PpciInit
                     $message->set($mes, true);
                 }
             }
-            /**
-             * Set default parameters
-             */
-            $session->set(
-                array(
-                    "APPLI_code" => "Ppci"
-                )
-            );
             /**
              * Get parameters stored in ini file
              * and populate App/Config/App class
@@ -82,19 +65,19 @@ class PpciInit
                  * Recuperation le cas echeant du cookie
                  */
                 if (isset($_COOKIE["locale"])) {
-                    $lenguage = $_COOKIE["locale"];
+                    $language = $_COOKIE["locale"];
                 } else {
                     /*
                      * Recuperation de la langue du navigateur
                      */
-                    $lenguage = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-                    $lenguage = substr($lenguage[0], 0, 2);
+                    $language = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+                    $language = substr($language[0], 0, 2);
                 }
                 /*
                  * Mise a niveau du langage
                  */
-                if (in_array($lenguage, array("fr", "en", "us"))) {
-                    $locale->setLocale($lenguage);
+                if (in_array($language, array("fr", "en", "us"))) {
+                    $locale->setLocale($language);
                 }
             }
             try {
@@ -102,27 +85,9 @@ class PpciInit
                 /**
                  * set the connection
                  */
-                $db = db_connect();
+                /*$db = db_connect();
                 $db->query("set search_path = " . $_ENV["database.default.searchpath"]);
-                /**
-                 * Verify the database version
-                 */
-                if (!isset($_SESSION["dbversionCheck"])) {
-                    $dbversion = new Dbversion();
-                    if ($dbversion->verifyVersion($paramApp->dbversion)) {
-                        self::$isDbversionOk = true;
-                    } else {
-                        $message->set(
-                            sprintf(
-                                _('La base de données n\'est pas dans la version attendue (%1$s). Version actuelle : %2$s'),
-                                $paramApp->dbversion,
-                                $dbversion->getLastVersion()["dbversion_number"]
-                            ),
-                            true
-                        );
-                    }
-                    $_SESSION["dbversionCheck"] = true;
-                }
+                */
                 /**
                  * Set locale parameters
                  */
