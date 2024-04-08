@@ -69,11 +69,11 @@ class Import
                 if (in_array($data[$range], $fields)) {
                     $this->header[$range] = $data[$range];
                 } else {
-                    throw new PpciException(sprintf(_("%s n'est pas un champ reconnu utilisable lors de l'importation"), $data[$range]));
+                    throw new \Ppci\Libraries\PpciException(sprintf(_("%s n'est pas un champ reconnu utilisable lors de l'importation"), $data[$range]));
                 }
             }
         } else {
-            throw new PpciException(sprintf(_("Fichier %s non trouvé ou non lisible"), $filename));
+            throw new \Ppci\Libraries\PpciException(sprintf(_("Fichier %s non trouvé ou non lisible"), $filename));
         }
     }
 

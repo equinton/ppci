@@ -74,16 +74,16 @@ class Passwordlost extends PpciModel
                         $data["expiration"] = date(DATELONGMASK, time() + $duree_token);
                         $this->ecrire($data);
                     } else {
-                        throw new PpciException(_("Le compte n'est pas actif"));
+                        throw new \Ppci\Libraries\PpciException(_("Le compte n'est pas actif"));
                     }
                 } else {
-                    throw new PpciException(_("Le compte n'est pas autorisé à réinitialiser son mot de passe, la dernière connexion réussie n'ayant pas été réalisée dans un mode compatible"));
+                    throw new \Ppci\Libraries\PpciException(_("Le compte n'est pas autorisé à réinitialiser son mot de passe, la dernière connexion réussie n'ayant pas été réalisée dans un mode compatible"));
                 }
             } else {
-                throw new PpciException(_("Aucun compte n'a été trouvé pour le mail considéré"));
+                throw new \Ppci\Libraries\PpciException(_("Aucun compte n'a été trouvé pour le mail considéré"));
             }
         }else {
-            throw new PpciException(_("Le mail n'a pas été renseigné"));
+            throw new \Ppci\Libraries\PpciException(_("Le mail n'a pas été renseigné"));
         }
         return $data;
     }
@@ -110,14 +110,14 @@ class Passwordlost extends PpciModel
 
             if ($data["passwordlost_id"] > 0) {
                 if ($data["actif"] == 0) {
-                    throw new PpciException("account desactivated");
+                    throw new \Ppci\Libraries\PpciException("account desactivated");
                 }
                 return $data;
             } else {
-                throw new PpciException("token not found");
+                throw new \Ppci\Libraries\PpciException("token not found");
             }
         } else {
-            throw new PpciException("token empty");
+            throw new \Ppci\Libraries\PpciException("token empty");
         }
     }
 

@@ -15,14 +15,13 @@
 
 
     <div class="center">
-      <img src="index.php?module=totpGetQrcode" height="150" style="margin-top:2.5em">
+      <img src="totpGetQrcode" height="150" style="margin-top:2.5em">
     </div>
-    <form id="otpform" class="form-horizontal protoform" method="post" action="index.php">
-      <input type="hidden" name="module" value="totpCreateVerify">
+    <form id="otpform" class="form-horizontal protoform" method="post" action="totpCreateVerify">
         <div class="form-group">
           <label for="otpcode" class="control-label col-md-4">{t}Code généré par le logiciel TOTP :{/t} </label>
           <div class="col-md-8">
-            <input id="otpcode" type="text" class="form-control" name="otpcode" class="nombre" required autofocus>
+            <input id="otpcode" type="number" class="form-control" name="otpcode" class="nombre" required autofocus>
           </div>
         </div>
         <div class="center">

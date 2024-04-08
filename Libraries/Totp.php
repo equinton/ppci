@@ -24,14 +24,18 @@ class Totp extends PpciLibrary
         }
         $this->defaultPage = new \Ppci\Libraries\DefaultPage();
     }
-    function input() {
-        $this->smarty->set('ppci/ident/totp.tpl','corps');
+    function input()
+    {
+        $vue = service("Smarty");
+        $vue->set('ppci/ident/totp.tpl', 'corps');
+        return $vue->send();
     }
     function create()
     {
         if ($this->acllogin->isTotp()) {
             $this->message->set(_("Vous avez déjà activé l'identification à double facteur : contactez un administrateur de l'application pour réinitialiser cette fonction"), true);
         }
+        unset ($_SESSION["totpSecret"]);
         if (!isset($_SESSION["totpSecret"])) {
             $_SESSION["totpSecret"] = $this->gacltotp->createSecret();
             $this->gacltotp->createQrCode();
@@ -50,6 +54,7 @@ class Totp extends PpciLibrary
                 /**
                  * Write the secret into the database
                  */
+                $datalogin = $this->acllogin->getFromLogin($_SESSION["login"]);
                 $datalogin["totp_key"] = $this->gacltotp->encodeTotpKey($_SESSION["totpSecret"]);
                 $this->acllogin->ecrire($datalogin);
                 unset($_SESSION["totpSecret"]);
@@ -57,15 +62,15 @@ class Totp extends PpciLibrary
                 /**
                  * Delete the qrcode
                  */
-                $filename = WRITEPATH . "/temp/" . $_SESSION["login"] . "_totp.png";
+                $filename = WRITEPATH . "temp/" . $_SESSION["login"] . "_totp.png";
                 if (file_exists($filename)) {
                     unlink($filename);
                 }
             } else {
                 $this->message->set(_("Le code fourni n'a pu être vérifié"), true);
             }
-            return $this->defaultPage->display();
         }
+        return $this->defaultPage->display();
     }
 
     function getQrcode()
@@ -73,17 +78,18 @@ class Totp extends PpciLibrary
         /**
          * must be a vuebinaire instance
          */
-        $vue = new BinaryView();
+        $vue = service("BinaryView");
         $vue->setParam(
             array(
                 "disposition" => "inline",
-                "tmp_name" => WRITEPATH . "/temp/" . $_SESSION["login"] . "_totp.png"
+                "tmp_name" => $this->config->APP_temp . "/" . $_SESSION["login"] . "_totp.png"
             )
         );
         return $vue->send();
     }
 
-    function verify() {
+    function verify()
+    {
         try {
             if (
                 $this->gacltotp->verifyOtp(
@@ -93,8 +99,10 @@ class Totp extends PpciLibrary
             ) {
                 $_SESSION["isLogged"] = true;
                 $this->log->setlog($_SESSION["login"], "totpVerifyExec", "ok");
+                $this->message->set(_("Vous êtes maintenant connecté"));
             } else {
                 $this->log->setlog($_SESSION["login"], "totpVerifyExec", "ko");
+                $this->message->set(_("Le code TOTP rentré n'a pas été reconnu"), true);
             }
         } catch (PpciException $pe) {
             $this->message->setSyslog($pe->getMessage());

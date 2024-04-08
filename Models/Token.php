@@ -44,7 +44,7 @@ class Token
          */
         foreach (array($this->privateKey, $this->pubKey) as $filename) {
             if (!file_exists($filename)) {
-                throw new PpciException("File $filename not readable");
+                throw new \Ppci\Libraries\PpciException("File $filename not readable");
             }
         }
     }
@@ -86,13 +86,13 @@ class Token
                     );
                     $token = json_encode($dataToken);
                 } else {
-                    throw new PpciException("Encryption_token_not_realized");
+                    throw new \Ppci\Libraries\PpciException("Encryption_token_not_realized");
                 }
             } else {
-                throw new PpciException("validity duration not numeric : " . $validityDuration);
+                throw new \Ppci\Libraries\PpciException("validity duration not numeric : " . $validityDuration);
             }
         } else {
-            throw new PpciException("login_empty");
+            throw new \Ppci\Libraries\PpciException("login_empty");
         }
         return $token;
     }
@@ -130,22 +130,22 @@ class Token
                             if ($data["expire"] > $now) {
                                 $login = $data["login"];
                             } else {
-                                throw new PpciException('token_expired');
+                                throw new \Ppci\Libraries\PpciException('token_expired');
                             }
                         } else {
-                            throw new PpciException('IP_address_non_equivalent');
+                            throw new \Ppci\Libraries\PpciException('IP_address_non_equivalent');
                         }
                     } else {
-                        throw new PpciException("parameter_into_token_absent");
+                        throw new \Ppci\Libraries\PpciException("parameter_into_token_absent");
                     }
                 } else {
-                    throw new PpciException("token_cannot_be_decrypted");
+                    throw new \Ppci\Libraries\PpciException("token_cannot_be_decrypted");
                 }
             } catch (\Exception $e) {
-                throw new PpciException("token_cannot_be_decrypted");
+                throw new \Ppci\Libraries\PpciException("token_cannot_be_decrypted");
             }
         } else {
-            throw new PpciException("token_empty");
+            throw new \Ppci\Libraries\PpciException("token_empty");
         }
         return $login;
     }
@@ -163,7 +163,7 @@ class Token
             $token = json_decode($jsonData, true);
             return $this->openToken($token);
         }
-        throw new PpciException("Json file empty");
+        throw new \Ppci\Libraries\PpciException("Json file empty");
     }
 
     /**
@@ -183,17 +183,17 @@ class Token
                 if ($handle ) {
                     $contents = fread($handle, filesize($filename));
                     if (!$contents) {
-                        throw new PpciException("key " . $filename . " is empty");
+                        throw new \Ppci\Libraries\PpciException("key " . $filename . " is empty");
                     }
                     fclose($handle);
                 } else {
-                    throw new PpciException($filename . " could not be open");
+                    throw new \Ppci\Libraries\PpciException($filename . " could not be open");
                 }
             } else {
-                throw new PpciException("key " . $filename . " not found");
+                throw new \Ppci\Libraries\PpciException("key " . $filename . " not found");
             }
         } else {
-            throw new PpciException("open key : type not specified");
+            throw new \Ppci\Libraries\PpciException("open key : type not specified");
         }
         return $contents;
     }

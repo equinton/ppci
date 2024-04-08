@@ -11,6 +11,7 @@ use Ppci\Libraries\SmartyPpci;
 use Ppci\Libraries\PpciInit;
 use Ppci\Models\Log;
 use Ppci\Models\Dbparam;
+use Ppci\Libraries\BinaryView;
 
 /**
  * Services Configuration file.
@@ -37,18 +38,12 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
-    public static function Smarty($getShared = true)
-    {
-        return ($getShared === true ? static::getSharedInstance('Smarty') : new SmartyPpci());
-    }
+
 
     public static function MessagePpci($getShared = true)
     {
         return ($getShared === true ? static::getSharedInstance('MessagePpci') : new MessagePpci());
     }
-    // public static function LoggerPpci($getShared = true) {
-    //     return ($getShared === true ? static::getSharedInstance('LoggerPpci') : new LoggerPpci());
-    // }
 
     public static function PpciInit($getShared = true)
     {
@@ -65,5 +60,20 @@ class Services extends BaseService
     }
     public static function AppConfig($getShared = true) {
         return ($getShared === true ? static::getSharedInstance('AppConfig') : new App());
+    }
+
+    /**
+     * Views
+     */
+        public static function Smarty($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('Smarty') : new SmartyPpci());
+
+    }
+
+    public static function BinaryView($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('BinaryView') : new BinaryView());
+        
     }
 }

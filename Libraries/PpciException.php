@@ -1,3 +1,3 @@
 <?php 
-namespace Ppci\Models;
+namespace Ppci\Libraries;
 class PpciException extends \Exception {}

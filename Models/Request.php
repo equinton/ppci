@@ -57,7 +57,7 @@ class Request extends PpciModel
          * Search the terms forbiden into the request
          */
         if (preg_match("/(insert)|(update)|(delete)|(grant)|(revoke)|(create)|(drop)|(alter)|(log)|(logingestion)|(passwordlost)|(acllogin)|(truncate)|(cascade)/i", $data["body"]) == 1) {
-            throw new PpciException(_("La requête ne peut pas contenir d'ordres de modification de la base de données ni porter sur des tables contenant des informations confidentielles"));
+            throw new \Ppci\Libraries\PpciException(_("La requête ne peut pas contenir d'ordres de modification de la base de données ni porter sur des tables contenant des informations confidentielles"));
         }
         /*
          * Suppression des contenus dangereux dans la commande SQL

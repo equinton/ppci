@@ -339,7 +339,7 @@ class Login
             ldap_set_option($ldap, LDAP_OPT_TIMELIMIT, $LDAP["timeout"]);
             ldap_set_option($ldap, LDAP_OPT_TIMEOUT, $LDAP["timeout"]);
             if (!$ldap) {
-                throw new PpciException(_("Impossible de se connecter au serveur LDAP"));
+                throw new \Ppci\Libraries\PpciException(_("Impossible de se connecter au serveur LDAP"));
             }
             if ($LDAP["v3"]) {
                 ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -406,7 +406,8 @@ class Login
         }
         // Finalement, on détruit la session.
         session()->destroy();
-        $_SESSION = array();
+        session_unset();
+        $_SESSION = [];
         if ($this->identificationMode == "CAS") {
             \phpCAS::client(
                 CAS_VERSION_2_0,

@@ -13,7 +13,7 @@ class RightFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         // Do something here
-        echo base_url(uri_string()) . "<br>";
+        //echo base_url(uri_string()) . "<br>";
         //echo $_SERVER['QUERY_STRING'] . "<br>";
         $query = explode("/", uri_string());
         if (!empty($query)) {
@@ -28,8 +28,6 @@ class RightFilter implements FilterInterface
                 $requiredRights = $ppciRights->getRights($moduleName);
             }
             if (!empty($requiredRights)) {
-
-
                 $session = \Config\Services::session();
                 if (!isset($_SESSION["isLogged"])) {
                     $login = new \Ppci\Libraries\Login();

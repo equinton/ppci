@@ -26,7 +26,6 @@ class Acllogin extends PpciModel
             ),
             "logindetail" => array(
                 "type" => 0,
-                "requis" => 1
             ),
             "totp_key" => array("type" => 0)
         );
@@ -89,7 +88,6 @@ class Acllogin extends PpciModel
         } else {
             $nameisnull = false;
         }
-        $name = $this->encodeData($name);
         if (!empty($login)) {
             /**
              * Recherche d'un login correspondant
@@ -107,7 +105,7 @@ class Acllogin extends PpciModel
             $data["login"] = strtolower($login);
             return $this->ecrire($data);
         } else {
-            throw new PpciException(_("L'ajout d'un login à la table des comptes (gestion des droits) n'est pas possible : le login n'est pas fourni"));
+            throw new \Ppci\Libraries\PpciException(_("L'ajout d'un login à la table des comptes (gestion des droits) n'est pas possible : le login n'est pas fourni"));
         }
     }
     /**

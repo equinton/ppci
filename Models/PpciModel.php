@@ -98,12 +98,12 @@ class PpciModel extends Model
         }
         if ($onlyExecute && !$query) {
             $this->message->setSyslog(sprintf(_("Erreur SQL pour la requête %s"), $sql));
-            throw new PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
+            throw new \Ppci\Libraries\PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
         } else {
             if (!is_bool($query) && $query->hasError()) {
                 $this->message->set($query->getErrorMessage(), true);
                 $this->message->setSyslog($query->getErrorMessage());
-                throw new PpciException($query->getErrorMessage(), $query->getErrorCode());
+                throw new \Ppci\Libraries\PpciException($query->getErrorMessage(), $query->getErrorCode());
             }
         }
         return $query;
@@ -129,9 +129,12 @@ class PpciModel extends Model
         /**
          * Verify mandatory fields
          */
+        if (!isset($row[$this->primaryKey])) {
+            $row[$this->primaryKey] = 0;
+        }
         foreach ($this->mandatoryFields as $fieldName) {
             if (!isset($row[$fieldName]) || strlen($row[$fieldName]) == 0) {
-                throw new PpciException(sprintf(_("Le champ %s est obligatoire mais n'a pas été renseigné"), $fieldName));
+                throw new \Ppci\Libraries\PpciException(sprintf(_("Le champ %s est obligatoire mais n'a pas été renseigné"), $fieldName));
             }
         }
         $isInsert = false;
@@ -175,11 +178,11 @@ class PpciModel extends Model
     function writeTableNN(string $tablename, string $firstKey, string $secondKey, int $id, $data = array()): void
     {
         if (!$id > 0) {
-            throw new PpciException(sprintf(_("La clé principale %s n'est pas renseignée ou vaut zéro"), $firstKey));
+            throw new \Ppci\Libraries\PpciException(sprintf(_("La clé principale %s n'est pas renseignée ou vaut zéro"), $firstKey));
         }
         foreach ($data as $value) {
             if (!is_numeric($value)) {
-                throw new PpciException(sprintf(_("Une valeur fournie n'est pas numérique (%s)"), $value));
+                throw new \Ppci\Libraries\PpciException(sprintf(_("Une valeur fournie n'est pas numérique (%s)"), $value));
             }
         }
         $tablename = $this->qi . $tablename . $this->qi;

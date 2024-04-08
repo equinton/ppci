@@ -31,9 +31,9 @@ class BinaryView
          * Recuperation du content-type s'il n'a pas ete fourni
          */
         if (empty($this->param["content_type"])) {
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
             if (!$finfo) {
-                throw new FrameworkException(_("Problème rencontré lors de l'ouverture de finfo"));
+                throw new \Ppci\Libraries\PpciException(_("Problème rencontré lors de l'ouverture de finfo"));
             }
             $this->param["content_type"] = $finfo->file($this->param["tmp_name"]);
         }

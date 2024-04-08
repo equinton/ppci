@@ -5,6 +5,7 @@ namespace Ppci\Config;
  */
 class RightsPpci {
     protected array $rights = [];
+    protected array $adminModules = [];
     /**
      * Get the rights necessary to run a module
      *
@@ -17,5 +18,8 @@ class RightsPpci {
         } else {
             return [];
         }
+    }
+    function isAdminRequired(string $moduleName):bool {
+        return in_array($moduleName, $this->adminModules);
     }
 }

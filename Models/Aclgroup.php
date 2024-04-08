@@ -91,7 +91,7 @@ class Aclgroup extends PpciModel
                 );
                 if ($ldapParam["ldapnoanonymous"]) {
                     if (!$ldap->login($ldapParam["ldaplogin"], $ldapParam["ldappassword"])) {
-                        throw new PpciException(
+                        throw new \Ppci\Libraries\PpciException(
                             _("L'identification dans l'annuaire LDAP a échoué pour la récupération des groupes de l'utilisateur")
                         );
                     }
@@ -129,7 +129,7 @@ class Aclgroup extends PpciModel
                  */
                 $groupes = array_merge($groupes, $groupesLdap);
             } else {
-                throw new PpciException(_("Connexion à l'annuaire LDAP impossible"));
+                throw new \Ppci\Libraries\PpciException(_("Connexion à l'annuaire LDAP impossible"));
             }
         }
         /**
@@ -314,7 +314,7 @@ class Aclgroup extends PpciModel
     function ecrire(array $data):int
     {
         if ($data["aclgroup_id"] > 0 && $data["aclgroup_id"] == $data["aclgroup_id_parent"]) {
-            throw new PpciException(_("Un groupe ne peut être son propre parent"));
+            throw new \Ppci\Libraries\PpciException(_("Un groupe ne peut être son propre parent"));
         }
         $id = parent::ecrire($data);
         if ($id > 0) {
@@ -358,7 +358,7 @@ class Aclgroup extends PpciModel
              */
             $dataFils = $this->getChildGroups($id);
             if (count($dataFils) > 0) {
-                throw new PpciException(_("Suppression du groupe impossible : d'autres groupes lui sont rattachés"));
+                throw new \Ppci\Libraries\PpciException(_("Suppression du groupe impossible : d'autres groupes lui sont rattachés"));
             } else {
                 try {
                     /**

@@ -249,7 +249,7 @@ class LoginGestion extends PpciModel
                 $data["password"] = $this->_encryptPassword($data["pass1"]);
                 $data["is_expired"] = 1;
             } else {
-                throw new PpciException(_("Mot de passe insuffisamment complexe ou trop petit"));
+                throw new \Ppci\Libraries\PpciException(_("Mot de passe insuffisamment complexe ou trop petit"));
             }
         }
         $data["datemodif"] = date($_SESSION["MASKDATELONG"]);
@@ -263,7 +263,7 @@ class LoginGestion extends PpciModel
                 if (openssl_public_encrypt($token, $crypted, $this->getKey("pub"), OPENSSL_PKCS1_OAEP_PADDING)) {
                     $data["tokenws"] = base64_encode($crypted);
                 } else {
-                    throw new PpciException(_("Une erreur est survenue pendant le chiffrement du jeton d'identification"));
+                    throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le chiffrement du jeton d'identification"));
                 }
             } else {
                 /**
@@ -320,7 +320,7 @@ class LoginGestion extends PpciModel
             if (openssl_private_decrypt(base64_decode($data["tokenws"]), $decrypted, $this->getKey("priv"), OPENSSL_PKCS1_OAEP_PADDING)) {
                 $data["tokenws"] = $decrypted;
             } else {
-                throw new PpciException(_("Une erreur est survenue pendant le déchiffrement du jeton d'identification"));
+                throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le déchiffrement du jeton d'identification"));
             }
         }
         return $data;
@@ -343,17 +343,17 @@ class LoginGestion extends PpciModel
                 if ($handle) {
                     $contents = fread($handle, filesize($filename));
                     if (!$contents) {
-                        throw new PpciException("key " . $filename . " is empty");
+                        throw new \Ppci\Libraries\PpciException("key " . $filename . " is empty");
                     }
                     fclose($handle);
                 } else {
-                    throw new PpciException($filename . " could not be open");
+                    throw new \Ppci\Libraries\PpciException($filename . " could not be open");
                 }
             } else {
-                throw new PpciException("key " . $filename . " not found");
+                throw new \Ppci\Libraries\PpciException("key " . $filename . " not found");
             }
         } else {
-            throw new PpciException("open key : type not specified");
+            throw new \Ppci\Libraries\PpciException("open key : type not specified");
         }
         return $contents;
     }

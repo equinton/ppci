@@ -44,7 +44,7 @@ class Locale
          */
         $param = new Ppci();
         if (!setlocale(LC_ALL, "C")) {
-            throw new PpciException("Locale not initialized");
+            throw new \Ppci\Libraries\PpciException("Locale not initialized");
         }
         ;
         bindtextdomain($locale, $param->localePath);
@@ -59,7 +59,7 @@ class Locale
          */
         $param = new Ppci();
         if (!setlocale(LC_ALL, "C")) {
-            throw new PpciException("Locale not initialized");
+            throw new \Ppci\Libraries\PpciException("Locale not initialized");
         }
         ;
         bindtextdomain($locale, $param->localePath);
