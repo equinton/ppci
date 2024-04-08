@@ -73,8 +73,8 @@ class SmartyPpci
          * Assign variables from app/Config/App
          */
         $appConfig = service("AppConfig");
-        $this->set( $appConfig->copyright, "copyright");
-        $this->set( $appConfig->APP_help_address,"APP_help_address");
+        $this->set($appConfig->copyright, "copyright");
+        $this->set($appConfig->APP_help_address, "APP_help_address");
         /**
          * Assign variables from dbparam table
          */
@@ -98,6 +98,8 @@ class SmartyPpci
             $_SESSION["menu"] = $menu->generateMenu();
         }
         $this->set($_SESSION["menu"], "menu");
+        $this->set($_SESSION["isLogged"], "isLogged");
+        $this->set($_SESSION["login"], "login");
     }
     /**
      * Add variable to Smarty
