@@ -2,7 +2,8 @@
 namespace Ppci\Models;
 
 use ZxcvbnPhp\Zxcvbn;
-use ppci\Config\SmartyParam;
+use Ppci\Config\SmartyParam;
+use Ppci\Libraries\Mail;
 
 /**
  * Classe permettant de manipuler les logins stockés en base de données locale

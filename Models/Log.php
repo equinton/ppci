@@ -1,6 +1,7 @@
 <?php
 namespace Ppci\Models;
 use Ppci\Models\PpciModel;
+use Ppci\Libraries\Mail;
 /**
  * Classe permettant d'enregistrer toutes les operations effectuees dans la base
  *
