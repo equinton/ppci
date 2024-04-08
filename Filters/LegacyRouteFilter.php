@@ -15,6 +15,7 @@ class LegacyRouteFilter implements FilterInterface
         /**
          * Legacy routes
          */
+        $session = session();
         $newroute = "";
         if (!empty ($_REQUEST["module"])) {
             $newroute = $_REQUEST["module"];
@@ -25,7 +26,16 @@ class LegacyRouteFilter implements FilterInterface
             unset($_REQUEST["action"]);
         }
         if (!empty ($newroute)) {
-            return redirect($newroute)->withCookies();
+            if (!empty ($_POST)) {
+                $session->setFlashData("POST", $_POST);
+            }
+            if (!empty($_GET)) {
+                $session->setFlashData("GET", $_GET);
+            }
+            if (!empty($_REQUEST)) {
+                $session->setFlashData("REQUEST", $_REQUEST);
+            }
+            return redirect($newroute)->withHeaders()->withInput()->withCookies();
         }
     }
 

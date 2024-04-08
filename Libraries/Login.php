@@ -6,18 +6,21 @@ use Ppci\Config\IdentificationConfig;
 class Login extends PpciLibrary
 {
     protected $dataclass;
+    function __construct() {
+        parent::__construct();
+        $this->dataclass = new \Ppci\Models\Login();
+    }
     function getLogin()
     {
-        $login = new \Ppci\Models\Login();
         $config = new IdentificationConfig();
         $ident_type = $config->identificationType;
         $log = service("Log");
         if (
             in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])
-            && empty($_REQUEST["login"])
+            && empty($_POST["login"])
             && empty($_SESSION["login"])
             && empty($_COOKIE["tokenIdentity"])
-            && empty($_REQUEST["cas_required"])
+            && empty($_POST["cas_required"])
         ) {
             return "login";
         } else {
@@ -59,7 +62,7 @@ class Login extends PpciLibrary
                         "admin-reauthenticate",
                         "Error: the used account (" . $_POST["login"] . ") is not the same of the current account"
                     );
-                    $login->disconnect();
+                    $this->dataclass->disconnect();
                 } else {
                     $_SESSION["isLogged"] = true;
                 }
@@ -72,6 +75,8 @@ class Login extends PpciLibrary
                 return "login";
             }
         }
+        unset($_SESSION["menu"]);
+        return ("default");
     }
 
     public function display()

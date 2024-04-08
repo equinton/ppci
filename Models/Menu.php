@@ -67,13 +67,13 @@ class Menu
         /*
          * Recherche si le login est requis
          */
-        if (isset($attributes["loginrequis"]) && !$_SESSION["is_authenticated"]) {
+        if (isset($attributes["loginrequis"]) && !$_SESSION["isLogged"]) {
             $ok = false;
         }
         /*
          * Recherche si l'utilisateur n'est pas connecte
          */
-        if (isset ($attributes["onlynoconnect"]) && $_SESSION["is_authenticated"]) {
+        if (isset ($attributes["onlynoconnect"]) && $_SESSION["isLogged"]) {
             $ok = false;
         }
         /**

@@ -12,7 +12,8 @@ use Ppci\Libraries;
  */
 class PpciController extends \App\Controllers\BaseController
 {
-
+    protected $message;
+    protected $config;
     /**
      * 
      * Systematic code used
@@ -28,7 +29,18 @@ class PpciController extends \App\Controllers\BaseController
         LoggerInterface $logger
     ) {
         parent::initController($request, $response, $logger);
-
+        $this->message = service('MessagePpci');
+        $this->config = service("AppConfig");
+        $session = session();
+        if ($session->getFlashdata("POST")){
+            $_POST = $session->getFlashdata("POST");
+        }
+        if ($session->getFlashdata("GET")){
+            $_GET = $session->getFlashdata("GET");
+        }
+        if ($session->getFlashdata("REQUEST")){
+            $_REQUEST = $session->getFlashdata("REQUEST");
+        }
     }
 
 }

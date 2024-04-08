@@ -361,13 +361,15 @@ class PpciModel extends Model
     {
         $result = array();
         $query = $this->db->query($sql, $param);
-        $data = $query->getResult("array");
-        if ($this->autoFormatDate) {
-            foreach ($data as $row) {
-                $result[] = $this->formatDatesToLocale($row);
+        if ($query) {
+            $data = $query->getResult("array");
+            if ($this->autoFormatDate) {
+                foreach ($data as $row) {
+                    $result[] = $this->formatDatesToLocale($row);
+                }
+            } else {
+                $result = $data;
             }
-        } else {
-            $result = $data;
         }
         return $result;
     }

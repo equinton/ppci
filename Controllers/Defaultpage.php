@@ -1,8 +1,8 @@
 <?php
 namespace Ppci\Controllers;
-use CodeIgniter\Controller;
+use App\Controllers\BaseController;
 
-class Defaultpage extends PpciController
+class Defaultpage extends BaseController
 {
 
     
