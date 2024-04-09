@@ -25,7 +25,7 @@ class AdminFilter implements FilterInterface
 
                 if ($ppciRights->isAdminRequired($moduleName)) {
                     $app = service("AppConfig");
-                    if (in_array("admin", $_SESSION["rights"])) {
+                    if (in_array("admin", $_SESSION["userRights"])) {
                         if (
                             isset($_SESSION["adminSessionTime"])
                             && ($_SESSION["adminSessionTime"] + $app->adminSessionDuration) < time()

@@ -2,6 +2,7 @@
 namespace Ppci\Models;
 
 use Config\App;
+use CodeIgniter\Cookie\Cookie;
 
 class Login
 {
@@ -49,9 +50,10 @@ class Login
             try {
 
                 $gaclTotp = new Gacltotp($this->paramApp->privateKey, $this->paramApp->pubKey);
-                $token = $gaclTotp->decode($_COOKIE["tokenIdentity"]);
+                $token = json_decode($gaclTotp->decode($_COOKIE["tokenIdentity"], "pub"), true);
                 if ($token["exp"] > time()) {
                     $_SESSION["login"] = $token["uid"];
+                    $_SESSION["isLogged"] = 1;
                 } else {
                     throw new PpciException(_("Le jeton fourni n'est pas valide"));
                 }
@@ -402,13 +404,15 @@ class Login
         // Note : cela détruira la session et pas seulement les données de session !
         helper("cookie");
         if (isset($_COOKIE[session_name()])) {
-            set_cookie(session_name(), '', time() - 42000, );
+            $cookie = new Cookie(session_name(), "", [time() - 42000]);
+            set_cookie($cookie);
         }
         /*
          * Suppression du cookie d'identification
          */
         if (isset($_COOKIE["tokenIdentity"])) {
-            set_cookie("tokenIdentity", '', time() - 42000, "/");
+            $cookie = new Cookie("tokenIdentity", "", [time() - 42000]);
+            set_cookie($cookie);
         }
         // Finalement, on détruit la session.
         session()->destroy();

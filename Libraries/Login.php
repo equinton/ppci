@@ -87,8 +87,11 @@ class Login extends PpciLibrary
             $message->set($e->getMessage(), true);
         }
         if ($_SESSION["isLogged"]) {
+            /**
+             * Generate rights
+             */
+            $_SESSION["userRights"] = $acllogin->generateRights($_SESSION["login"],$config->GACL_aco,$config->LDAP);
             $this->log->setMessageLastConnections();
-            //$this->log->setLog($_SESSION["login"], "connection", "ok");
             if ($_POST["loginByTokenRequested"] == 1) {
                 helper('cookie');
                 $maxAge = $config->tokenIdentityValidity;

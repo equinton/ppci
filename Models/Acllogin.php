@@ -128,12 +128,10 @@ class Acllogin extends PpciModel
      * @param string $login
      * @return array
      */
-    function getListDroits($login, $appli, $ldapParam = array())
+    function generateRights($login, $appli, $ldapParam = array())
     {
         $droits = array();
         if (!empty($login) && !empty($appli)) {
-            $login = strtolower($this->encodeData($login));
-            $appli = $this->encodeData($appli);
             /**
              * Recherche des groupes associes au login
              */
