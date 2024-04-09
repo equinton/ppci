@@ -101,6 +101,7 @@ class Totp extends PpciLibrary
                 $_SESSION["isLogged"] = true;
                 $this->log->setlog($_SESSION["login"], "totpVerifyExec", "ok");
                 $this->message->set(_("Vous êtes maintenant connecté"));
+                $_SESSION["adminSessionTime"] = time();
                 /**
                  * Generate the cookie to inhibit the totp control
                  */
