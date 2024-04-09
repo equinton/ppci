@@ -12,9 +12,6 @@ class RightFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        // Do something here
-        //echo base_url(uri_string()) . "<br>";
-        //echo $_SERVER['QUERY_STRING'] . "<br>";
         $query = explode("/", uri_string());
         if (!empty($query)) {
             $moduleName = $query[0];
@@ -28,7 +25,7 @@ class RightFilter implements FilterInterface
                 $requiredRights = $ppciRights->getRights($moduleName);
             }
             if (!empty($requiredRights)) {
-                $session = \Config\Services::session();
+                $ok = false;
                 if (!isset($_SESSION["isLogged"])) {
                     $login = new \Ppci\Libraries\Login();
                     $retour = $login->getLogin();
@@ -36,13 +33,13 @@ class RightFilter implements FilterInterface
                         return redirect()->to(site_url($retour));
                     }
                 }
-
-                $userRights = $session->get("userRights");
-                if (is_null($userRights)) {
-                    $userRights = [];
+                foreach ($requiredRights as $r) {
+                    if ($_SESSION["userRights"][$r] == 1) {
+                        $ok = true;
+                        break;
+                    }
                 }
-                $testRights = array_intersect($requiredRights, $userRights);
-                if (count($testRights) == 0) {
+                if (!$ok) {
                     $message = service('MessagePpci');
                     $message->set(_("Vous ne disposez pas des droits nécessaires pour exécuter cette fonction"), true);
                     helper("ppci");
@@ -56,6 +53,5 @@ class RightFilter implements FilterInterface
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        // Do something here
     }
 }

@@ -16,6 +16,10 @@ class Rights extends RightsPpci
      * List of rights by module
      */
     protected array $rights = [
+        "loginList" => ["admin"],
+        "loginChange" => ["admin"],
+        "loginWrite" => ["admin"],
+        "loginDelete" => ["admin"],
         "appliList" => ["admin"],
         "appliDisplay" => ["admin"],
         "appliChange" => ["admin"],
@@ -51,6 +55,10 @@ class Rights extends RightsPpci
         "systemShowSession" => ["admin"],
     ];
     protected array $adminModules = [
+        "loginList",
+        "loginChange",
+        "loginWrite",
+        "loginDelete",
         "appliList",
         "appliDisplay",
         "appliChange",

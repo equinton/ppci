@@ -14,7 +14,6 @@ class AdminFilter implements FilterInterface
     {
         $conf = new App();
         if ($conf["adminMustUseTotp"]) {
-            $adminOk = false;
             $query = explode("/", uri_string());
             if (!empty($query)) {
                 $moduleName = $query[0];
@@ -22,15 +21,13 @@ class AdminFilter implements FilterInterface
                     $moduleName .= ucfirst($query[1]);
                 }
                 $ppciRights = new \Ppci\Config\Rights();
-
                 if ($ppciRights->isAdminRequired($moduleName)) {
                     $app = service("AppConfig");
-                    if (in_array("admin", $_SESSION["userRights"])) {
+                    if ($_SESSION["userRights"]["admin"] == 1) {
                         if (
                             isset($_SESSION["adminSessionTime"])
                             && ($_SESSION["adminSessionTime"] + $app->adminSessionDuration) < time()
                         ) {
-                            $adminOk = true;
                             $_SESSION["adminSessionTime"] = time();
                         } else {
                             $aclLogin = new Acllogin();
