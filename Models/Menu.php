@@ -59,7 +59,7 @@ class Menu
             $ok = false;
             $tdroits = explode(",", $attributes["droits"]);
             foreach ($tdroits as $droit) {
-                if (isset ($_SESSION["droits"]) && isset($_SESSION["droits"][$droit])) {
+                if (isset ($_SESSION["userRights"]) && isset($_SESSION["userRights"][$droit])) {
                     $ok = true;
                 }
             }

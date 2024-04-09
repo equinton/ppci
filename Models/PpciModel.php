@@ -376,6 +376,10 @@ class PpciModel extends Model
         }
         return $result;
     }
+    function getListeParam(string $sql): array
+    {
+        return $this->getListParam($sql);
+    }
     function getListeParamAsPrepared(string $sql, array $param = null): array
     {
         return $this->getListParam($sql, $param);
@@ -415,7 +419,7 @@ class PpciModel extends Model
     public function setDateFormat(string $dateFormat)
     {
         $this->dateFormatMask = $dateFormat;
-        $this->datetimeFormat = $dateFormat . " h:i:s";
+        $this->datetimeFormat = $dateFormat . " H:i:s";
     }
     /**
      * Get a record or, if not exists, get the default values
@@ -435,14 +439,18 @@ class PpciModel extends Model
     {
         foreach ($this->dateFields as $field) {
             if (!empty($row[$field])) {
-                $date = date_create_from_format("Y-m-d h:i:s", $row[$field]);
-                $row[$field] = date_format($date, $this->dateFormatMask);
+                $date = date_create_from_format("Y-m-d H:i:s", $row[$field]);
+                if ($date) {
+                    $row[$field] = date_format($date, $this->dateFormatMask);
+                }
             }
         }
         foreach ($this->datetimeFields as $field) {
-            if (!empty($row[$field])) {
-                $date = date_create_from_format("Y-m-d h:i:s", $row[$field]);
-                $row[$field] = date_format($date, $this->datetimeFormat);
+            if (strlen($row[$field]) > 0) {
+                $date = date_create_from_format("Y-m-d H:i:s", $row[$field]);
+                if ($date) {
+                    $row[$field] = date_format($date, $this->datetimeFormat);
+                }
             }
         }
         return $row;
