@@ -59,7 +59,7 @@ class Login extends PpciLibrary
                      */
                     $totpNecessary = true;
                     if (isset($_COOKIE["totpTrustBrowser"])) {
-                        $content = json_decode($gacltotp->decode($_COOKIE["totpTrustBrowser"],"pub"), true);
+                        $content = json_decode($gacltotp->decode($_COOKIE["totpTrustBrowser"], "pub"), true);
                         if ($content["uid"] == $_SESSION["login"] && $content["exp"] > time()) {
                             $totpNecessary = false;
                             $_SESSION["isLogged"] = true;
@@ -72,19 +72,7 @@ class Login extends PpciLibrary
                         return "totp";
                     }
                 } else {
-                    /**
-                     * Verify that the login used as admin is the same as login
-                     */
-                    if (isset($_POST["loginAdmin"]) && $_POST["login"] != $_SESSION["login"]) {
-                        $log->setLog(
-                            $_SESSION["login"],
-                            "admin-reauthenticate",
-                            "Error: the used account (" . $_POST["login"] . ") is not the same of the current account"
-                        );
-                        $this->dataclass->disconnect();
-                    } else {
-                        $_SESSION["isLogged"] = true;
-                    }
+                    $_SESSION["isLogged"] = true;
                 }
             } else {
                 if ($ident_type == "ws") {
@@ -101,20 +89,22 @@ class Login extends PpciLibrary
         if ($_SESSION["isLogged"]) {
             $this->log->setMessageLastConnections();
             //$this->log->setLog($_SESSION["login"], "connection", "ok");
-            if ($_POST["loginByTokenRequested"] == 1){
+            if ($_POST["loginByTokenRequested"] == 1) {
                 helper('cookie');
-                    $maxAge = $config->tokenIdentityValidity;
-                    $content = json_encode(["uid"=>$_SESSION["login"],
-                    "exp"=>time() + $maxAge]);
-                    $encoded = $gacltotp->encode($content, "priv");
-                    $cookie = new Cookie(
-                        'tokenIdentity',
-                        $encoded,
-                        [
-                            'max-age' => $maxAge
-                        ]
-                    );
-                    set_cookie($cookie);
+                $maxAge = $config->tokenIdentityValidity;
+                $content = json_encode([
+                    "uid" => $_SESSION["login"],
+                    "exp" => time() + $maxAge
+                ]);
+                $encoded = $gacltotp->encode($content, "priv");
+                $cookie = new Cookie(
+                    'tokenIdentity',
+                    $encoded,
+                    [
+                        'max-age' => $maxAge
+                    ]
+                );
+                set_cookie($cookie);
             }
         }
         unset($_SESSION["menu"]);
