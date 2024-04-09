@@ -3,6 +3,7 @@ namespace Ppci\Libraries;
 
 use \Ppci\Models\Gacltotp;
 use \Ppci\Models\Acllogin;
+use CodeIgniter\Cookie\Cookie;
 
 class Totp extends PpciLibrary
 {
@@ -35,7 +36,7 @@ class Totp extends PpciLibrary
         if ($this->acllogin->isTotp()) {
             $this->message->set(_("Vous avez déjà activé l'identification à double facteur : contactez un administrateur de l'application pour réinitialiser cette fonction"), true);
         }
-        unset ($_SESSION["totpSecret"]);
+        unset($_SESSION["totpSecret"]);
         if (!isset($_SESSION["totpSecret"])) {
             $_SESSION["totpSecret"] = $this->gacltotp->createSecret();
             $this->gacltotp->createQrCode();
@@ -100,6 +101,24 @@ class Totp extends PpciLibrary
                 $_SESSION["isLogged"] = true;
                 $this->log->setlog($_SESSION["login"], "totpVerifyExec", "ok");
                 $this->message->set(_("Vous êtes maintenant connecté"));
+                /**
+                 * Generate the cookie to inhibit the totp control
+                 */
+                if (isset($_POST["otptrusted"])) {
+                    helper('cookie');
+                    $maxAge = 2592000;
+                    $content = json_encode(["uid"=>$_SESSION["login"],
+                    "exp"=>time() + $maxAge]);
+                    $encoded = $this->gacltotp->encode($content, "priv");
+                    $cookie = new Cookie(
+                        'totpTrustBrowser',
+                        $encoded,
+                        [
+                            'max-age' => $maxAge
+                        ]
+                    );
+                    set_cookie($cookie);
+                }
             } else {
                 $this->log->setlog($_SESSION["login"], "totpVerifyExec", "ko");
                 $this->message->set(_("Le code TOTP rentré n'a pas été reconnu"), true);

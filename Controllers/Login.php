@@ -26,7 +26,14 @@ class Login extends PpciController
         if (!in_array($config->identificationType, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])) {
             return redirect()->to(site_url());
         } else {
-            return redirect()->to($login->getLogin());
+            $retour = $login->getLogin();
+            $message = service("messagePpci");
+            if (empty($retour)) {
+                $lib = new \Ppci\Libraries\DefaultPage();
+                return ($lib->display());
+            } else {
+                return redirect()->to($retour);
+            }
         }
     }
     public function disconnect()

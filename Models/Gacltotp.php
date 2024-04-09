@@ -53,7 +53,7 @@ class Gacltotp
         $this->otp->setLabel($_SESSION["login"]);
         $dbparam = service("Dbparam");
         $this->otp->setIssuer($dbparam->getParam("otp_issuer"));
-        include_once ROOTPATH.'plugins/phpqrcode/qrlib.php';
+        include_once ROOTPATH . 'plugins/phpqrcode/qrlib.php';
         $paramApp = service("AppConfig");
         $filename = $paramApp->APP_temp . "/" . $_SESSION["login"] . "_totp.png";
         \QRcode::png($this->otp->getProvisioningUri(), $filename);
@@ -130,5 +130,50 @@ class Gacltotp
             throw new \Ppci\Libraries\PpciException("open key : type not specified");
         }
         return $contents;
+    }
+    /**
+     * Encode a content with the public (pub) or private (priv) key
+     *
+     * @param [type] $content in json or other
+     * @param [type] $keyType
+     * @return string (base_64 encrypted)
+     */
+    public function encode($content, $keyType)
+    {
+        if ($keyType == "priv") {
+            if (openssl_private_encrypt($content, $crypted, $this->getKey("priv"))) {
+            } else {
+                throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le chiffrement"));
+            }
+        } else {
+            if (openssl_public_encrypt($content, $crypted, $this->getKey("pub"))) {
+            } else {
+                throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le chiffrement"));
+            }
+        }
+        return base64_encode($crypted);
+    }
+    /**
+     * Decrypt a content with public (pub) or private (priv) key
+     *
+     * @param [type] $crypted in format base64
+     * @param [type] $keyType
+     * @return string (json)
+     */
+    public function decode($crypted, $keyType)
+    {
+        $crypted = base64_decode($crypted);
+        if ($keyType == "priv") {
+            if (openssl_private_decrypt($crypted, $decrypted, $this->getKey("priv"))) {
+            } else {
+                throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le déchiffrement"));
+            }
+        } else {
+            if (openssl_public_decrypt($crypted, $decrypted, $this->getKey("pub"))) {
+            } else {
+                throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le déchiffrement"));
+            }
+        }
+        return $decrypted;
     }
 }
