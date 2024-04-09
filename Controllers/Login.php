@@ -10,8 +10,8 @@ class Login extends PpciController
     function index()
     {
         $login = new \Ppci\Libraries\Login();
-        $config = new IdentificationConfig();
-        if (in_array($config->identificationType, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])) {
+
+        if (in_array($this->config->identificationMode, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])) {
             return ($login->display());
         } else {
             $this->message->set(_("Le mode d'identification dans l'application ne vous permet pas d'accéder à la page de connexion"), true);
@@ -23,11 +23,10 @@ class Login extends PpciController
     {
         $login = new \Ppci\Libraries\Login();
         $config = new IdentificationConfig();
-        if (!in_array($config->identificationType, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])) {
+        if (!in_array($this->config->identificationMode, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])) {
             return redirect()->to(site_url());
         } else {
             $retour = $login->getLogin();
-            $message = service("messagePpci");
             if (empty($retour)) {
                 $lib = new \Ppci\Libraries\DefaultPage();
                 return ($lib->display());

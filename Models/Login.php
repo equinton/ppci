@@ -47,16 +47,22 @@ class Login
              * Token identification
              */
             try {
-                $token = new Token($this->paramApp->privateKey, $this->paramApp->pubKey);
-                $login = $token->openToken($_COOKIE["tokenIdentity"]);
+
+                $gaclTotp = new Gacltotp($this->paramApp->privateKey, $this->paramApp->pubKey);
+                $token = $gaclTotp->decode($_COOKIE["tokenIdentity"]);
+                if ($token["exp"] > time()) {
+                    $_SESSION["login"] = $token["uid"];
+                } else {
+                    throw new PpciException(_("Le jeton fourni n'est pas valide"));
+                }
             } catch (PpciException $e) {
-                $this->message->set(_("L'identification par jeton n'a pas abouti"));
+                $this->message->set(_("L'identification par jeton n'a pas abouti"), true);
                 $this->message->setSyslog($e->getMessage());
                 /**
                  * Destroy the token
                  */
                 helper('cookie');
-                setcookie('tokenIdentity', "", time() - 3600);
+                setcookie('tokenIdentity', "", time() - 36000);
             }
         } elseif ($type_authentification == "HEADER") {
             $tauth = "header";

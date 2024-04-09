@@ -1,8 +1,10 @@
 <?php
 namespace Ppci\Libraries;
 
-use Ppci\Config\IdentificationConfig;
+
+use Config\App;
 use Ppci\Models\Gacltotp;
+use CodeIgniter\Cookie\Cookie;
 
 class Login extends PpciLibrary
 {
@@ -15,8 +17,9 @@ class Login extends PpciLibrary
     function getLogin()
     {
         try {
-            $config = new IdentificationConfig();
-            $ident_type = $config->identificationType;
+            $config = new App();
+            $ident_type = $config->identificationMode;
+            $gacltotp = new Gacltotp($this->config->privateKey, $this->config->pubKey);
             $log = service("Log");
             if (
                 in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])
@@ -56,7 +59,6 @@ class Login extends PpciLibrary
                      */
                     $totpNecessary = true;
                     if (isset($_COOKIE["totpTrustBrowser"])) {
-                        $gacltotp = new Gacltotp($this->config->privateKey, $this->config->pubKey);
                         $content = json_decode($gacltotp->decode($_COOKIE["totpTrustBrowser"],"pub"), true);
                         if ($content["uid"] == $_SESSION["login"] && $content["exp"] > time()) {
                             $totpNecessary = false;
@@ -95,6 +97,25 @@ class Login extends PpciLibrary
         } catch (\Exception $e) {
             $message = service("MessagePpci");
             $message->set($e->getMessage(), true);
+        }
+        if ($_SESSION["isLogged"]) {
+            $this->log->setMessageLastConnections();
+            //$this->log->setLog($_SESSION["login"], "connection", "ok");
+            if ($_POST["loginByTokenRequested"] == 1){
+                helper('cookie');
+                    $maxAge = $config->tokenIdentityValidity;
+                    $content = json_encode(["uid"=>$_SESSION["login"],
+                    "exp"=>time() + $maxAge]);
+                    $encoded = $gacltotp->encode($content, "priv");
+                    $cookie = new Cookie(
+                        'tokenIdentity',
+                        $encoded,
+                        [
+                            'max-age' => $maxAge
+                        ]
+                    );
+                    set_cookie($cookie);
+            }
         }
         unset($_SESSION["menu"]);
         //return ("default");

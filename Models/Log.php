@@ -1,7 +1,9 @@
 <?php
 namespace Ppci\Models;
+
 use Ppci\Models\PpciModel;
 use Ppci\Libraries\Mail;
+
 /**
  * Classe permettant d'enregistrer toutes les operations effectuees dans la base
  *
@@ -167,13 +169,29 @@ class Log extends PpciModel
                 $sql,
                 array(
                     "login" => $_SESSION["login"],
-                    "datefrom" => $date->format(DATELONGMASK),
+                    "datefrom" => $date->format($_SESSION["date"]["maskdatelong"]),
                     "module" => $module,
                     "token" => $token
                 )
             );
         }
         return $connections;
+    }
+    /**
+     * Add last connections to messagePpci
+     *
+     * @param integer $duration
+     * @return void
+     */
+    public function setMessageLastConnections($duration = 36000)
+    {
+        $last = $this->getLastConnections($duration);
+        if (!empty($last)) {
+            $this->message->set(_("Dernières connexions :"));
+            foreach ($last as $conn) {
+                $this->message->set(sprintf(_("Le %1s depuis l'adresse IP %2s"), $conn["log_date"], $conn["ipaddress"]));
+            }
+        }
     }
 
     /**
@@ -188,7 +206,7 @@ class Log extends PpciModel
 
         if (!empty($login)) {
             $paramApp = service("AppConfig");
-        $GACL_aco = $paramApp->GACL_aco;
+            $GACL_aco = $paramApp->GACL_aco;
             $like = " like '" . $GACL_aco . "-connection%'";
             $sql = "select nom_module from log";
             $sql .= " where login = :login: and nom_module $like and commentaire = 'ok' and nom_module <> 'connection-token'";
@@ -235,7 +253,7 @@ class Log extends PpciModel
             $sql,
             array(
                 "login" => $login,
-                "blockingdate" => $date->format(DATELONGMASK),
+                "blockingdate" => $date->format($_SESSION["date"]["maskdatelong"]),
             )
         );
         if ($data["log_id"] > 0) {
@@ -252,7 +270,7 @@ class Log extends PpciModel
                 array(
                     "login" => $login,
                     "nbmax" => $nbMax,
-                    "blockingdate" => $date->format(DATELONGMASK),
+                    "blockingdate" => $date->format($_SESSION["date"]["maskdatelong"]),
                 )
             );
             $nb = 0;
@@ -314,7 +332,7 @@ class Log extends PpciModel
      */
     public function getCallsToModule($moduleName, $maxNumber, $duration)
     {
-        $APPLI_address = base_url(uri_string()) ;
+        $APPLI_address = base_url(uri_string());
         $paramApp = service("AppConfig");
         $message = service('MessagePpci');
         $GACL_aco = $paramApp->GACL_aco;
