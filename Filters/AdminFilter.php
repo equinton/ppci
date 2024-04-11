@@ -12,8 +12,8 @@ class AdminFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        $conf = new App();
-        if ($conf["adminMustUseTotp"]) {
+        $conf = service("AppConfig");
+        if ($conf->adminMustUseTotp) {
             $query = explode("/", uri_string());
             if (!empty($query)) {
                 $moduleName = $query[0];
@@ -26,20 +26,26 @@ class AdminFilter implements FilterInterface
                     if ($_SESSION["userRights"]["admin"] == 1) {
                         if (
                             isset($_SESSION["adminSessionTime"])
-                            && ($_SESSION["adminSessionTime"] + $app->adminSessionDuration) < time()
+                            && ($_SESSION["adminSessionTime"] + $app->adminSessionDuration) > time()
                         ) {
                             $_SESSION["adminSessionTime"] = time();
                         } else {
+                            /**
+                             * Store the module called
+                             */
+                            if ($request->is("get")) {
+                                $_SESSION["moduleRequired"] = $moduleName;
+                            }
                             $aclLogin = new Acllogin();
                             $totp = new Totp();
                             $vue = service("Smarty");
                             if ($aclLogin->isTotp()) {
                                 $vue->set(1, "isAdmin");
-                                return $totp->input();
+                                $_SESSION["filterMessages"][] = _("Vous devez vous ré-identifier avec votre code TOTP pour accéder aux modules d'administration");
+                                return redirect("totpAdmin");
                             } else {
-                                $message = service("MessagePpci");
-                                $message->set(_("Vous devez activer la double identification TOTP pour accéder aux modules d'administration"), true);
-                                return $totp->create();
+                                $_SESSION["filterMessages"][] = _("Vous devez activer la double identification TOTP pour accéder aux modules d'administration");
+                                return redirect("totpCreate");
                             }
                         }
                     }

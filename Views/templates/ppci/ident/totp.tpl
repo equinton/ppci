@@ -8,8 +8,7 @@
 </div>
 <div class="col-lg-6 col-md-8">
     <div class="row">
-        <form id="otpform" class="form-horizontal protoform" method="post" action="index.php">
-            <input type="hidden" name="module" value="totpVerifyExec">
+        <form id="otpform" class="form-horizontal protoform" method="post" action="totpVerifyExec">
             <input type="hidden" name="moduleCalled" value="{$moduleCalled}"">
         <div class=" form-group">
             <label for="otpcode" class="control-label col-md-4">

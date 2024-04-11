@@ -17,6 +17,11 @@ class Totp extends PpciController
     {
         return $this->lib->input();
     }
+    function admin() {
+        $smarty = service("Smarty");
+        $smarty->set(1, "isAdmin");
+        return $this->lib->input();
+    }
 
     function create()
     {

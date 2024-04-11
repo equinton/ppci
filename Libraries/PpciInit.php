@@ -31,11 +31,13 @@ class PpciInit
             /**
              * Add filter messages
              */
-            if (isset($_SESSION["filterMessage"])) {
-                foreach ($_SESSION["filterMessage"] as $mes) {
+            if (isset($_SESSION["filterMessages"])) {
+                foreach ($_SESSION["filterMessages"] as $mes) {
                     $message->set($mes, true);
                 }
+                unset($_SESSION["filterMessages"]);
             }
+
             /**
              * Get parameters stored in ini file
              * and populate App/Config/App class

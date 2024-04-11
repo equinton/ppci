@@ -20,6 +20,10 @@ class RightsPpci {
         }
     }
     function isAdminRequired(string $moduleName):bool {
-        return in_array($moduleName, $this->adminModules);
+        $ok = false;
+        if (isset($this->rights[$moduleName])) {
+            $ok = in_array("admin", $this->rights[$moduleName]);
+        }
+        return $ok;
     }
 }

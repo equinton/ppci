@@ -27,6 +27,9 @@ class RightFilter implements FilterInterface
             if (!empty($requiredRights)) {
                 $ok = false;
                 if (!isset($_SESSION["isLogged"])) {
+                    if ($request->is("get")) {
+                        $_SESSION["moduleRequired"] = $moduleName;
+                    }
                     $login = new \Ppci\Libraries\Login();
                     $retour = $login->getLogin();
                     if (isset($retour)) {
@@ -46,6 +49,12 @@ class RightFilter implements FilterInterface
                     setLogRequest($request, "ko: insufficient rights");
                     $defaultPage = new \Ppci\Libraries\DefaultPage();
                     return ($defaultPage->display());
+                } else {
+                    if (isset($_SESSION["moduleRequired"])) {
+                        $retour = $_SESSION["moduleRequired"];
+                        unset ($_SESSION["moduleRequired"]);
+                        return redirect($retour);
+                    }
                 }
             }
         }

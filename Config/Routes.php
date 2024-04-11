@@ -75,7 +75,7 @@ $routes->add('totpCreate', '\Ppci\Controllers\Totp::create');
 $routes->post('totpCreateVerify', '\Ppci\Controllers\Totp::createVerify');
 $routes->add('totpGetQrcode', '\Ppci\Controllers\Totp::getQrcode');
 $routes->post('totpVerifyExec', '\Ppci\Controllers\Totp::verify');
-$routes->add('totp', '\Ppci\Controllers\Totp::index');
+$routes->add('totpAdmin', '\Ppci\Controllers\Totp::admin');
 $routes->add('doctotp_fr', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_fr.md');
 $routes->add('doctotp_en', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_en.md');
 $routes->add('systemShowServer', '\Ppci\Controllers\Utils\System::SERVER');
