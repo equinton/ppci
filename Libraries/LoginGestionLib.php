@@ -20,33 +20,35 @@ class LoginGestionLib extends PpciLibrary
         $vue->set("ppci/ident/loginliste.tpl", "corps");
         return $vue->send();
     }
-    function change() {
-            try {
-                $data = $this->dataRead($_REQUEST["id"],"ppci/ident/loginsaisie.tpl");
-                $vue = service("Smarty");
-                $vue->set($this->config->APP_passwordMinLength, "passwordMinLength");
-                unset($data["password"]);
-                /**
-                 * Add dbconnect_provisional_nb
-                 */
-                if (!empty($data["login"])) {
-                    $data["dbconnect_provisional_nb"] = $this->dataClass->getDbconnectProvisionalNb($data["login"]);
-                }
-                $vue->set($data, "data");
-                return $vue->send();
-            } catch (\Exception $e) {
-                $this->message->set($e->getMessage(), true);
-                return $this->index();
+    function change()
+    {
+        try {
+            $data = $this->dataRead($_REQUEST["id"], "ppci/ident/loginsaisie.tpl");
+            $vue = service("Smarty");
+            $vue->set($this->config->APP_passwordMinLength, "passwordMinLength");
+            unset($data["password"]);
+            /**
+             * Add dbconnect_provisional_nb
+             */
+            if (!empty($data["login"])) {
+                $data["dbconnect_provisional_nb"] = $this->dataClass->getDbconnectProvisionalNb($data["login"]);
             }
+            $vue->set($data, "data");
+            return $vue->send();
+        } catch (\Exception $e) {
+            $this->message->set($e->getMessage(), true);
+            return $this->index();
+        }
     }
     function write()
     {
-        $id = $this->dataClass->write($_REQUEST);
-        if ($id > 0) {
-            /*
-             * Ecriture du compte dans la table acllogin
-             */
-            try {
+        try {
+            $id = $this->dataClass->write($_REQUEST);
+            if ($id > 0) {
+                /*
+                 * Ecriture du compte dans la table acllogin
+                 */
+
                 $acllogin = new Acllogin();
                 if (!empty($_REQUEST["nom"])) {
                     $nom = $_REQUEST["nom"] . " " . $_REQUEST["prenom"];
@@ -55,14 +57,15 @@ class LoginGestionLib extends PpciLibrary
                 }
                 $acllogin->addLoginByLoginAndName($_REQUEST["login"], $nom);
                 return $this->index();
-            } catch (PpciException $e) {
-                $this->message->set(_("Problème rencontré lors de l'écriture du login pour la gestion des droits"), true);
-                $this->message->setSyslog($e->getMessage());
-                return $this->change();
             }
+        } catch (PpciException $e) {
+            $this->message->set(_("Problème rencontré lors de l'enregistrement"), true);
+            $this->message->setSyslog($e->getMessage());
+            return $this->change();
         }
     }
-    function delete() {
+    function delete()
+    {
         try {
             $this->dataDelete($_POST["id"]);
             return $this->index();
@@ -71,9 +74,10 @@ class LoginGestionLib extends PpciLibrary
         }
     }
 
-    function changePassword() {
+    function changePassword()
+    {
         if ($this->log->getLastConnexionType($_SESSION["login"]) == "db") {
-            $vue = service ("Smarty");
+            $vue = service("Smarty");
             $vue->set("ppci/ident/loginChangePassword.tpl", "corps");
             $vue->set($this->config->APPLI_passwordMinLength, "passwordMinLength");
         } else {
@@ -81,7 +85,8 @@ class LoginGestionLib extends PpciLibrary
             defaultPage();
         }
     }
-    function changePasswordExec() {
+    function changePasswordExec()
+    {
         if (!$this->dataClass->changePassword($_REQUEST["oldPassword"], $_REQUEST["pass1"], $_REQUEST["pass2"])) {
         } else {
             /**
