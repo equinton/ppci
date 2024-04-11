@@ -80,7 +80,7 @@ $(document).ready(function() {
 <div class="col-lg-6">
 <a href="index.php?module=loginList">{t}Retour à la liste des logins{/t}</a>
 
-<form class="form-horizontal protoform" id="formLogin" method="post" action="index.php">
+<form class="form-horizontal" id="formLogin" method="post" action="index.php">
 <input type="hidden" name="moduleBase" value="login">
 <input type="hidden" name="action" value="Write">
 <input type="hidden" name="id" value="{$data.id}">

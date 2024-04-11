@@ -41,6 +41,13 @@ class PpciController extends \App\Controllers\BaseController
         if ($session->getFlashdata("REQUEST")){
             $_REQUEST = $session->getFlashdata("REQUEST");
         }
+        if (!empty($_SESSION["lastGet"])) {
+            foreach ($_SESSION["lastGet"] as $k => $v) {
+                if (!isset($_REQUEST[$k])) {
+                    $_REQUEST[$k] = $v;
+                }
+            }
+        }
     }
 
 }

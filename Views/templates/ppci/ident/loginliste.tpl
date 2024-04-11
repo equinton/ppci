@@ -39,20 +39,20 @@ $(document).ready(function() {
 				</tr>
 			</thead>
 			<tbody>
-				{section name=lst loop=$liste}
+				{section name=lst loop=$data}
 				<tr>
-					<td><a href="index.php?module=loginChange&id={$liste[lst].id}">{$liste[lst].login}</a></td>
-					<td>{$liste[lst].nom}&nbsp;{$liste[lst].prenom}</td>
-					<td><div class="mail">{$liste[lst].mail}</div>&nbsp;</td>
-					<td class="center">{if $liste[lst].actif == 1}{t}oui{/t}{/if}</td>
-					<td class="center">{if $liste[lst].is_clientws == 1}{t}oui{/t}{/if}</td>
+					<td><a href="index.php?module=loginChange&id={$data[lst].id}">{$data[lst].login}</a></td>
+					<td>{$data[lst].nom}&nbsp;{$data[lst].prenom}</td>
+					<td><div class="mail">{$data[lst].mail}</div>&nbsp;</td>
+					<td class="center">{if $data[lst].actif == 1}{t}oui{/t}{/if}</td>
+					<td class="center">{if $data[lst].is_clientws == 1}{t}oui{/t}{/if}</td>
 					<td class="center">
-						{if $liste[lst].dbconnect_provisional_nb > 3 }{t}Compte bloqué{/t}
-						{else if $liste[lst].dbconnect_provisional_nb > 3 }{t}oui{/t}
+						{if $data[lst].dbconnect_provisional_nb > 3 }{t}Compte bloqué{/t}
+						{else if $data[lst].dbconnect_provisional_nb > 3 }{t}oui{/t}
 						{/if}
 					</td>
-					<td class="center">{if $liste[lst].nbattempts > 0}{$liste[lst].nbattempts}{/if}</td>
-					<td>{$liste[lst].lastattempt}</td>
+					<td class="center">{if $data[lst].nbattempts > 0}{$data[lst].nbattempts}{/if}</td>
+					<td>{$data[lst].lastattempt}</td>
 				</tr>
 				{/section}
 			</tbody>

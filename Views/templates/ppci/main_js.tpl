@@ -252,20 +252,22 @@
             });
             $('.date, .datepicker, .timepicker, .datetimepicker').attr('autocomplete', 'off');
 
-            var lib = "{t}Confirmez-vous la suppression ?{/t}";
-            $('.button-delete').keypress(function () {
-                if (confirm(lib) == true) {
-                    $(this.form).find("input[name='action']").val("Delete");
-                    $(this.form).submit();
-                } else
-                    return false;
+            $(".button-valid").on("keyup click", function() { 
+                var module = $(this.form).find("input[name='moduleBase']").val();
+                var action = $(this.form).find("input[name='action']").val();
+                $(this.form).attr("action", module+action);
+                $(this.form).find("input[name='moduleBase']").remove();
+                $(this.form).find("input[name='module']").remove();
+                $(this.form).find("input[name='action']").remove();
             });
-            $(".button-delete").click(function () {
-                if (confirm(lib) == true) {
-                    $(this.form).find("input[name='action']").val("Delete");
-                    $(this.form).submit();
-                } else {
-                    return false;
+            $(".button-delete").on("keyup click", function() { 
+                if (confirm("{t}Confirmez-vous la suppression ?{/t}")) {
+                var module = $(this.form).find("input[name='moduleBase']").val();
+                $(this.form).attr("action", module+"Delete");
+                $(this.form).find("input[name='moduleBase']").remove();
+                $(this.form).find("input[name='module']").remove();
+                $(this.form).find("input[name='action']").remove();
+                $(this.form).submit();
                 }
             });
             /*

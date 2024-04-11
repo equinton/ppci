@@ -8,6 +8,7 @@ class PpciLibrary
     protected $dataClass;
     protected $config;
     protected $log;
+    public $vue;
 
     function __construct()
     {
@@ -19,6 +20,32 @@ class PpciLibrary
         $this->init::Init();
     }
 
+    /**
+     * read data and assign it to Smarty
+     * Assign template to Smarty
+     *
+     * @param [type] $id
+     * @param [type] $smartyPage
+     * @param integer $idParent
+     * @return array
+     */
+    function dataRead($id, $smartyPage, $idParent = 0)
+    {
+        $this->vue = service("Smarty");
+        try {
+            $data = $this->dataClass->read($id, true, $idParent);
+        } catch (\Exception $e) {
+            $this->message->set(_("Erreur de lecture des informations dans la base de données"), true);
+            $this->message->setSyslog($e->getMessage());
+            throw new PpciException($e->getMessage());
+        }
+        /*
+         * Affectation des donnees a smarty
+         */
+        $this->vue->set($data, "data");
+        $this->vue->set($smartyPage, "corps");
+        return $data;
+    }
     function dataWrite(array $data, bool $isPartOfTransaction = false)
     {
         try {
@@ -26,7 +53,6 @@ class PpciLibrary
             if ($id > 0) {
                 if (!$isPartOfTransaction) {
                     $this->message->set(_("Enregistrement effectué"));
-                    $module_coderetour = 1;
                     $this->log->setLog($_SESSION["login"], get_class($this->dataClass) . "-write", $id);
                 }
             } else {
@@ -67,6 +93,7 @@ class PpciLibrary
                 $this->message->set(_("Suppression effectuée"));
             }
             $this->log->setLog($_SESSION["login"], get_class($this->dataClass) . "-delete", $id);
+            return $ret;
         } catch (\Exception $e) {
             $this->message->setSyslog($e->getMessage());
             /**

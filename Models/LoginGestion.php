@@ -239,7 +239,7 @@ class LoginGestion extends PpciModel
      *
      * @see ObjetBDD::ecrire()
      */
-    public function ecrire(array $data): int
+    public function write(array $data): int
     {
         if ($data["id"] > 0) {
             $dataBefore = $this->lire($data["id"]);
@@ -252,7 +252,7 @@ class LoginGestion extends PpciModel
                 throw new \Ppci\Libraries\PpciException(_("Mot de passe insuffisamment complexe ou trop petit"));
             }
         }
-        $data["datemodif"] = date($_SESSION["MASKDATELONG"]);
+        $data["datemodif"] = date($_SESSION["date"]["maskdatelong"]);
         $data["login"] = strtolower($data["login"]);
         /*
          * Traitement de la generation du token d'identification ws
@@ -276,7 +276,7 @@ class LoginGestion extends PpciModel
             $data["nbattempts"] = 0;
             $data["lastattempt"] = "";
         }
-        $id = parent::ecrire($data);
+        $id = parent::write($data);
         if ($data["id"] > 0 && $dataBefore["actif"] == 0 && $data["actif"] == 1 && !empty($data["mail"])) {
             /**
              * Send mail to prevent of the activation of the account

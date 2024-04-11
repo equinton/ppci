@@ -22,10 +22,9 @@ class LoginGestionLib extends PpciLibrary
     }
     function change() {
             try {
-                $data = $this->dataClass->lire($_REQUEST["id"]);
+                $data = $this->dataRead($_REQUEST["id"],"ppci/ident/loginsaisie.tpl");
                 $vue = service("Smarty");
-                $vue->set("ppci/ident/loginsaisie.tpl", "corps");
-                $vue->set($this->config->APPLI_passwordMinLength, "passwordMinLength");
+                $vue->set($this->config->APP_passwordMinLength, "passwordMinLength");
                 unset($data["password"]);
                 /**
                  * Add dbconnect_provisional_nb
@@ -55,9 +54,11 @@ class LoginGestionLib extends PpciLibrary
                     $nom = $_REQUEST["login"];
                 }
                 $acllogin->addLoginByLoginAndName($_REQUEST["login"], $nom);
+                return $this->index();
             } catch (PpciException $e) {
                 $this->message->set(_("Problème rencontré lors de l'écriture du login pour la gestion des droits"), true);
                 $this->message->setSyslog($e->getMessage());
+                return $this->change();
             }
         }
     }

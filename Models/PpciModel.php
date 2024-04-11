@@ -154,7 +154,10 @@ class PpciModel extends Model
                 }
             }
         }
-        if (parent::save($row) && $isInsert) {
+        if (!parent::save($row)) {
+            throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
+        }
+        if ($isInsert) {
             $id = $this->getInsertID();
         }
         return $id;
@@ -316,7 +319,7 @@ class PpciModel extends Model
     {
         $data = array();
         foreach ($this->defaultValues as $k => $v) {
-            if (is_callable($v)) {
+            if ($v != 0 && is_callable(array($this, $v))) {
                 $data[$k] = $this->{$v}();
             } else {
                 $data[$k] = $v;
@@ -518,7 +521,7 @@ class PpciModel extends Model
     {
         return (date($this->dateFormatMask));
     }
-    function getDateJour(): string
+    static function getDateJour(): string
     {
         return (date($this->dateFormatMask));
     }
