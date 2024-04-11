@@ -51,7 +51,10 @@ class PpciModel extends Model
     protected function initialize()
     {
         foreach ($this->fields as $fieldName => $field) {
-            $this->allowedFields[] = $fieldName;
+            if (!isset($field["key"])){
+                $this->allowedFields[] = $fieldName;
+            }
+            
             if (!isset($field["type"])) {
                 $field["type"] = 0;
             }
@@ -75,6 +78,9 @@ class PpciModel extends Model
             }
             if (isset($field["mandatory"]) || isset($field["requis"])) {
                 $this->mandatoryFields[] = $fieldName;
+            }
+            if ($this->id_auto == 1) {
+                $this->useAutoIncrement = true;
             }
         }
         /**
@@ -154,12 +160,27 @@ class PpciModel extends Model
                 }
             }
         }
-        if (!parent::save($row)) {
-            throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
-        }
         if ($isInsert) {
-            $id = $this->getInsertID();
+            /**
+             * Remove all empty fields
+             */
+            foreach ($row as $k=>$v) {
+                if (strlen ($v) == 0) {
+                    unset ($row[$k]);
+                }
+            }
+            if ($this->insert($row, false)) {
+                $id = $this->getInsertID();
+            } else {
+                test ($this->db->error()["message"]);
+                throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
+            }
+        } else {
+            if (!parent::update($id, $row)) {
+                throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
+            }
         }
+
         return $id;
     }
     public function ecrire(array $row): int
@@ -521,7 +542,7 @@ class PpciModel extends Model
     {
         return (date($this->dateFormatMask));
     }
-    static function getDateJour(): string
+    function getDateJour(): string
     {
         return (date($this->dateFormatMask));
     }

@@ -16,7 +16,7 @@ class PpciInit
             /**
              * Start the session
              */
-            $session = session();
+            session();
             /**
              * Add generic functions
              */

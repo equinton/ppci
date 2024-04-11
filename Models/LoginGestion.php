@@ -26,6 +26,7 @@ class LoginGestion extends PpciModel
             "id" => array(
                 "type" => 1,
                 "key" => 1,
+                "defaultValue" => 0
             ),
             "datemodif" => array(
                 "type" => 3,

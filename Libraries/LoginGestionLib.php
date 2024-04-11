@@ -58,7 +58,7 @@ class LoginGestionLib extends PpciLibrary
                 $acllogin->addLoginByLoginAndName($_REQUEST["login"], $nom);
                 return $this->index();
             }
-        } catch (PpciException $e) {
+        } catch (\Exception $e) {
             $this->message->set(_("Problème rencontré lors de l'enregistrement"), true);
             $this->message->setSyslog($e->getMessage());
             return $this->change();
