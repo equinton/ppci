@@ -14,6 +14,7 @@ class Login
     private array $dacllogin;
     public string $identificationMode;
     public App $paramApp;
+    public $identificationConfig ;
 
     function __construct()
     {
@@ -25,14 +26,15 @@ class Login
         $this->aclgroup = new Aclgroup();
         $this->log = service("Log");
         $this->message = service("MessagePpci");
-        $this->identificationMode = $this->paramApp->identificationMode;
+        $this->identificationConfig = service ("IdentificationConfig");
+        $this->identificationMode = $this->identificationConfig->identificationMode;
     }
 
     function getLogin(string $type_authentification, $modeAdmin = false): ?string
     {
         $tauth = "";
-        $this->loginGestion->attemptdelay = $this->paramApp->CONNECTION_blocking_duration;
-        $this->loginGestion->nbattempts = $this->paramApp->CONNECTION_max_attempts;
+        $this->loginGestion->attemptdelay = $this->identificationConfig->CONNECTION_blocking_duration;
+        $this->loginGestion->nbattempts = $this->identificationConfig->CONNECTION_max_attempts;
         /**
          * web service
          */
@@ -49,7 +51,7 @@ class Login
              */
             try {
 
-                $gaclTotp = new Gacltotp($this->paramApp->privateKey, $this->paramApp->pubKey);
+                $gaclTotp = new Gacltotp($this->identificationConfig->privateKey, $this->identificationConfig->pubKey);
                 $token = json_decode($gaclTotp->decode($_COOKIE["tokenIdentity"], "pub"), true);
                 if ($token["exp"] > time()) {
                     $_SESSION["login"] = $token["uid"];
@@ -100,7 +102,7 @@ class Login
 
     function getLoginFromHeader()
     {
-        $ident_header_vars = $this->paramApp->ident_header_vars;
+        $ident_header_vars = $this->identificationConfig->ident_header_vars;
         $userparams = $this->getUserParams($ident_header_vars, $_SERVER);
         $login = $userparams["login"];
         $verify = false;
@@ -279,20 +281,20 @@ class Login
     {
 
         global $CAS_address, $CAS_port, $CAS_address, $CAS_CApath, $CAS_debug, $CAS_uri, $user_attributes;
-        if ($this->paramApp->CAS_debug) {
+        if ($this->identificationConfig->CAS_debug) {
             \phpCAS::setDebug(WRITEPATH . "logs/cas.log");
             \phpCAS::setVerbose(true);
         }
         \phpCAS::client(
             CAS_VERSION_2_0,
-            $this->paramApp->CAS_address,
-            $this->paramApp->CAS_port,
-            $this->paramApp->CAS_uri,
+            $this->paraidentificationConfigmApp->CAS_address,
+            $this->identificationConfig->CAS_port,
+            $this->identificationConfig->CAS_uri,
             "https://" . $_SERVER["HTTP_HOST"],
             false
         );
-        if (!empty($this->paramApp->CAS_CApath)) {
-            \phpCAS::setCasServerCACert($this->paramApp->CAS_CApath);
+        if (!empty($this->identificationConfig->CAS_CApath)) {
+            \phpCAS::setCasServerCACert($this->identificationConfig->CAS_CApath);
         } else {
             \phpCAS::setNoCasServerValidation();
         }
@@ -318,7 +320,7 @@ class Login
 
     public function getLoginLdap($login, $password)
     {
-        $LDAP = $this->paramApp->LDAP;
+        $LDAP = $this->identificationConfig->LDAP;
         $loginOk = "";
         if (!empty($login) && !empty($password)) {
             $login = str_replace(

@@ -6,7 +6,7 @@ class PpciLibrary
     protected $session;
     protected $message;
     protected $dataClass;
-    protected $config;
+    protected $appConfig;
     protected $log;
     public $vue;
 
@@ -14,7 +14,7 @@ class PpciLibrary
     {
         $this->message = service('MessagePpci');
         $this->init = service("PpciInit");
-        $this->config = service("AppConfig");
+        $this->appConfig = service("AppConfig");
         $this->log = service("Log");
         $this->init::Init();
     }

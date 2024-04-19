@@ -1,25 +1,24 @@
 <?php
 namespace Ppci\Libraries;
 
-
-use Config\App;
 use Ppci\Models\Gacltotp;
 use CodeIgniter\Cookie\Cookie;
 
 class Login extends PpciLibrary
 {
     protected $dataclass;
+    public $identificationConfig;
     function __construct()
     {
         parent::__construct();
         $this->dataclass = new \Ppci\Models\Login();
+        $this->identificationConfig = service('IdentificationConfig');
     }
     function getLogin()
     {
         try {
-            $config = new App();
-            $ident_type = $config->identificationMode;
-            $gacltotp = new Gacltotp($this->config->privateKey, $this->config->pubKey);
+            $ident_type = $this->identificationConfig->identificationMode;
+            $gacltotp = new Gacltotp($this->appConfig->privateKey, $this->appConfig->pubKey);
             if (
                 in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])
                 && empty($_POST["login"])
@@ -89,11 +88,11 @@ class Login extends PpciLibrary
             /**
              * Generate rights
              */
-            $_SESSION["userRights"] = $acllogin->generateRights($_SESSION["login"],$config->GACL_aco,$config->LDAP);
+            $_SESSION["userRights"] = $acllogin->generateRights($_SESSION["login"],$this->identificationConfig->GACL_aco,$this->identificationConfig->LDAP);
             $this->log->setMessageLastConnections();
             if ($_POST["loginByTokenRequested"] == 1) {
                 helper('cookie');
-                $maxAge = $config->tokenIdentityValidity;
+                $maxAge = $this->identificationConfig->tokenIdentityValidity;
                 $content = json_encode([
                     "uid" => $_SESSION["login"],
                     "exp" => time() + $maxAge
@@ -117,13 +116,13 @@ class Login extends PpciLibrary
     {
         $vue = service('Smarty');
         $vue->set("ppci/ident/login.tpl", "corps");
-        if ($this->config->identificationMode == "CAS-BDD") {
+        if ($this->identificationConfig->identificationMode == "CAS-BDD") {
             $vue->set(1, "CAS_enabled");
         } else {
             $vue->set(0, "CAS_enabled");
         }
-        $vue->set($this->config->tokenIdentityValidity, "tokenIdentityValidity");
-        $vue->set($this->config->APPLI_lostPassword, "lostPassword");
+        $vue->set($this->identificationConfig->tokenIdentityValidity, "tokenIdentityValidity");
+        $vue->set($this->identificationConfig->APPLI_lostPassword, "lostPassword");
         $vue->set("", "moduleCalled");
         return $vue->send();
     }
