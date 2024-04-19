@@ -7,11 +7,12 @@ use CodeIgniter\Config\BaseService;
 use Config\App;
 use Ppci\Libraries\Locale;
 use Ppci\Libraries\MessagePpci;
-use Ppci\Libraries\SmartyPpci;
+use Ppci\Libraries\Views\SmartyPpci;
 use Ppci\Libraries\PpciInit;
 use Ppci\Models\Log;
 use Ppci\Models\Dbparam;
-use Ppci\Libraries\BinaryView;
+use Ppci\Libraries\Views\BinaryView;
+use Ppci\Config\IdentificationConfig;
 
 /**
  * Services Configuration file.
@@ -55,11 +56,19 @@ class Services extends BaseService
     public static function Locale($getShared = true) {
         return ($getShared === true ? static::getSharedInstance('Locale') : new Locale());
     }
+
+    /**
+     * Configurations
+     */
     public static function Dbparam($getShared = true) {
         return ($getShared === true ? static::getSharedInstance('Dbparam') : new Dbparam());
     }
     public static function AppConfig($getShared = true) {
         return ($getShared === true ? static::getSharedInstance('AppConfig') : new App());
+    }
+
+    public static function IdentificationConfig($getShared = true) {
+        return ($getShared === true ? static::getSharedInstance("IdentificationConfig") : new IdentificationConfig());
     }
 
     /**

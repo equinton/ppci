@@ -1,5 +1,5 @@
 <?php
-namespace Ppci\Libraries;
+namespace Ppci\Libraries\Views;
 
 class BinaryView
 {
