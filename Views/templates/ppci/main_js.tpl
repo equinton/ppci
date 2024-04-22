@@ -252,22 +252,30 @@
             });
             $('.date, .datepicker, .timepicker, .datetimepicker').attr('autocomplete', 'off');
 
-            $(".button-valid").on("keyup click", function() { 
+            $(".button-valid").on("keyup click", function () {
                 var module = $(this.form).find("input[name='moduleBase']").val();
-                var action = $(this.form).find("input[name='action']").val();
-                $(this.form).attr("action", module+action);
-                $(this.form).find("input[name='moduleBase']").remove();
-                $(this.form).find("input[name='module']").remove();
-                $(this.form).find("input[name='action']").remove();
+                if (module) {
+                    var action = $(this.form).find("input[name='action']").val();
+                    if (action) {
+                        $(this.form).attr("action", module + action);
+                    } else {
+                        $(this.form).attr("action", module);
+                    }
+                    $(this.form).find("input[name='moduleBase']").remove();
+                    $(this.form).find("input[name='module']").remove();
+                    $(this.form).find("input[name='action']").remove();
+                }
             });
-            $(".button-delete").on("keyup click", function() { 
+            $(".button-delete").on("keyup click", function () {
                 if (confirm("{t}Confirmez-vous la suppression ?{/t}")) {
-                var module = $(this.form).find("input[name='moduleBase']").val();
-                $(this.form).attr("action", module+"Delete");
-                $(this.form).find("input[name='moduleBase']").remove();
-                $(this.form).find("input[name='module']").remove();
-                $(this.form).find("input[name='action']").remove();
-                $(this.form).submit();
+                    var module = $(this.form).find("input[name='moduleBase']").val();
+                    if (module) {
+                        $(this.form).attr("action", module + "Delete");
+                        $(this.form).find("input[name='moduleBase']").remove();
+                        $(this.form).find("input[name='module']").remove();
+                        $(this.form).find("input[name='action']").remove();
+                    }
+                    $(this.form).submit();
                 }
             });
             /*
