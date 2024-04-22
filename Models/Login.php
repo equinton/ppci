@@ -414,15 +414,16 @@ class Login
         session_unset();
         $_SESSION = [];
         if ($this->identificationMode == "CAS") {
+            $CAS = $this->identificationConfig->CAS;
             \phpCAS::client(
                 CAS_VERSION_2_0,
-                $this->paramApp->CAS_address,
-                $this->paramApp->CAS_port,
-                $this->paramApp->CAS_uri,
+                $CAS["cAS_address"],
+                $CAS["CAS_port"],
+                $CAS["CAS_uri"],
                 "https://" . $_SERVER["HTTP_HOST"]
             );
-            if (!empty($CAS_CApath)) {
-                \phpCAS::setCasServerCACert($CAS_CApath);
+            if (!empty($CAS["CAS_CApath"])) {
+                \phpCAS::setCasServerCACert($CAS["CAS_CApath"]);
             } else {
                 \phpCAS::setNoCasServerValidation();
             }
