@@ -16,8 +16,9 @@ class Login extends PpciLibrary
     }
     function getLogin()
     {
-        try {
+        try {          
             $ident_type = $this->identificationConfig->identificationMode;
+            test ($ident_type);
             $gacltotp = new Gacltotp($this->appConfig->privateKey, $this->appConfig->pubKey);
             if (
                 in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS", "CAS-BDD"])
@@ -26,13 +27,14 @@ class Login extends PpciLibrary
                 && empty($_COOKIE["tokenIdentity"])
                 && empty($_POST["cas_required"])
                 && empty($_GET["ticket"])
+                && !isset($_SESSION["phpCAS"])
             ) {
                 return "login";
             } else {
                 /**
                  * Verify the login
                  */
-                if (!isset($_SESSION["login"])) {
+                if (empty($_SESSION["login"])) {
                     if (!empty($_REQUEST["token"]) && !empty($_REQUEST["login"])) {
                         $ident_type = "ws";
                     }
@@ -43,7 +45,7 @@ class Login extends PpciLibrary
                         $ident_type = "CAS";
                         $_SESSION["cas_required"] = 1;
                     }
-                    $_SESSION["login"] = strtolower($this->dataclass->getLogin($ident_type, false));
+                    $_SESSION["login"] = strtolower($this->dataclass->getLogin($ident_type));
                 }
             }
             if (!empty($_SESSION["login"])) {
@@ -89,7 +91,11 @@ class Login extends PpciLibrary
             /**
              * Generate rights
              */
-            $_SESSION["userRights"] = $acllogin->generateRights($_SESSION["login"],$this->identificationConfig->GACL_aco,$this->identificationConfig->LDAP);
+            $_SESSION["userRights"] = $acllogin->generateRights(
+                $_SESSION["login"],
+                $this->appConfig->GACL_aco,
+                $this->identificationConfig->LDAP
+            );
             $this->log->setMessageLastConnections();
             if ($_POST["loginByTokenRequested"] == 1) {
                 helper('cookie');

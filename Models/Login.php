@@ -30,9 +30,12 @@ class Login
         $this->identificationMode = $this->identificationConfig->identificationMode;
     }
 
-    function getLogin(string $type_authentification, $modeAdmin = false): ?string
+    function getLogin(string $type_authentification): ?string
     {
         $tauth = "";
+        if ($type_authentification == "CAS-BDD") {
+            $type_authentification = "CAS";
+        }
         $this->loginGestion->attemptdelay = $this->identificationConfig->CONNECTION_blocking_duration;
         $this->loginGestion->nbattempts = $this->identificationConfig->CONNECTION_max_attempts;
         /**
@@ -74,7 +77,11 @@ class Login
             $_SESSION["realIdentificationMode"] = "HEADER";
         } elseif ($type_authentification == "CAS") {
             $tauth = "cas";
-            $login = $this->getLoginCas($modeAdmin);
+            if (isset($_SESSION["phpCAS"])) {
+                $login = $_SESSION["phpCAS"]["user"];
+            } else {
+                $login = $this->getLoginCas();
+            }
             $_SESSION["realIdentificationMode"] = "CAS";
         } elseif ($type_authentification == "LDAP" || $type_authentification == "LDAP-BDD") {
             $tauth = "ldap";
@@ -91,6 +98,7 @@ class Login
             $_SESSION["realIdentificationMode"] = "BDD";
         }
         if (!empty($login)) {
+            $_SESSION["realIdentificationMode"] = $tauth;
             $this->log->setlog($login, "connection-" . $tauth, "ok");
         } else {
             isset($_POST["login"]) ? $loginRequired = $_POST["login"] : $loginRequired = "unknown";
@@ -296,8 +304,12 @@ class Login
         } else {
             \phpCAS::setNoCasServerValidation();
         }
+        $user = "";
         \phpCAS::forceAuthentication();
         $user = \phpCAS::getUser();
+        $_SESSION["login"] = $user;
+        printA($_SESSION);
+        die;
         if (!empty($user)) {
             $_SESSION["CAS_attributes"] = \phpCAS::getAttributes();
             if (!is_array($_SESSION["CAS_attributes"])) {
@@ -393,7 +405,7 @@ class Login
      */
     public function disconnect($adresse_retour = "")
     {
-
+        $identificationMode = $_SESSION["realIdentificationMode"];
         // Si vous voulez détruire complètement la session, effacez également
         // le cookie de session.
         // Note : cela détruira la session et pas seulement les données de session !
@@ -413,11 +425,11 @@ class Login
         session()->destroy();
         session_unset();
         $_SESSION = [];
-        if ($this->identificationMode == "CAS") {
+        if ($identificationMode == "cas") {
             $CAS = $this->identificationConfig->CAS;
             \phpCAS::client(
                 CAS_VERSION_2_0,
-                $CAS["cAS_address"],
+                $CAS["CAS_address"],
                 $CAS["CAS_port"],
                 $CAS["CAS_uri"],
                 "https://" . $_SERVER["HTTP_HOST"]

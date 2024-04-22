@@ -26,6 +26,13 @@ class Login extends PpciController
             return redirect()->to(site_url());
         } else {
             $retour = $login->getLogin();
+            if ($_SESSION["isLogged"]) {
+                if (!empty($_SESSION["moduleRequired"])) {
+                    $retour = $_SESSION["moduleRequired"];
+                } elseif ($retour == "login") {
+                    $retour = "";
+                }
+            }
             if (empty($retour)) {
                 $lib = new \Ppci\Libraries\DefaultPage();
                 return ($lib->display());

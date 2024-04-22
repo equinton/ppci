@@ -28,7 +28,7 @@ class DbversioncheckFilter implements FilterInterface
 
                 $dbversion = new Dbversion();
                 if ($dbversion->verifyVersion($paramApp->dbversion)) {
-                    self::$isDbversionOk = true;
+                    $this->isDbversionOk = true;
                 } else {
                     $message->set(
                         sprintf(
