@@ -18,7 +18,6 @@ class Login extends PpciLibrary
     {
         try {          
             $ident_type = $this->identificationConfig->identificationMode;
-            test ($ident_type);
             $gacltotp = new Gacltotp($this->appConfig->privateKey, $this->appConfig->pubKey);
             if (
                 in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS", "CAS-BDD"])

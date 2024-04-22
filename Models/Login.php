@@ -378,6 +378,9 @@ class Login
             $dn = $user_attrib_part . $login . $upn_suffix_part . $basedn_part;
             if (@ldap_bind($ldap, $dn, $password)) {
                 $loginOk = $login;
+            } else {
+                $this->log->setLog($login,"connection-ldap", "ko");
+                throw new \Ppci\Libraries\PpciException(sprintf(_("La connexion auprès de l'annuaire LDAP pour l'utilisateur %s a échoué"), $login));
             }
         }
         return $loginOk;
