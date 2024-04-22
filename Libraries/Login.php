@@ -20,11 +20,12 @@ class Login extends PpciLibrary
             $ident_type = $this->identificationConfig->identificationMode;
             $gacltotp = new Gacltotp($this->appConfig->privateKey, $this->appConfig->pubKey);
             if (
-                in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])
+                in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS", "CAS-BDD"])
                 && empty($_POST["login"])
                 && empty($_SESSION["login"])
                 && empty($_COOKIE["tokenIdentity"])
                 && empty($_POST["cas_required"])
+                && empty($_GET["ticket"])
             ) {
                 return "login";
             } else {
@@ -38,14 +39,14 @@ class Login extends PpciLibrary
                     /**
                      * For CAS-BDD
                      */
-                    if ($_REQUEST["cas_required"] == 1 || !empty($_REQUEST["ticket"])) {
+                    if ($_REQUEST["cas_required"] == 1 || !empty($_GET["ticket"])) {
                         $ident_type = "CAS";
                         $_SESSION["cas_required"] = 1;
                     }
                     $_SESSION["login"] = strtolower($this->dataclass->getLogin($ident_type, false));
                 }
             }
-            if (isset($_SESSION["login"])) {
+            if (!empty($_SESSION["login"])) {
                 unset($_SESSION["cas_required"]);
                 /**
                  * Verify if the double authentication is mandatory

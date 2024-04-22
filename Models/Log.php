@@ -42,7 +42,8 @@ class Log extends PpciModel
                 "type" => 0,
             ),
         );
-        $this->currentDate = date($_SESSION["date"]["maskdatelong"]);
+        isset($_SESSION["date"]) ? $mask = $_SESSION["date"]["maskdatelong"]: $mask = 'd/m/Y H:i:s';
+        $this->currentDate = date($mask);
         parent::__construct();
     }
 

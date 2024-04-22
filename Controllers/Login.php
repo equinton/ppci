@@ -3,7 +3,6 @@ namespace Ppci\Controllers;
 
 
 use \Ppci\Controllers\PpciController;
-use \Ppci\Config\IdentificationConfig;
 
 class Login extends PpciController
 {
@@ -23,7 +22,7 @@ class Login extends PpciController
     {
         $login = new \Ppci\Libraries\Login();
         $config = service("IdentificationConfig");
-        if (!in_array($config->identificationMode, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])) {
+        if (!in_array($config->identificationMode, ["BDD", "LDAP", "CAS", "LDAP-BDD", "CAS-BDD"])) {
             return redirect()->to(site_url());
         } else {
             $retour = $login->getLogin();

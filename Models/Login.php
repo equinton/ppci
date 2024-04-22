@@ -14,7 +14,7 @@ class Login
     private array $dacllogin;
     public string $identificationMode;
     public App $paramApp;
-    public $identificationConfig ;
+    public $identificationConfig;
 
     function __construct()
     {
@@ -26,7 +26,7 @@ class Login
         $this->aclgroup = new Aclgroup();
         $this->log = service("Log");
         $this->message = service("MessagePpci");
-        $this->identificationConfig = service ("IdentificationConfig");
+        $this->identificationConfig = service("IdentificationConfig");
         $this->identificationMode = $this->identificationConfig->identificationMode;
     }
 
@@ -274,36 +274,29 @@ class Login
     /**
      * Get login from CAS server
      *
-     * @param boolean $modeAdmin
      * @return string|null
      */
-    public function getLoginCas($modeAdmin = false)
+    public function getLoginCas()
     {
-
-        global $CAS_address, $CAS_port, $CAS_address, $CAS_CApath, $CAS_debug, $CAS_uri, $user_attributes;
-        if ($this->identificationConfig->CAS_debug) {
+        $CAS = $this->identificationConfig->CAS;
+        if ($CAS["CAS_debug"]) {
             \phpCAS::setDebug(WRITEPATH . "logs/cas.log");
             \phpCAS::setVerbose(true);
         }
         \phpCAS::client(
             CAS_VERSION_2_0,
-            $this->paraidentificationConfigmApp->CAS_address,
-            $this->identificationConfig->CAS_port,
-            $this->identificationConfig->CAS_uri,
+            $CAS["CAS_address"],
+            $CAS["CAS_port"],
+            $CAS["CAS_uri"],
             "https://" . $_SERVER["HTTP_HOST"],
             false
         );
-        if (!empty($this->identificationConfig->CAS_CApath)) {
-            \phpCAS::setCasServerCACert($this->identificationConfig->CAS_CApath);
+        if (!empty($CAS["CAS_CApath"])) {
+            \phpCAS::setCasServerCACert($CAS["CAS_CApath"]);
         } else {
             \phpCAS::setNoCasServerValidation();
         }
-        if ($modeAdmin) {
-            \phpCAS::renewAuthentication();
-        } else {
-            \phpCAS::forceAuthentication();
-        }
-
+        \phpCAS::forceAuthentication();
         $user = \phpCAS::getUser();
         if (!empty($user)) {
             $_SESSION["CAS_attributes"] = \phpCAS::getAttributes();
@@ -311,7 +304,7 @@ class Login
                 $_SESSION["CAS_attributes"] = array($_SESSION["CAS_attributes"]);
             }
             if (!empty($_SESSION["CAS_attributes"])) {
-                $params = $this->getUserParams($user_attributes, $_SESSION["CAS_attributes"]);
+                $params = $this->getUserParams($CAS["user_attributes"], $_SESSION["CAS_attributes"]);
                 $this->updateLoginFromIdentification($user, $params);
             }
         }

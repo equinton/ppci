@@ -89,7 +89,7 @@ class IdentificationConfig extends BaseConfig
         "CAS_address" => "localhost",
         "CAS_uri" => "/cas",
         "CAS_port" => 443,
-        "CAS_debug" => false,
+        "CAS_debug" => true,
         "CAS_CApath" => "",
         "CAS_get_groups" => 1,
         "CAS_group_attribute" => "supannEntiteAffectation"
