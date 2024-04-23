@@ -32,9 +32,16 @@ $routes->post('totpCreateVerify', '\Ppci\Controllers\Totp::createVerify');
 $routes->add('totpGetQrcode', '\Ppci\Controllers\Totp::getQrcode');
 $routes->post('totpVerifyExec', '\Ppci\Controllers\Totp::verify');
 $routes->add('totpAdmin', '\Ppci\Controllers\Totp::admin');
+/**
+ * Miscellaneous
+ */
+$routes->add('getLastConnections', '\Ppci\Controllers\Log::getLastConnections');
 
+/**
+ * Submenus
+ */
+$routes->add('administration', '\Ppci\Controllers\Submenu::administration');
 
-$routes->add('administration', '\Ppci\Controllers\Utils\Submenu::index');
 $routes->add('gestion', 'Gestion\Index::index');
 $routes->add('errorbefore', '\Ppci\Controllers\Errorbefore::index');
 $routes->add('errorlogin', '\Ppci\Controllers\Errorlogin::index');
@@ -45,7 +52,7 @@ $routes->add('about', '\Ppci\Controllers\Utils\About::index');
 $routes->add('phpinfo', '\Ppci\Controllers\Phpinfo::index');
 $routes->add('quoideneuf', '\Ppci\Controllers\Utils\News::index');
 $routes->add('news', '\Ppci\Controllers\Utils\News::index');
-$routes->add('getLastConnections', '\Ppci\Controllers\Log\Log::getLastConnections');
+
 $routes->add('setlanguage', '\Ppci\Controllers\Setlanguage::index');
 $routes->add('setlanguagefr', '\Ppci\Controllers\Setlanguage::fr');
 $routes->add('setlanguageen', '\Ppci\Controllers\Setlanguage::en');
