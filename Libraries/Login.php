@@ -14,6 +14,11 @@ class Login extends PpciLibrary
         $this->dataclass = new \Ppci\Models\Login();
         $this->identificationConfig = service('IdentificationConfig');
     }
+    /**
+     * Perform authentication
+     *
+     * @return ?string
+     */
     function getLogin()
     {
         try {          

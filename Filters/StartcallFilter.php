@@ -12,13 +12,13 @@ class StartcallFilter implements FilterInterface
     {
         $init = service("PpciInit");
         $init::init();
+        $_SERVER["MELLON_MAIL"] = "equinton";
         $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
         $conf = new App();
         if (!isset($_SESSION["ABSOLUTE_START"])) {
             $_SESSION["ABSOLUTE_START"] = time();
         } elseif (time() - $_SESSION["ABSOLUTE_START"] > $conf->APPLI_absolute_session) {
-            $message = service(("MessagePpci"));
-            $message->set(_("La session est expirée, vous devez vous reconnecter"), true);
+            $_SESSION["filterMessages"][] = _("La session a expiré, vous devez vous reconnecter");
             $login = new \Ppci\Models\Login();
             $login->disconnect();
             $defaultPage = new \Ppci\Libraries\DefaultPage();

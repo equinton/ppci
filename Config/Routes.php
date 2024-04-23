@@ -4,7 +4,7 @@ $routes->add("/", "\Ppci\Controllers\Defaultpage");
 $routes->add('default', '\Ppci\Controllers\Defaultpage');
 $routes->add('droitko', '\Ppci\Controllers\Droitko::index');
 $routes->add('gestiondroits', '\Ppci\Controllers\Gestiondroits::index');
-$routes->add('connexion', '\Ppci\Controllers\Login::loginExec');
+$routes->add('connexion', '\Ppci\Controllers\Login::index');
 $routes->add('login', '\Ppci\Controllers\Login::index');
 $routes->add('totp', '\Ppci\Controllers\Totp::index');
 $routes->add('loginValid', '\Ppci\Controllers\Login::valid');

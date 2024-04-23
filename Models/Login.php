@@ -33,6 +33,7 @@ class Login
     function getLogin(string $type_authentification): ?string
     {
         $tauth = "";
+
         if ($type_authentification == "CAS-BDD") {
             $type_authentification = "CAS";
         }
@@ -202,6 +203,9 @@ class Login
                     }
                 }
             }
+        } else {
+            $this->log->setLog("unknown", "connection-header", "ko");
+            throw new \Ppci\Libraries\PpciException(_("Aucun login n'a été fourni, identification refusée"));
         }
         if ($verify) {
             return $login;
@@ -308,8 +312,6 @@ class Login
         \phpCAS::forceAuthentication();
         $user = \phpCAS::getUser();
         $_SESSION["login"] = $user;
-        printA($_SESSION);
-        die;
         if (!empty($user)) {
             $_SESSION["CAS_attributes"] = \phpCAS::getAttributes();
             if (!is_array($_SESSION["CAS_attributes"])) {
@@ -427,7 +429,6 @@ class Login
         // Finalement, on détruit la session.
         session()->destroy();
         session_unset();
-        $_SESSION = [];
         if ($identificationMode == "cas") {
             $CAS = $this->identificationConfig->CAS;
             \phpCAS::client(
@@ -443,7 +444,6 @@ class Login
                 \phpCAS::setNoCasServerValidation();
             }
             \phpCAS::logout(array("url" => "https://" . $_SERVER["HTTP_HOST"]));
-
         }
     }
 }
