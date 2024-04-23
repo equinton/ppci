@@ -23,16 +23,14 @@
 </script>
 
 <div class="col-sm-12 col-md-6">
-	<form id="loginForm" method="POST" action="index.php">
-		<input type="hidden" name="module" value="loginExec">
-		<input type="hidden" name="moduleCalled" value={$moduleCalled}>
-		<div class="form-horizontal protoform">
+	<form id="loginForm" method="POST" action="loginExec">
+		<div class="form-horizontal">
 			<div class="form-group">
 				<label for="login" class="control-label col-sm-4">
 					{t}Login :{/t}
 				</label>
 				<div class="col-sm-8">
-					<input class="form-control input-lg" name="login" id="login" maxlength="64" required autofocus>
+					<input class="form-control input-lg" name="login" id="login" required autofocus>
 				</div>
 			</div>
 			<div class="form-group">

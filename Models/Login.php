@@ -426,9 +426,14 @@ class Login
             $cookie = new Cookie("tokenIdentity", "", [time() - 42000]);
             set_cookie($cookie);
         }
+        $vars=["login","userRights","menu","isLogged"];
+        foreach ($vars as $var) {
+            unset ($_SESSION[$var]);
+        }
         // Finalement, on détruit la session.
-        session()->destroy();
-        session_unset();
+        //session()->destroy();
+        //session_unset();
+        session_regenerate_id();
         if ($identificationMode == "cas") {
             $CAS = $this->identificationConfig->CAS;
             \phpCAS::client(

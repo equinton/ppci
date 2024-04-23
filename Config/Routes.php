@@ -4,11 +4,18 @@ $routes->add("/", "\Ppci\Controllers\Defaultpage");
 $routes->add('default', '\Ppci\Controllers\Defaultpage');
 $routes->add('droitko', '\Ppci\Controllers\Droitko::index');
 $routes->add('gestiondroits', '\Ppci\Controllers\Gestiondroits::index');
+/**
+ * Connection
+ */
 $routes->add('connexion', '\Ppci\Controllers\Login::index');
 $routes->add('login', '\Ppci\Controllers\Login::index');
 $routes->add('totp', '\Ppci\Controllers\Totp::index');
 $routes->add('loginValid', '\Ppci\Controllers\Login::valid');
-$routes->add('loginExec', '\Ppci\Controllers\Login::loginExec');
+$routes->post('loginExec', '\Ppci\Controllers\Login::loginExec');
+$routes->add('disconnect', '\Ppci\Controllers\Login::disconnect');
+/**
+ * Manage loginGestion
+ */
 $routes->add('loginGestionList', '\Ppci\Controllers\LoginGestion::index');
 $routes->add('loginList', '\Ppci\Controllers\LoginGestion::index');
 $routes->add('loginChange', '\Ppci\Controllers\LoginGestion::change');
@@ -16,12 +23,22 @@ $routes->post('loginWrite', '\Ppci\Controllers\LoginGestion::write');
 $routes->post('loginDelete', '\Ppci\Controllers\LoginGestion::delete');
 $routes->add('loginChangePassword', '\Ppci\Controllers\LoginGestion::changePassword');
 $routes->post('loginChangePasswordExec', '\Ppci\Controllers\LoginGestion::changePasswordExec');
+/**
+ * TOTP
+ */
+$routes->add('totpCreate', '\Ppci\Controllers\Totp::create');
+$routes->post('totpCreateVerify', '\Ppci\Controllers\Totp::createVerify');
+$routes->add('totpGetQrcode', '\Ppci\Controllers\Totp::getQrcode');
+$routes->post('totpVerifyExec', '\Ppci\Controllers\Totp::verify');
+$routes->add('totpAdmin', '\Ppci\Controllers\Totp::admin');
+
+
 $routes->add('administration', '\Ppci\Controllers\Utils\Submenu::index');
 $routes->add('gestion', 'Gestion\Index::index');
 $routes->add('errorbefore', '\Ppci\Controllers\Errorbefore::index');
 $routes->add('errorlogin', '\Ppci\Controllers\Errorlogin::index');
 $routes->add('test', 'Test::index');
-$routes->add('disconnect', '\Ppci\Controllers\Login::disconnect');
+
 $routes->add('apropos', '\Ppci\Controllers\Utils\About::index');
 $routes->add('about', '\Ppci\Controllers\Utils\About::index');
 $routes->add('phpinfo', '\Ppci\Controllers\Phpinfo::index');
@@ -71,11 +88,7 @@ $routes->add('lexicalGet', '\Ppci\Controllers\Utils\Lexical::index');
 $routes->add('backupDisplay', '\Ppci\Controllers\Utils\Backup::display');
 $routes->post('backupExec', '\Ppci\Controllers\Utils\Backup::exec');
 $routes->post('backupSend', '\Ppci\Controllers\Utils\Backup::send');
-$routes->add('totpCreate', '\Ppci\Controllers\Totp::create');
-$routes->post('totpCreateVerify', '\Ppci\Controllers\Totp::createVerify');
-$routes->add('totpGetQrcode', '\Ppci\Controllers\Totp::getQrcode');
-$routes->post('totpVerifyExec', '\Ppci\Controllers\Totp::verify');
-$routes->add('totpAdmin', '\Ppci\Controllers\Totp::admin');
+
 $routes->add('doctotp_fr', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_fr.md');
 $routes->add('doctotp_en', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_en.md');
 $routes->add('systemShowServer', '\Ppci\Controllers\Utils\System::SERVER');

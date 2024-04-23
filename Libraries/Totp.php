@@ -83,7 +83,7 @@ class Totp extends PpciLibrary
         $vue->setParam(
             array(
                 "disposition" => "inline",
-                "tmp_name" => $this->config->APP_temp . "/" . $_SESSION["login"] . "_totp.png"
+                "tmp_name" => WRITEPATH . "temp/" . $_SESSION["login"] . "_totp.png"
             )
         );
         return $vue->send();
@@ -102,6 +102,16 @@ class Totp extends PpciLibrary
                 $this->log->setlog($_SESSION["login"], "totpVerifyExec", "ok");
                 $this->message->set(_("Vous êtes maintenant connecté"));
                 $_SESSION["adminSessionTime"] = time();
+                /**
+                 * Regenerate rights and menu
+                 */
+                $acllogin = new Acllogin();
+                $_SESSION["userRights"] = $acllogin->generateRights(
+                    $_SESSION["login"],
+                    $this->appConfig->GACL_aco,
+                    $this->identificationConfig->LDAP
+                );
+                unset ($_SESSION["menu"]);
                 /**
                  * Generate the cookie to inhibit the totp control
                  */

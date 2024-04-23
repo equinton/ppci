@@ -34,7 +34,7 @@ class Login extends PpciController
             return ($defaultPage->display());
         }
     }
-    public function LoginExec()
+    public function loginExec()
     {
         $login = new \Ppci\Libraries\Login();
         $config = service("IdentificationConfig");
@@ -48,9 +48,8 @@ class Login extends PpciController
     {
         $login = new \Ppci\Models\Login();
         $login->disconnect();
-        $this->message->set(_("Vous avez été déconnecté"));
-        $defaultPage = new \Ppci\Libraries\DefaultPage();
-        return ($defaultPage->display());
+        $_SESSION["filterMessages"][]=(_("Vous avez été déconnecté"));
+        return redirect()->to(site_url());
     }
     protected function defaultReturn($retour = "") {
         if ($_SESSION["isLogged"]) {
