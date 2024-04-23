@@ -12,6 +12,7 @@ $routes->add('login', '\Ppci\Controllers\Login::index');
 $routes->add('totp', '\Ppci\Controllers\Totp::index');
 $routes->add('loginValid', '\Ppci\Controllers\Login::valid');
 $routes->post('loginExec', '\Ppci\Controllers\Login::loginExec');
+$routes->add('loginExecCas', '\Ppci\Controllers\Login::loginExecCas');
 $routes->add('disconnect', '\Ppci\Controllers\Login::disconnect');
 /**
  * Manage loginGestion

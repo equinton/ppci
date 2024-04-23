@@ -12,7 +12,6 @@ class StartcallFilter implements FilterInterface
     {
         $init = service("PpciInit");
         $init::init();
-        $_SERVER["MELLON_MAIL"] = "equinton";
         $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
         $conf = new App();
         if (!isset($_SESSION["ABSOLUTE_START"])) {

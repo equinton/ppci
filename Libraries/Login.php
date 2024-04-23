@@ -25,7 +25,7 @@ class Login extends PpciLibrary
             $ident_type = $this->identificationConfig->identificationMode;
             $gacltotp = new Gacltotp($this->appConfig->privateKey, $this->appConfig->pubKey);
             if (
-                in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS", "CAS-BDD"])
+                in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])
                 && empty($_POST["login"])
                 && empty($_SESSION["login"])
                 && empty($_COOKIE["tokenIdentity"])

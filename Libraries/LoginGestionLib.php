@@ -25,7 +25,7 @@ class LoginGestionLib extends PpciLibrary
         try {
             $data = $this->dataRead($_REQUEST["id"], "ppci/ident/loginsaisie.tpl");
             $vue = service("Smarty");
-            $vue->set($this->config->APP_passwordMinLength, "passwordMinLength");
+            $vue->set($this->appConfig->APP_passwordMinLength, "passwordMinLength");
             unset($data["password"]);
             /**
              * Add dbconnect_provisional_nb
