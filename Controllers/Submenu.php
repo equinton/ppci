@@ -13,7 +13,5 @@ class Submenu extends PpciController
     {
         return $this->submenu->generateSubmenu("administration");
     }
-    function index(string $name) {
-        return $this->submenu->generateSubmenu($name);
-    }
+    
 }

@@ -36,7 +36,12 @@ $routes->add('totpAdmin', '\Ppci\Controllers\Totp::admin');
  * Miscellaneous
  */
 $routes->add('getLastConnections', '\Ppci\Controllers\Log::getLastConnections');
-
+$routes->add('apropos', '\Ppci\Controllers\Miscellaneous::about');
+$routes->add('about', '\Ppci\Controllers\Miscellaneous::about');
+$routes->add('phpinfo', '\Ppci\Controllers\Miscellaneous::phpinfo');
+$routes->add('quoideneuf', '\Ppci\Controllers\Miscellaneous::news');
+$routes->add('news', '\Ppci\Controllers\Miscellaneous::news');
+$routes->add('test', '\Ppci\Controllers\Miscellaneous::test');
 /**
  * Submenus
  */
@@ -46,12 +51,6 @@ $routes->add('gestion', 'Gestion\Index::index');
 $routes->add('errorbefore', '\Ppci\Controllers\Errorbefore::index');
 $routes->add('errorlogin', '\Ppci\Controllers\Errorlogin::index');
 $routes->add('test', 'Test::index');
-
-$routes->add('apropos', '\Ppci\Controllers\Utils\About::index');
-$routes->add('about', '\Ppci\Controllers\Utils\About::index');
-$routes->add('phpinfo', '\Ppci\Controllers\Phpinfo::index');
-$routes->add('quoideneuf', '\Ppci\Controllers\Utils\News::index');
-$routes->add('news', '\Ppci\Controllers\Utils\News::index');
 
 $routes->add('setlanguage', '\Ppci\Controllers\Setlanguage::index');
 $routes->add('setlanguagefr', '\Ppci\Controllers\Setlanguage::fr');
