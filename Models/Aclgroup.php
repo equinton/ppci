@@ -333,11 +333,11 @@ class Aclgroup extends PpciModel
     function addLoginToGroup(int $group_id, int $login_id)
     {
         if ($group_id > 0 && $login_id > 0) {
-            $sql = "select count(*) as nb from acllogingroup where acllogin_id =:login_id and aclgroup_id =:group_id";
+            $sql = "select count(*) as nb from acllogingroup where acllogin_id =:login_id: and aclgroup_id =:group_id:";
             $param = array("login_id" => $login_id, "group_id" => $group_id);
             $result = $this->lireParamAsPrepared($sql, $param);
             if ($result["nb"] != 1) {
-                $sql = "insert into acllogingroup (acllogin_id, aclgroup_id) values (:login_id, :group_id)";
+                $sql = "insert into acllogingroup (acllogin_id, aclgroup_id) values (:login_id:, :group_id:)";
                 $this->executeQuery($sql, $param, true);
             }
         }

@@ -203,7 +203,7 @@ class Acllogin extends PpciModel
             /*
              * Suppression du login dans les groupes
              */
-            $sql = "delete from acllogingroup where acllogin_id = :id";
+            $sql = "delete from acllogingroup where acllogin_id = :id:";
             $this->executeQuery($sql, array("id" => $id));
             parent::supprimer($id);
             /*

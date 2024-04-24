@@ -13,10 +13,9 @@ namespace Ppci\Models;
  */
 class Request extends PpciModel
 {
-    function __construct($bdd, $param = null)
+    function __construct()
     {
         $this->table = "request";
-        $this->id_auto = 1;
         $this->fields = array(
             "request_id" => array(
                 "key" => 1,
@@ -45,9 +44,6 @@ class Request extends PpciModel
                 "type" => 0
             )
         );
-        if (!is_array($param)) {
-            $param = array();
-        }
         parent::__construct();
     }
 
@@ -56,15 +52,15 @@ class Request extends PpciModel
         /**
          * Search the terms forbiden into the request
          */
-        if (preg_match("/(insert)|(update)|(delete)|(grant)|(revoke)|(create)|(drop)|(alter)|(log)|(logingestion)|(passwordlost)|(acllogin)|(truncate)|(cascade)/i", $data["body"]) == 1) {
+        if (preg_match("/(insert)|(update)|(delete)|(grant)|(revoke)|(create)|(drop)|(alter)|(call)|(copy)|(cascade)|(cluster)|(comment)|(describe)|(execute)|(load)|(lock)|(prepare)|(reassign)|(reindex)|(security)|(set)|(show)|(vacuum)|(explain)|(truncate)|(log)|(logingestion)|(passwordlost)|(acllogin)/i", $data["body"]) == 1) {
             throw new \Ppci\Libraries\PpciException(_("La requête ne peut pas contenir d'ordres de modification de la base de données ni porter sur des tables contenant des informations confidentielles"));
         }
         /*
          * Suppression des contenus dangereux dans la commande SQL
          */
-        $data["body"] = str_replace(";", "", $data["body"]);
+        /*$data["body"] = str_replace(";", "", $data["body"]);
         $data["body"] = str_replace("--", "", $data["body"]);
-        $data["body"] = str_replace("/*", "", $data["body"]);
+        $data["body"] = str_replace("/*", "", $data["body"]);*/
         return parent::ecrire($data);
     }
 

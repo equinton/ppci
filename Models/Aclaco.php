@@ -63,7 +63,6 @@ class Aclaco extends PpciModel
      * Retourne la liste des logins associes a un ACO
      *
      * @param string $aco
-     *            : aco a tester
      * @return array : liste des logins trouves
      */
     function getLogins($aco)
