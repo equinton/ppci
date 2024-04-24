@@ -45,6 +45,8 @@ $routes->add('test', '\Ppci\Controllers\Miscellaneous::test');
 $routes->add('systemShowServer', '\Ppci\Controllers\Miscellaneous::systemServer');
 $routes->add('systemShowSession', '\Ppci\Controllers\Miscellaneous::systemSession');
 $routes->add('logList', '\Ppci\Controllers\Log::index');
+$routes->add('backupDisplay', '\Ppci\Controllers\Backup::index');
+$routes->post('backupExec', '\Ppci\Controllers\Backup::exec');
 /**
  * Submenus
  */
@@ -94,9 +96,7 @@ $routes->post('requestExecList', '\Ppci\Controllers\Request\Request::execList');
 $routes->post('requestWriteExec', '\Ppci\Controllers\Request\Request::write');
 $routes->add('requestCopy', '\Ppci\Controllers\Request\Request::copy');
 $routes->add('lexicalGet', '\Ppci\Controllers\Utils\Lexical::index');
-$routes->add('backupDisplay', '\Ppci\Controllers\Utils\Backup::display');
-$routes->post('backupExec', '\Ppci\Controllers\Utils\Backup::exec');
-$routes->post('backupSend', '\Ppci\Controllers\Utils\Backup::send');
+
 
 $routes->add('doctotp_fr', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_fr.md');
 $routes->add('doctotp_en', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_en.md');

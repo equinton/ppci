@@ -14,6 +14,24 @@ class BinaryView
 
     );
 
+    function __construct(array $param = array())
+    {
+        $this->setParam($param);
+    }
+    /**
+     * Met a jour les parametres necessaires pour l'export
+     *
+     * @param array $param
+     */
+    function setParam(?array $param)
+    {
+        if (is_array($param)) {
+            foreach ($param as $key => $value) {
+                $this->param[$key] = $value;
+            }
+        }
+    }
+
     /**
      *
      * Envoi du fichier au navigateur
@@ -24,7 +42,6 @@ class BinaryView
      */
     function send($param = "")
     {
-        //printr($this->param);
 
         !empty($this->param["tmp_name"]) ? $isReference = false : $isReference = true;
         /*
@@ -62,20 +79,6 @@ class BinaryView
             readfile($this->param["tmp_name"]);
         } else {
             fpassthru($this->param["handle"]);
-        }
-    }
-
-    /**
-     * Met a jour les parametres necessaires pour l'export
-     *
-     * @param array $param
-     */
-    function setParam(?array $param)
-    {
-        if (is_array($param)) {
-            foreach ($param as $key => $value) {
-                $this->param[$key] = $value;
-            }
         }
     }
 }

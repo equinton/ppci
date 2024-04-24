@@ -5,7 +5,7 @@
 <p>{t}Après avoir récupéré le fichier généré, assurez-vous qu'il contient bien les informations (fichier .sql dans le fichier compressé au format gzip){/t}</p>
 <div class="row">
   <div class="col-md-3">
-    <form id="backup">
+    <form id="backup" method="post">
       <input type="hidden" name="moduleBase" value="backup">
       <input type="hidden" name="action" value="Exec">
       <div class="form-group center">

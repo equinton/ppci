@@ -56,7 +56,7 @@ try {
                 $action = str_replace(".php", "", $action);
                 $aAction = explode("/", $action);
                 $aAction[0] == "framework" ? $radical = "\Ppci\Controllers\\" : $radical = "";
-                //$action = str_replace(["modules/","framework/", ".php"], ["","",""], $action);
+                //$action = str_replace(["modules/","ppci/", ".php"], ["","",""], $action);
 
                 $routes .= '$routes->add(' . "'" . lcfirst($node->tagName) . "', '" . $radical;
                 for ($i = 1; $i < count($aAction); $i++) {

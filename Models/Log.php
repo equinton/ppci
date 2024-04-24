@@ -312,7 +312,7 @@ class Log extends PpciModel
         $message->setSyslog("connectionBlocking for login $login");
         $this->sendMailToAdmin(
             sprintf(_("%s - Compte bloqué"), $_SESSION["APP_title"]),
-            "framework/mail/accountBlocked.tpl",
+            "ppci/mail/accountBlocked.tpl",
             array(
                 "login" => $login,
                 "date" => date($_SESSION["MASKDATELONG"]),
@@ -352,7 +352,7 @@ class Log extends PpciModel
             $message->set(_("Le nombre d'accès autorisés pour le module demandé a été atteint. Si vous considérez que la valeur est trop faible, veuillez contacter l'administrateur de l'application"), true);
             $this->sendMailToAdmin(
                 sprintf(_("%s - Trop d'accès à un module"), $_SESSION["APP_title"]),
-                "framework/mail/maxAccessToModule.tpl",
+                "ppci/mail/maxAccessToModule.tpl",
                 array("login" => $_SESSION["login"], "module" => $moduleName, "date" => date($_SESSION["MASKDATELONG"])),
                 $moduleName,
                 $_SESSION["login"]
