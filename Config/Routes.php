@@ -42,6 +42,9 @@ $routes->add('phpinfo', '\Ppci\Controllers\Miscellaneous::phpinfo');
 $routes->add('quoideneuf', '\Ppci\Controllers\Miscellaneous::news');
 $routes->add('news', '\Ppci\Controllers\Miscellaneous::news');
 $routes->add('test', '\Ppci\Controllers\Miscellaneous::test');
+$routes->add('systemShowServer', '\Ppci\Controllers\Miscellaneous::systemServer');
+$routes->add('systemShowSession', '\Ppci\Controllers\Miscellaneous::systemSession');
+$routes->add('logList', '\Ppci\Controllers\Log::index');
 /**
  * Submenus
  */
@@ -82,7 +85,6 @@ $routes->add('passwordlostReinitchange', '\Ppci\Controllers\PasswordLost::reinit
 $routes->post('passwordlostReinitwrite', '\Ppci\Controllers\PasswordLost::reinitWrite');
 $routes->add('dbparamList', '\Ppci\Controllers\Dbparam\Dbparam::index');
 $routes->post('dbparamWriteGlobal', '\Ppci\Controllers\Dbparam\Dbparam::writeGlobal');
-$routes->add('logList', '\Ppci\Controllers\Log\Log::index');
 $routes->add('requestList', '\Ppci\Controllers\Request\Request::index');
 $routes->add('requestChange', '\Ppci\Controllers\Request\Request::change');
 $routes->post('requestWrite', '\Ppci\Controllers\Request\Request::write');
@@ -98,5 +100,3 @@ $routes->post('backupSend', '\Ppci\Controllers\Utils\Backup::send');
 
 $routes->add('doctotp_fr', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_fr.md');
 $routes->add('doctotp_en', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_en.md');
-$routes->add('systemShowServer', '\Ppci\Controllers\Utils\System::SERVER');
-$routes->add('systemShowSession', '\Ppci\Controllers\Utils\System::SESSION');

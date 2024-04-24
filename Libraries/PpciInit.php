@@ -5,6 +5,7 @@ use Config\App;
 use \Ppci\Models\Log;
 use \Ppci\Models\PpciException;
 use \Ppci\Models\Dbversion;
+use App\Libraries\BeforeSession;
 
 class PpciInit
 {
@@ -13,6 +14,12 @@ class PpciInit
     static function init()
     {
         if (!self::$isInitialized) {
+            /**
+             * Before session
+             */
+            if (class_exists("App\Libraries\BeforeSession")) {
+                BeforeSession::index();
+            }
             /**
              * Start the session
              */

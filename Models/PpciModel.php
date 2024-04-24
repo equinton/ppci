@@ -479,8 +479,17 @@ class PpciModel extends Model
         }
         return $row;
     }
-
-
+    function formatDateLocaleToDB(string $value) {
+        $newdate = "";
+        $date = date_create_from_format($this->dateFormatMask, $value);
+        if ($date) {
+            $newdate = date_format($date, 'Y-m-d H:i:s');
+        }
+        return $newdate;
+    } 
+    function formatDateLocaleVersDB($value) {
+        return $this->formatDateLocaleToDB($value);
+    }
     function getBinaryField(int $id, string $fieldName)
     {
         $sql = "select " . $this->db->escape($fieldName) .

@@ -79,7 +79,7 @@ class LoginGestionLib extends PpciLibrary
         if ($this->log->getLastConnexionType($_SESSION["login"]) == "db") {
             $vue = service("Smarty");
             $vue->set("ppci/ident/loginChangePassword.tpl", "corps");
-            $vue->set($this->config->APPLI_passwordMinLength, "passwordMinLength");
+            $vue->set($this->appConfig->APPLI_passwordMinLength, "passwordMinLength");
         } else {
             $this->message->set(_("Le mode d'identification utilisé pour votre compte n'autorise pas la modification du mot de passe depuis cette application"), true);
             defaultPage();

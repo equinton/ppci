@@ -3,7 +3,7 @@ namespace Ppci\Libraries;
 
 class Phpinfo extends PpciLibrary
 {
-    function getPhpinfo()
+    static function getPhpinfo()
     {
         ob_start();
         phpinfo();

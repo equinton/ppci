@@ -59,7 +59,7 @@
                     <tbody>
                         {foreach $logs as $log}
                             <tr>
-                                <td>{$log.log_date}</td>
+                                <td class="nowrap">{$log.log_date}</td>
                                 <td>{$log.nom_module}</td>
                                 <td>{$log.commentaire}</td>
                                 <td>{$log.login}</td>

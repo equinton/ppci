@@ -42,7 +42,7 @@ class Log extends PpciModel
                 "type" => 0,
             ),
         );
-        isset($_SESSION["date"]) ? $mask = $_SESSION["date"]["maskdatelong"]: $mask = 'd/m/Y H:i:s';
+        isset($_SESSION["date"]) ? $mask = $_SESSION["date"]["maskdatelong"] : $mask = 'd/m/Y H:i:s';
         $this->currentDate = date($mask);
         parent::__construct();
     }
@@ -265,7 +265,7 @@ class Log extends PpciModel
             $sql = "select log_date, commentaire from log where lower(login) = lower(:login:)
                     and nom_module like '$nom_module'
                     and log_date > :blockingdate:
-                order by log_id desc limit :nbmax";
+                order by log_id desc limit :nbmax:";
             $data = $this->getListeParamAsPrepared(
                 $sql,
                 array(
@@ -393,7 +393,7 @@ class Log extends PpciModel
             /*
              * Recherche de la liste des administrateurs
              */
-            $aclAco = new Aclaco($this->connection, $this->paramori);
+            $aclAco = new Aclaco();
             $logins = $aclAco->getLogins("admin");
             /*
              * Envoi des mails aux administrateurs
@@ -469,7 +469,7 @@ class Log extends PpciModel
         $login = strtolower($login);
         $ip = getIPClientAddress();
         $sql = "select extract (epoch from now() - log_date) as ts from log
-                where login = :login and ipaddress = :ip:
+                where login = :login: and ipaddress = :ip:
                 order by log_date desc limit 1";
         $data = $this->lireParamAsPrepared($sql, array("login" => $login, "ip" => $ip));
         if (empty($data["ts"])) {
@@ -483,11 +483,17 @@ class Log extends PpciModel
      * @param string $field
      * @return array
      */
-    function getDistinctValuesFromField($field)
+    function getDistinctValuesFromField($field, $dateFrom, $dateTo)
     {
         if (array_key_exists($field, $this->fields)) {
-            $sql = "select distinct $field as val from log order by $field";
-            return $this->getListeParam($sql);
+            $sql = "select distinct $field as val from log 
+            where log_date between :datefrom: and :dateto:
+            order by $field";
+            $sqlParam = array(
+                "datefrom" => $this->formatDateLocaleVersDB($dateFrom),
+                "dateto" => $this->formatDateLocaleVersDB($dateTo)
+            );
+            return $this->getListParam($sql, $sqlParam);
         } else {
             return array();
         }
@@ -506,11 +512,11 @@ class Log extends PpciModel
             "date_to" => $this->formatDateLocaleVersDB($param["date_to"])
         );
         if (!empty($param["loglogin"])) {
-            $sql .= " and lower(login) = lower(:login)";
+            $sql .= " and lower(login) = lower(:login:)";
             $sqlParam["login"] = $param["loglogin"];
         }
         if (!empty($param["logmodule"])) {
-            $sql .= " and nom_module = :module";
+            $sql .= " and nom_module = :module:";
             $sqlParam["module"] = $param["logmodule"];
         }
         return $this->getListeParamAsPrepared($sql, $sqlParam);
