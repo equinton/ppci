@@ -17,6 +17,7 @@ class IdentificationConfig extends BaseConfig
      * @var string
      */
     public $identificationMode = "BDD";
+    public $disableTotpToAdmin = 0;
     /**
      * List of parameters to use SAML identification with apache2-mellon
      *

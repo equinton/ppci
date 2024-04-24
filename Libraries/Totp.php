@@ -9,6 +9,7 @@ class Totp extends PpciLibrary
 {
     protected Gacltotp $gacltotp;
     protected Acllogin $acllogin;
+    protected Login $login;
     protected $appConfig;
     protected $datalogin;
     protected $defaultPage;
@@ -24,6 +25,7 @@ class Totp extends PpciLibrary
             $datalogin["acllogin_id"] = $this->acllogin->addLoginByLoginAndName($_SESSION["login"]);
         }
         $this->defaultPage = new \Ppci\Libraries\DefaultPage();
+        $this->login = new Login();
     }
     function input()
     {
@@ -101,17 +103,8 @@ class Totp extends PpciLibrary
                 $_SESSION["isLogged"] = true;
                 $this->log->setlog($_SESSION["login"], "totpVerifyExec", "ok");
                 $this->message->set(_("Vous êtes maintenant connecté"));
-                $this->log->setMessageLastConnections();
+                $this->login->postLogin("totp");
                 $_SESSION["adminSessionTime"] = time();
-                /**
-                 * Regenerate rights and menu
-                 */
-                $acllogin = new Acllogin();
-                $_SESSION["userRights"] = $acllogin->generateRights(
-                    $_SESSION["login"],
-                    $this->appConfig->GACL_aco,
-                    $this->identificationConfig->LDAP
-                );
                 unset ($_SESSION["menu"]);
                 /**
                  * Generate the cookie to inhibit the totp control

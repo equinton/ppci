@@ -12,8 +12,8 @@ class AdminFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        $conf = service("AppConfig");
-        if ($conf->adminMustUseTotp) {
+        $conf = service("IdentificationConfig");
+        if (!$conf->disableTotpToAdmin) {
             $query = explode("/", uri_string());
             if (!empty($query)) {
                 $moduleName = $query[0];

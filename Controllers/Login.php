@@ -30,7 +30,7 @@ class Login extends PpciController
                 }
             } else {
                 if ($idConfig->identificationMode == "CAS") {
-                    return redirect()->to("loginExecCas");
+                    return redirect()->to("loginCasExec");
                 }
             }
             $_SESSION["filterMessages"][] = _("Le mode d'identification dans l'application ne vous permet pas d'accéder à la page de connexion");
@@ -48,12 +48,15 @@ class Login extends PpciController
             return $this->defaultReturn($login->getLogin());
         }
     }
-    public function loginExecCas()
+    public function loginCasExec()
     {
         $config = service("IdentificationConfig");
-        if ($config->identificationMode == "CAS") {
+        $ident_type = $config->identificationMode;
+        if ($ident_type == "CAS-BDD" && $_REQUEST["identificationType"] == "CAS") {
+            $ident_type = "CAS";
+        }
+        if ($ident_type == "CAS") {
             $login = new \Ppci\Libraries\Login();
-            $login->getLogin();
             return $this->defaultReturn($login->getLogin());
         } else {
             return redirect()->to(site_url());

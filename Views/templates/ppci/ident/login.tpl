@@ -13,18 +13,13 @@
 				$(this).attr("src", "display/images/framework/invisible-24.png");
 			}
 		});
-		$("#cas").click(function () {
-			$("#cas_required").val(1);
-			$("#login").removeAttr("required");
-			$("#password").removeAttr("required");
-			$("#loginForm").submit();
-		});
 	});
 </script>
 
 <div class="col-sm-12 col-md-6">
-	<form id="loginForm" method="POST" action="loginExec">
-		<div class="form-horizontal">
+	<div class="form-horizontal">
+		<form id="loginForm" method="POST" action="loginExec">
+			<input type="hidden" name="identificationType" value="BDD">
 			<div class="form-group">
 				<label for="login" class="control-label col-sm-4">
 					{t}Login :{/t}
@@ -57,22 +52,25 @@
 			{/if}
 			{if $lostPassword == 1 }
 			<div class="form-group center col-sm-12 input-lg">
-				<a href="index.php?module=passwordlostIslost">{t}Mot de passe oublié ?{/t}</a>
+				<a href="index.php?module=passwordlostIslost">
+					{t}Mot de passe oublié ?{/t}</a>
 			</div>
 			{/if}
 			<div class="form-group center">
 				<button type="submit" class="btn btn-primary button-valid input-lg">{t}Se connecter{/t}</button>
 			</div>
-			{if $CAS_enabled == 1}
-			<input id="cas_required" name="cas_required" value="0" type="hidden">
+			{$csrf}
+		</form>
+		{if $CAS_enabled == 1}
+		<form id="loginCasForm" method="GET" action="loginCasExec">
+			<input type="hidden" name="identificationType" value="CAS">
 			<div class="form-group">
 				<label for="cas" class="control-label col-sm-4">{t}ou :{/t}</label>
 				<div class="col-sm-8">
-					<button id="cas" class="btn btn-info">{t}Se connecter avec l'identification centralisée{/t}</button>
+					<button type="submit" id="cas" class="btn btn-info">{t}Se connecter avec l'identification centralisée{/t}</button>
 				</div>
 			</div>
-			{/if}
-	{$csrf}
-</form>
-</div>
+		</form>
+		{/if}
+	</div>
 </div>
