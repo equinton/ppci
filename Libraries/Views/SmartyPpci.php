@@ -52,6 +52,7 @@ class SmartyPpci
     );
     public $templateMain;
     protected \Smarty $smarty;
+    protected $isSent = false;
     public function __construct()
     {
         if (!isset($this->smarty)) {
@@ -119,34 +120,37 @@ class SmartyPpci
      */
     function send()
     {
-        $message = service('MessagePpci');
-        if ($message->is_error) {
-            $this->set(1, "messageError");
-        }
-        /**
-         * Encode data before send
-         */
-        foreach ($this->smarty->getTemplateVars() as $key => $value) {
-            if (!in_array($key, $this->htmlVars)) {
-                $this->smarty->assign($key, esc($value));
+        if (!$this->isSent) {
+            $message = service('MessagePpci');
+            if ($message->is_error) {
+                $this->set(1, "messageError");
             }
-        }
-        /**
-         * Generate the CSRF Field
-         */
-        $this->smarty->assign("csrf", csrf_field());
+            /**
+             * Encode data before send
+             */
+            foreach ($this->smarty->getTemplateVars() as $key => $value) {
+                if (!in_array($key, $this->htmlVars)) {
+                    $this->smarty->assign($key, esc($value));
+                }
+            }
+            /**
+             * Generate the CSRF Field
+             */
+            $this->smarty->assign("csrf", csrf_field());
 
-        /**
-         * Get messages
-         */
-        $this->smarty->assign("message", $message->getAsHtml());
-        /**
-         * Trigger the display
-         */
-        try {
-            $this->smarty->display($this->templateMain);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
+            /**
+             * Get messages
+             */
+            $this->smarty->assign("message", $message->getAsHtml());
+            /**
+             * Trigger the display
+             */
+            try {
+                $this->smarty->display($this->templateMain);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
+            $this->isSent = true;
         }
     }
 
