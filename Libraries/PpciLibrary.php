@@ -8,6 +8,7 @@ class PpciLibrary
     protected $dataClass;
     protected $appConfig;
     protected $log;
+    protected int $id;
     public $vue;
 
     function __construct()

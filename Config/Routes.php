@@ -57,6 +57,29 @@ $routes->add('dbstructureSchema', '\Ppci\Controllers\Miscellaneous::structureSch
  */
 $routes->add('administration', '\Ppci\Controllers\Submenu::administration');
 
+/**
+ * GACL configuration
+ */
+$routes->add('appliList', '\Ppci\Controllers\Gacl::appliindex');
+$routes->add('appliDisplay', '\Ppci\Controllers\Gacl::applidisplay');
+$routes->add('appliChange', '\Ppci\Controllers\Gacl::applichange');
+$routes->post('appliWrite', '\Ppci\Controllers\Gacl::appliwrite');
+$routes->post('appliDelete', '\Ppci\Controllers\Gacl::applidelete');
+$routes->add('aclloginList', '\Ppci\Controllers\Gacl::loginindex');
+$routes->add('aclloginChange', '\Ppci\Controllers\Gacl::loginchange');
+$routes->post('aclloginWrite', '\Ppci\Controllers\Gacl::loginwrite');
+$routes->post('aclloginDelete', '\Ppci\Controllers\Gacl::logindelete');
+$routes->add('groupList', '\Ppci\Controllers\Gacl::groupindex');
+$routes->add('groupChange', '\Ppci\Controllers\Gacl::groupchange');
+$routes->post('groupWrite', '\Ppci\Controllers\Gacl::groupwrite');
+$routes->post('groupDelete', '\Ppci\Controllers\Gacl::groupdelete');
+$routes->add('acoDisplay', '\Ppci\Controllers\Gacl::acodisplay');
+$routes->add('acoChange', '\Ppci\Controllers\Gacl::acochange');
+$routes->post('acoWrite', '\Ppci\Controllers\Gacl::acowrite');
+$routes->post('acoDelete', '\Ppci\Controllers\Gacl::acodelete');
+
+
+
 $routes->add('gestion', 'Gestion\Index::index');
 $routes->add('errorbefore', '\Ppci\Controllers\Errorbefore::index');
 $routes->add('errorlogin', '\Ppci\Controllers\Errorlogin::index');
@@ -69,23 +92,7 @@ $routes->add('setlanguageus', '\Ppci\Controllers\Setlanguage::us');
 $routes->add('documentation_fr', '\Ppci\Controllers\Utils\Submenu::index');
 $routes->add('documentation_en', '\Ppci\Controllers\Utils\Submenu::index');
 $routes->add('documentationGetFile', '\Ppci\Controllers\Utils\File::documentationGetFile');
-$routes->add('appliList', '\Ppci\Controllers\Droits\Appli::index');
-$routes->add('appliDisplay', '\Ppci\Controllers\Droits\Appli::display');
-$routes->add('appliChange', '\Ppci\Controllers\Droits\Appli::change');
-$routes->post('appliWrite', '\Ppci\Controllers\Droits\Appli::write');
-$routes->post('appliDelete', '\Ppci\Controllers\Droits\Appli::delete');
-$routes->add('aclloginList', '\Ppci\Controllers\Droits\Login::index');
-$routes->add('aclloginChange', '\Ppci\Controllers\Droits\Login::change');
-$routes->post('aclloginWrite', '\Ppci\Controllers\Droits\Login::write');
-$routes->post('aclloginDelete', '\Ppci\Controllers\Droits\Login::delete');
-$routes->add('groupList', '\Ppci\Controllers\Droits\Group::index');
-$routes->add('groupChange', '\Ppci\Controllers\Droits\Group::change');
-$routes->post('groupWrite', '\Ppci\Controllers\Droits\Group::write');
-$routes->post('groupDelete', '\Ppci\Controllers\Droits\Group::delete');
-$routes->add('acoDisplay', '\Ppci\Controllers\Droits\Aco::display');
-$routes->add('acoChange', '\Ppci\Controllers\Droits\Aco::change');
-$routes->post('acoWrite', '\Ppci\Controllers\Droits\Aco::write');
-$routes->post('acoDelete', '\Ppci\Controllers\Droits\Aco::delete');
+
 $routes->add('passwordlostIslost', '\Ppci\Controllers\PasswordLost::isLost');
 $routes->add('passwordlostSendmail', '\Ppci\Controllers\PasswordLost::sendMail');
 $routes->add('passwordlostReinitchange', '\Ppci\Controllers\PasswordLost::reinitChange');
