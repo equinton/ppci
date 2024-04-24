@@ -30,7 +30,7 @@ class PpciController extends \App\Controllers\BaseController
     ) {
         parent::initController($request, $response, $logger);
         $this->message = service('MessagePpci');
-        $this->config = service("AppConfig");
+        $this->config = config("App");
         $session = session();
         if ($session->getFlashdata("POST")){
             $_POST = $session->getFlashdata("POST");

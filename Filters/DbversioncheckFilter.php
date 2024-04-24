@@ -15,7 +15,7 @@ class DbversioncheckFilter implements FilterInterface
     {
         try {
             if (!isset($_SESSION["dbversionCheck"])) {
-                $paramApp = service("AppConfig");
+                $paramApp = config("App");
                 /**
                  * set the connection
                  */

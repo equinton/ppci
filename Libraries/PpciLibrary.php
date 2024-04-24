@@ -14,7 +14,7 @@ class PpciLibrary
     {
         $this->message = service('MessagePpci');
         $this->init = service("PpciInit");
-        $this->appConfig = service("AppConfig");
+        $this->appConfig = config("App");
         $this->log = service("Log");
         $this->init::Init();
     }

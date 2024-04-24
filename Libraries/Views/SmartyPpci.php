@@ -73,7 +73,7 @@ class SmartyPpci
         /**
          * Assign variables from app/Config/App
          */
-        $appConfig = service("AppConfig");
+        $appConfig = config("App");
         $this->set($appConfig->copyright, "copyright");
         $this->set($appConfig->APP_help_address, "APP_help_address");
         /**

@@ -66,7 +66,7 @@ class LoginGestion extends PpciModel
             "nbattempts" => array("type" => 1),
             "lastattempt" => array("type" => 3)
         );
-        $this->paramApp = service("AppConfig");
+        $this->paramApp = config("App");
         parent::__construct();
     }
 

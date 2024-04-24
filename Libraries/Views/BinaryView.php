@@ -1,7 +1,7 @@
 <?php
 namespace Ppci\Libraries\Views;
 
-class BinaryView
+class BinaryView extends DefaultView
 {
 
     private $param = array(
@@ -11,7 +11,6 @@ class BinaryView
         "content_type" => "", /* type mime */
         "is_reference" => false, /* if true, tmp_name contains the handle of the opened file */
         "handle" => 0
-
     );
 
     function __construct(array $param = array())
@@ -31,7 +30,14 @@ class BinaryView
             }
         }
     }
-
+    function set($value, $variable = "")
+    {
+        if (!empty($variable)) {
+            $this->data[$variable] = $value;
+        } else {
+            $this->data = $value;
+        }
+    }
     /**
      *
      * Envoi du fichier au navigateur

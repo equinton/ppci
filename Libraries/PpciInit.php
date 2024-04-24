@@ -49,7 +49,7 @@ class PpciInit
              * Get parameters stored in ini file
              * and populate App/Config/App class
              */
-            $appConfig = service("AppConfig");
+            $appConfig = config("App");
             $appConfig->setParameters();
             if (is_file($appConfig->paramIniFile)) {
                 $params = parse_ini_file($appConfig->paramIniFile, true);
@@ -90,7 +90,7 @@ class PpciInit
                 }
             }
             try {
-                $paramApp = service("AppConfig");
+                $paramApp = config("App");
                 /**
                  * set the connection
                  */

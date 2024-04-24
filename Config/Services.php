@@ -12,6 +12,7 @@ use Ppci\Libraries\PpciInit;
 use Ppci\Models\Log;
 use Ppci\Models\Dbparam;
 use Ppci\Libraries\Views\BinaryView;
+use Ppci\Libraries\Views\FileView;
 use Ppci\Config\IdentificationConfig;
 
 /**
@@ -84,5 +85,8 @@ class Services extends BaseService
     {
         return ($getShared === true ? static::getSharedInstance('BinaryView') : new BinaryView());
         
+    }
+    public static function FileView($getShared = true) {
+        return ($getShared === true ? static::getSharedInstance('FileView') : new FileView());
     }
 }

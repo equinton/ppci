@@ -47,6 +47,11 @@ $routes->add('systemShowSession', '\Ppci\Controllers\Miscellaneous::systemSessio
 $routes->add('logList', '\Ppci\Controllers\Log::index');
 $routes->add('backupDisplay', '\Ppci\Controllers\Backup::index');
 $routes->post('backupExec', '\Ppci\Controllers\Backup::exec');
+
+$routes->add('dbstructureHtml', '\Ppci\Controllers\Miscellaneous::structureHtml');
+$routes->add('dbstructureLatex', '\Ppci\Controllers\Miscellaneous::structureLatex');
+$routes->add('dbstructureSchema', '\Ppci\Controllers\Miscellaneous::structureSchema');
+
 /**
  * Submenus
  */

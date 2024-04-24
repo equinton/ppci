@@ -19,7 +19,7 @@ class Login
     function __construct()
     {
 
-        $this->paramApp = service("AppConfig");
+        $this->paramApp = config("App");
         $this->loginGestion = new LoginGestion();
         $this->loginGestion->setKeys($this->paramApp->privateKey, $this->paramApp->pubKey);
         $this->acllogin = new Acllogin();

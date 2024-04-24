@@ -17,7 +17,7 @@ class Totp extends PpciLibrary
     function __construct()
     {
         parent::__construct();
-        $this->appConfig = service("AppConfig");
+        $this->appConfig = config("App");
         $this->gacltotp = new Gacltotp($this->appConfig->privateKey, $this->appConfig->pubKey);
         $this->acllogin = new Acllogin();
         $this->datalogin = $this->acllogin->getFromLogin($_SESSION["login"]);
