@@ -22,11 +22,10 @@ class AdminFilter implements FilterInterface
                 }
                 $ppciRights = new \Ppci\Config\Rights();
                 if ($ppciRights->isAdminRequired($moduleName)) {
-                    $app = service("AppConfig");
                     if ($_SESSION["userRights"]["admin"] == 1) {
                         if (
                             isset($_SESSION["adminSessionTime"])
-                            && ($_SESSION["adminSessionTime"] + $app->adminSessionDuration) > time()
+                            && ($_SESSION["adminSessionTime"] + $conf->adminSessionDuration) > time()
                         ) {
                             $_SESSION["adminSessionTime"] = time();
                         } else {
@@ -37,7 +36,6 @@ class AdminFilter implements FilterInterface
                                 $_SESSION["moduleRequired"] = $moduleName;
                             }
                             $aclLogin = new Acllogin();
-                            $totp = new Totp();
                             $vue = service("Smarty");
                             if ($aclLogin->isTotp()) {
                                 $vue->set(1, "isAdmin");
