@@ -48,6 +48,9 @@ $routes->add('logList', '\Ppci\Controllers\Log::index');
 $routes->add('backupDisplay', '\Ppci\Controllers\Backup::index');
 $routes->post('backupExec', '\Ppci\Controllers\Backup::exec');
 
+$routes->add('dbparamList', '\Ppci\Controllers\Miscellaneous::dbparamList');
+$routes->post('dbparamWriteGlobal', '\Ppci\Controllers\Miscellaneous::dbparamWriteGlobal');
+
 $routes->add('dbstructureHtml', '\Ppci\Controllers\Miscellaneous::structureHtml');
 $routes->add('dbstructureLatex', '\Ppci\Controllers\Miscellaneous::structureLatex');
 $routes->add('dbstructureSchema', '\Ppci\Controllers\Miscellaneous::structureSchema');
@@ -97,8 +100,7 @@ $routes->add('passwordlostIslost', '\Ppci\Controllers\PasswordLost::isLost');
 $routes->add('passwordlostSendmail', '\Ppci\Controllers\PasswordLost::sendMail');
 $routes->add('passwordlostReinitchange', '\Ppci\Controllers\PasswordLost::reinitChange');
 $routes->post('passwordlostReinitwrite', '\Ppci\Controllers\PasswordLost::reinitWrite');
-$routes->add('dbparamList', '\Ppci\Controllers\Dbparam\Dbparam::index');
-$routes->post('dbparamWriteGlobal', '\Ppci\Controllers\Dbparam\Dbparam::writeGlobal');
+
 $routes->add('requestList', '\Ppci\Controllers\Request\Request::index');
 $routes->add('requestChange', '\Ppci\Controllers\Request\Request::change');
 $routes->post('requestWrite', '\Ppci\Controllers\Request\Request::write');

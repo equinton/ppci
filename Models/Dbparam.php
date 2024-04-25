@@ -65,7 +65,8 @@ class DbParam extends PpciModel
 
     function ecrireGlobal($data)
     {
-        $this->fields["dbparam_name"]["requis"] = 0;
+        $this->disableMandatoryField("dbparam_name");
+        $this->disableMandatoryField("dbparam_value");
         foreach ($data as $key => $value) {
             if (substr($key, 0, 2) == "id") {
                 $aval = explode(":", $key);

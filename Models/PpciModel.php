@@ -570,5 +570,20 @@ class PpciModel extends Model
         return (date($this->dateFormatMask));
     }
 
+    /**
+     * Disable a mandatory field before write
+     *
+     * @param string $name
+     * @return void
+     */
+    function disableMandatoryField(string $name) {
+        foreach ($this->mandatoryFields as $k => $v) {
+            if ($name == $v) {
+                unset ($this->mandatoryFields[$k]);
+                break;
+            }
+        }
+    }
+
 
 }

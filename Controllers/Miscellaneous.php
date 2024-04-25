@@ -1,10 +1,12 @@
 <?php
 namespace Ppci\Controllers;
 use Ppci\Libraries\About;
+use Ppci\Libraries\Dbparam;
 use Ppci\Libraries\News;
 use Ppci\Libraries\Phpinfo;
 use Ppci\Libraries\Structure;
 use Ppci\Libraries\System;
+
 class Miscellaneous extends PpciController {
     function about() {
         $about = new About();
@@ -43,6 +45,16 @@ class Miscellaneous extends PpciController {
         }
         
     }
+
+    function dbparamList() {
+        $dbparam = new Dbparam();
+        return $dbparam->list();
+    }
+    function dbparamWriteGlobal(){
+        $dbparam = new Dbparam();
+        return $dbparam->writeGlobal();
+    }
+
     function test() {
 
     }
