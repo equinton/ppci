@@ -412,9 +412,9 @@ class PpciModel extends Model
         }
         return $result;
     }
-    function getListeParam(string $sql): array
+    function getListeParam(string $sql,array $param = null): array
     {
-        return $this->getListParam($sql);
+        return $this->getListParam($sql, $param);
     }
     function getListeParamAsPrepared(string $sql, array $param = null): array
     {

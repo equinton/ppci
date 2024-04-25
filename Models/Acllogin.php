@@ -182,8 +182,7 @@ class Acllogin extends PpciModel
         if (!empty($login)) {
             $sql = "select acllogin_id, login, logindetail from acllogin where lower(login) = :login:";
             return $this->lireParamAsPrepared($sql, array("login" => strtolower($login)));
-        }
-        else {
+        } else {
             return array();
         }
     }
@@ -243,5 +242,56 @@ class Acllogin extends PpciModel
         $sql = "select totp_key from acllogin where lower(login) = :login:";
         $data = $this->lireParamAsPrepared($sql, array("login" => $_SESSION["login"]));
         return ($data["totp_key"]);
+    }
+    /**
+     * Retourne la liste des droits attribues a un login
+     *
+     * @param string $login
+     * @return array
+     */
+    function getListDroits($login, $appli, $ldapParam = array())
+    {
+        $droits = array();
+        if (!empty($login) && !empty($appli)) {
+            $login = strtolower($login);
+            /**
+             * Recherche des groupes associes au login
+             */
+            $aclgroup = new Aclgroup();
+            $groupes = $aclgroup->getGroupsFromLogin($login, $ldapParam);
+            if (count($groupes) > 0) {
+                /**
+                 * Recherche des droits. Preparation de la clause IN
+                 */
+                $inclause = "";
+                $comma = false;
+                foreach ($groupes as $value) {
+                    if ($value["aclgroup_id"] > 0) {
+                        if ($comma) {
+                            $inclause .= ", ";
+                        } else {
+                            $comma = true;
+                        }
+                        $inclause .= $value["aclgroup_id"];
+                    }
+                }
+                $sql = "select distinct aco
+					from aclaco
+					join aclacl on (aclaco.aclaco_id = aclacl.aclaco_id)
+					join aclappli on (aclappli.aclappli_id = aclaco.aclappli_id)
+					where aclgroup_id in (" . $inclause . ")
+					and appli = '" . $appli . "'
+					order by aco";
+                $data = $this->getListeParam($sql);
+                /*
+                 * Mise en forme des droits
+                 */
+                $droits = array();
+                foreach ($data as $value) {
+                    $droits[$value["aco"]] = 1;
+                }
+            }
+        }
+        return $droits;
     }
 }

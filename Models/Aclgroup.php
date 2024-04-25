@@ -311,14 +311,14 @@ class Aclgroup extends PpciModel
      *
      * @see ObjetBDD::write()
      */
-    function ecrire(array $data):int
+    function write(array $data):int
     {
         if ($data["aclgroup_id"] > 0 && $data["aclgroup_id"] == $data["aclgroup_id_parent"]) {
             throw new \Ppci\Libraries\PpciException(_("Un groupe ne peut être son propre parent"));
         }
-        $id = parent::ecrire($data);
+        $id = parent::write($data);
         if ($id > 0) {
-            $this->ecrireTableNN("acllogingroup", "aclgroup_id", "acllogin_id", $id, $data["logins"]);
+            $this->writeTableNN("acllogingroup", "aclgroup_id", "acllogin_id", $id, $data["logins"]);
         }
         return $id;
     }
