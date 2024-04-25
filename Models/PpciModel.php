@@ -51,10 +51,10 @@ class PpciModel extends Model
     protected function initialize()
     {
         foreach ($this->fields as $fieldName => $field) {
-            if (!isset($field["key"])){
+            if (!isset($field["key"])) {
                 $this->allowedFields[] = $fieldName;
             }
-            
+
             if (!isset($field["type"])) {
                 $field["type"] = 0;
             }
@@ -74,7 +74,7 @@ class PpciModel extends Model
                 $this->defaultValues[$fieldName] = $field["defaultValue"];
             }
             if (isset($field["parentAttrib"])) {
-                $this->parentKeyName = $field["parentAttrib"];
+                $this->parentKeyName = $fieldName;
             }
             if (isset($field["mandatory"]) || isset($field["requis"])) {
                 $this->mandatoryFields[] = $fieldName;
@@ -102,16 +102,23 @@ class PpciModel extends Model
         } else {
             $query = $this->db->query($sql);
         }
-        if ($onlyExecute && !$query) {
+        if (!$query) {
+            $this->message->setSyslog(sprintf(_("Erreur SQL pour la requête %s"), $sql));
+            /*$this->message->setSyslog($this->db->error()->code.": ".$this->db->error()->message);*/
+            throw new \Ppci\Libraries\PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
+        }
+        /*if ($onlyExecute && !$query) {
             $this->message->setSyslog(sprintf(_("Erreur SQL pour la requête %s"), $sql));
             throw new \Ppci\Libraries\PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
         } else {
-            if (!is_bool($query) && $query->hasError()) {
+            printa($this->db->error());
+            die;
+            if (!is_bool($query) && is_object($query) && $query->hasError()) {
                 $this->message->set($query->getErrorMessage(), true);
                 $this->message->setSyslog($query->getErrorMessage());
                 throw new \Ppci\Libraries\PpciException($query->getErrorMessage(), $query->getErrorCode());
             }
-        }
+        }*/
         return $query;
     }
     protected function executeSQL(string $sql, array $data = null, $onlyExecute = false)
@@ -164,15 +171,15 @@ class PpciModel extends Model
             /**
              * Remove all empty fields
              */
-            foreach ($row as $k=>$v) {
-                if (strlen ($v) == 0) {
-                    unset ($row[$k]);
+            foreach ($row as $k => $v) {
+                if (empty($v)) {
+                    unset($row[$k]);
                 }
             }
             if ($this->insert($row, false)) {
                 $id = $this->getInsertID();
             } else {
-                test ($this->db->error()["message"]);
+                test($this->db->error()["message"]);
                 throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
             }
         } else {
@@ -215,11 +222,16 @@ class PpciModel extends Model
         /** 
          * get the current content of the table
          */
-        $sql = "select " . $k2 . " from " . $tablename . " where " . $k1 . " = :id";
+        $sql = "select " . $k2 . " from " . $tablename . " where " . $k1 . " = :id:";
         $origin = array();
         $query = $this->executeQuery($sql, ["id" => $id]);
-        foreach ($query->getResultArray() as $row) {
-            $origin[] = $row[$secondKey];
+        if ($query) {
+            foreach ($query->getResultArray() as $row) {
+                $origin[] = $row[$secondKey];
+            }
+        }
+        if (is_null($data)) {
+            $data = [];
         }
 
         /**
@@ -230,14 +242,14 @@ class PpciModel extends Model
         $create = array_diff($data, $intersect);
         $param = array("id" => $id);
         if (count($delete) > 0) {
-            $sql = "delete from " . $tablename . " where " . $k1 . " = :id and " . $k2 . "= :key2";
+            $sql = "delete from " . $tablename . " where " . $k1 . " = :id: and " . $k2 . "= :key2:";
             foreach ($delete as $key2) {
                 $param["key2"] = $key2;
                 $this->executeQuery($sql, $param);
             }
         }
         if (count($create) > 0) {
-            $sql = "insert into " . $this->qi . $tablename . $this->qi . "(" . $k1 . "," . $k2 . ") values ( :key1, :key2)";
+            $sql = "insert into $tablename (" . $k1 . "," . $k2 . ") values ( :id:, :key2:)";
             foreach ($create as $key2) {
                 $param["key2"] = $key2;
                 $this->executeQuery($sql, $param);
@@ -420,11 +432,11 @@ class PpciModel extends Model
     {
         if ($parentId > 0 && !empty($this->parentKeyName)) {
             $sql = "select * from " . $this->qi . $this->table . $this->qi .
-                "where " . $this->qi . $this->parentKeyName . $this->qi . "= :id";
+                " where " . $this->qi . $this->parentKeyName . $this->qi . "= :id:";
             if (!empty($order)) {
-                $sql .= "order by $order";
+                $sql .= " order by $order";
             }
-            return $this->getListParam($sql);
+            return $this->getListParam($sql, ["id" => $parentId]);
         } else {
             return array();
         }
@@ -479,15 +491,17 @@ class PpciModel extends Model
         }
         return $row;
     }
-    function formatDateLocaleToDB(string $value) {
+    function formatDateLocaleToDB(string $value)
+    {
         $newdate = "";
         $date = date_create_from_format($this->dateFormatMask, $value);
         if ($date) {
             $newdate = date_format($date, 'Y-m-d H:i:s');
         }
         return $newdate;
-    } 
-    function formatDateLocaleVersDB($value) {
+    }
+    function formatDateLocaleVersDB($value)
+    {
         return $this->formatDateLocaleToDB($value);
     }
     function getBinaryField(int $id, string $fieldName)

@@ -31,11 +31,11 @@ class Aclaco extends PpciModel
      * (non-PHPdoc)
      *
      */
-    function ecrire(array $data):int
+    function write(array $data):int
     {
-        $id = parent::ecrire($data);
+        $id = parent::write($data);
         if ($id > 0) {
-            $this->ecrireTableNN("aclacl", "aclaco_id", "aclgroup_id", $id, $data["groupes"]);
+            $this->writeTableNN("aclacl", "aclaco_id", "aclgroup_id", $id, $data["groupes"]);
         }
         return $id;
     }
@@ -46,14 +46,14 @@ class Aclaco extends PpciModel
      *
      * @see ObjetBDD::supprimer()
      */
-    function supprimer($id)
+    function delete($id = null, bool $purge = false)
     {
         if ($id > 0) {
             /*
              * Suppression des droits rattaches
              */
-            $this->ecrireTableNN("aclacl", "aclaco_id", "aclgroup_id", $id, array());
-            return parent::supprimer($id);
+            $this->writeTableNN("aclacl", "aclaco_id", "aclgroup_id", $id, array());
+            return parent::delete($id);
         } else {
             return false;
         }

@@ -48,14 +48,19 @@ class Gacl extends PpciController {
 
     }
     function acodisplay() {
-
-    }function acochange() {
-
+        $lib = new \Ppci\Libraries\Aclaco();
+        return $lib->display();
+    }
+    function acochange() {
+        $lib = new \Ppci\Libraries\Aclaco();
+        return $lib->change();
     }
     function acowrite() {
-
+        $lib = new \Ppci\Libraries\Aclaco();
+        return $lib->write();
     }
     function acodelete () {
-
+        $lib = new \Ppci\Libraries\Aclaco();
+        return $lib->delete();
     }
 }

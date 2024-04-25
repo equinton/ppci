@@ -1,24 +1,19 @@
 <?php
 namespace Ppci\Libraries;
+use Ppci\Models\Aclappli;
+use Ppci\Models\Aclgroup;
 
-class Aclappli extends PpciLibrary
+class Aclaco extends PpciLibrary
 {
     function __construct()
     {
         parent::__construct();
-        $this->dataClass = new \Ppci\Models\Aclappli();
-        $keyName = "aclappli_id";
+        $this->dataClass = new \Ppci\Models\Aclaco();
+        $keyName = "aclaco_id";
         if (isset($_REQUEST[$keyName])) {
             $this->id = $_REQUEST[$keyName];
         }
         
-    }
-    function list()
-    {
-        $vue = service("Smarty");
-        $vue->set($this->dataClass->getListe(2), "data");
-        $vue->set("ppci/droits/appliList.tpl", "corps");
-        return $vue->send();
     }
     function display()
     {
@@ -33,7 +28,11 @@ class Aclappli extends PpciLibrary
     function change()
     {
         $vue = service("Smarty");
-        $this->dataRead( $this->id, "ppci/droits/appliChange.tpl");
+        $data = $this->dataRead($this->id, "ppci/droits/acoChange.tpl", $_REQUEST["aclappli_id"]);
+		$aclAppli = new Aclappli();
+		$vue->set($aclAppli->lire($data["aclappli_id"]), "dataAppli");
+		$aclgroup = new Aclgroup();
+		$vue->set($aclgroup->getGroupsFromAco($this->id), "groupes");
         return $vue->send();
     }
     function write()
@@ -48,8 +47,8 @@ class Aclappli extends PpciLibrary
     function delete()
     {
         try {
-            dataDelete( $this->id);
-            return $this->list();
+            $this->dataDelete( $this->id);
+            return $this->display();
         } catch (\Exception $e) {
             return $this->change();
         }
