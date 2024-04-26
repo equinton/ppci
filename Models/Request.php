@@ -20,7 +20,8 @@ class Request extends PpciModel
             "request_id" => array(
                 "key" => 1,
                 "type" => 1,
-                "requis" => 1
+                "requis" => 1,
+                "defaultValue"=>0
             ),
             "create_date" => array(
                 "type" => 3,
@@ -92,5 +93,8 @@ class Request extends PpciModel
             }
         }
         return $result;
+    }
+    function getLogin() {
+        return $_SESSION["login"];
     }
 }

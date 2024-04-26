@@ -251,7 +251,11 @@
                 format: 'HH:mm:ss'
             });
             $('.date, .datepicker, .timepicker, .datetimepicker').attr('autocomplete', 'off');
-
+            function deleteLegacyFields() {
+                $(this.form).find("input[name='moduleBase']").remove();
+                $(this.form).find("input[name='module']").remove();
+                $(this.form).find("input[name='action']").remove();
+            }
             $(".button-valid").on("keyup click", function () {
                 var module = $(this.form).find("input[name='moduleBase']").val();
                 if (module) {
@@ -261,9 +265,7 @@
                     } else {
                         $(this.form).attr("action", module);
                     }
-                    $(this.form).find("input[name='moduleBase']").remove();
-                    $(this.form).find("input[name='module']").remove();
-                    $(this.form).find("input[name='action']").remove();
+                    deleteLegacyFields();
                 }
             });
             $(".button-delete").on("keyup click", function () {
@@ -271,9 +273,7 @@
                     var module = $(this.form).find("input[name='moduleBase']").val();
                     if (module) {
                         $(this.form).attr("action", module + "Delete");
-                        $(this.form).find("input[name='moduleBase']").remove();
-                        $(this.form).find("input[name='module']").remove();
-                        $(this.form).find("input[name='action']").remove();
+                        deleteLegacyFields();
                     }
                     $(this.form).submit();
                 }

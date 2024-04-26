@@ -3,9 +3,7 @@ namespace Ppci\Controllers;
 
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Ppci\Libraries\SmartyParam;
 use Psr\Log\LoggerInterface;
-use Ppci\Libraries;
 
 /**
  * Generic controller for prototypephp

@@ -1,8 +1,10 @@
 <?php
+
 namespace Ppci\Models;
 
 use CodeIgniter\Database\Query;
 use CodeIgniter\Model;
+use Ppci\Libraries\PpciException;
 
 class PpciModel extends Model
 {
@@ -103,22 +105,11 @@ class PpciModel extends Model
             $query = $this->db->query($sql);
         }
         if (!$query) {
-            $this->message->setSyslog(sprintf(_("Erreur SQL pour la requête %s"), $sql));
+            //$this->message->setSyslog(sprintf(_("Erreur SQL pour la requête %s"), $sql));
+            throw new PpciException($this->db->error()["message"]);
             /*$this->message->setSyslog($this->db->error()->code.": ".$this->db->error()->message);*/
-            throw new \Ppci\Libraries\PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
+            //throw new \Ppci\Libraries\PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
         }
-        /*if ($onlyExecute && !$query) {
-            $this->message->setSyslog(sprintf(_("Erreur SQL pour la requête %s"), $sql));
-            throw new \Ppci\Libraries\PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
-        } else {
-            printa($this->db->error());
-            die;
-            if (!is_bool($query) && is_object($query) && $query->hasError()) {
-                $this->message->set($query->getErrorMessage(), true);
-                $this->message->setSyslog($query->getErrorMessage());
-                throw new \Ppci\Libraries\PpciException($query->getErrorMessage(), $query->getErrorCode());
-            }
-        }*/
         return $query;
     }
     protected function executeSQL(string $sql, array $data = null, $onlyExecute = false)
@@ -179,7 +170,6 @@ class PpciModel extends Model
             if ($this->insert($row, false)) {
                 $id = $this->getInsertID();
             } else {
-                test($this->db->error()["message"]);
                 throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
             }
         } else {
@@ -303,12 +293,14 @@ class PpciModel extends Model
      */
     public function read(int $id, bool $getDefault = true, $parentKey = 0): array
     {
-        if ($id == 0) {
-            $data = $this->getDefaultValues($parentKey);
-        } else {
-            $data = $this->find($id);
-            if (empty($data)) {
+        if ($getDefault) {
+            if (empty($id) || $id == 0) {
                 $data = $this->getDefaultValues($parentKey);
+            } else {
+                $data = $this->find($id);
+                if (empty($data)) {
+                    $data = $this->getDefaultValues($parentKey);
+                }
             }
         }
         if ($this->autoFormatDate) {
@@ -409,10 +401,12 @@ class PpciModel extends Model
             } else {
                 $result = $data;
             }
+        } else {
+            throw new PpciException($this->db->error()["message"]);
         }
         return $result;
     }
-    function getListeParam(string $sql,array $param = null): array
+    function getListeParam(string $sql, array $param = null): array
     {
         return $this->getListParam($sql, $param);
     }
@@ -576,14 +570,13 @@ class PpciModel extends Model
      * @param string $name
      * @return void
      */
-    function disableMandatoryField(string $name) {
+    function disableMandatoryField(string $name)
+    {
         foreach ($this->mandatoryFields as $k => $v) {
             if ($name == $v) {
-                unset ($this->mandatoryFields[$k]);
+                unset($this->mandatoryFields[$k]);
                 break;
             }
         }
     }
-
-
 }

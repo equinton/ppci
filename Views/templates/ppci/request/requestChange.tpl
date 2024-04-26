@@ -7,27 +7,27 @@ $(document).ready(function() {
 			.map(b => b.toString(16).padStart(2, '0'))
 			.join('')
 	}
-	$("#suppr").bind("click keyup", function (event) {
+	$("#suppr").on("click keyup", function () {
 		if (confirm("{t}Confirmez la suppression de la requête{/t}")) {
-			$("#action").val("Delete");
+			$(this.form).attr("action", "requestDelete");
 			$("#requestForm").submit();
 		}
 	});
-	$("#exec").bind("click keyup", function (event) {
-		$("#action").val("Exec");
+	$("#exec").on("click keyup", function () {
+		$(this.form).attr("action", "requestExec");
 		$("#requestForm").submit();
 	});
-	$("#saveExec").bind("click keyup", function (event) {
-		$("#action").val("WriteExec");
+	$("#saveExec").on("click keyup", function () {
+		$(this.form).attr("action", "requestWriteExec");
 		$("#bodySent").val(toHex ($("#body").val() ) );
 		$("#requestForm").submit();
 	});
-	$("#save").bind("click keyup", function (event) {
-		$("#action").val("Write");
+	$("#save").on("click keyup", function () {
+		$(this.form).attr("action", "requestWrite");
 		$("#bodySent").val(toHex ($("#body").val() ) );
 		$("#requestForm").submit();
 	});
-	$(".modif").change(function() {
+	$(".modif").on ("keyup", function() {
 		$("#exec").prop("disabled", true);
 	});
 });
@@ -44,8 +44,6 @@ $(document).ready(function() {
 			{t}Structure de la base de données{/t}
 		</a>
 		<form class="form-horizontal protoform" id="requestForm" method="post" action="index.php">
-			<input type="hidden" id="moduleBase" name="moduleBase" value="request">
-			<input type="hidden" id="action" name="action" value="Write">
 			<input type="hidden" name="request_id" value="{$data.request_id}">
 			<input type="hidden" name="body" id="bodySent">
 			<div class="form-group">

@@ -1,15 +1,18 @@
 <?php
 namespace Ppci\Libraries;
 
+use Ppci\Models\PpciModel;
+
 class PpciLibrary
 {
     protected $session;
     protected $message;
-    protected $dataClass;
+    protected PpciModel $dataClass;
     protected $appConfig;
     protected $log;
     protected int $id;
     public $vue;
+    protected PpciInit $init;
 
     function __construct()
     {

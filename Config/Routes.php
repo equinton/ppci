@@ -81,7 +81,17 @@ $routes->add('acoChange', '\Ppci\Controllers\Gacl::acochange');
 $routes->post('acoWrite', '\Ppci\Controllers\Gacl::acowrite');
 $routes->post('acoDelete', '\Ppci\Controllers\Gacl::acodelete');
 
-
+/**
+ * SQL requests
+ */
+$routes->add('requestList', '\Ppci\Controllers\Request::list');
+$routes->add('requestChange', '\Ppci\Controllers\Request::change');
+$routes->post('requestWrite', '\Ppci\Controllers\Request::write');
+$routes->post('requestDelete', '\Ppci\Controllers\Request::delete');
+$routes->post('requestExec', '\Ppci\Controllers\Request::exec');
+$routes->add('requestExecList', '\Ppci\Controllers\Request::execList');
+$routes->post('requestWriteExec', '\Ppci\Controllers\Request::writeExec');
+$routes->add('requestCopy', '\Ppci\Controllers\Request::copy');
 
 $routes->add('gestion', 'Gestion\Index::index');
 $routes->add('errorbefore', '\Ppci\Controllers\Errorbefore::index');
@@ -101,14 +111,6 @@ $routes->add('passwordlostSendmail', '\Ppci\Controllers\PasswordLost::sendMail')
 $routes->add('passwordlostReinitchange', '\Ppci\Controllers\PasswordLost::reinitChange');
 $routes->post('passwordlostReinitwrite', '\Ppci\Controllers\PasswordLost::reinitWrite');
 
-$routes->add('requestList', '\Ppci\Controllers\Request\Request::index');
-$routes->add('requestChange', '\Ppci\Controllers\Request\Request::change');
-$routes->post('requestWrite', '\Ppci\Controllers\Request\Request::write');
-$routes->post('requestDelete', '\Ppci\Controllers\Request\Request::delete');
-$routes->post('requestExec', '\Ppci\Controllers\Request\Request::exec');
-$routes->post('requestExecList', '\Ppci\Controllers\Request\Request::execList');
-$routes->post('requestWriteExec', '\Ppci\Controllers\Request\Request::write');
-$routes->add('requestCopy', '\Ppci\Controllers\Request\Request::copy');
 $routes->add('lexicalGet', '\Ppci\Controllers\Utils\Lexical::index');
 
 
