@@ -1,4 +1,5 @@
 <?php
+
 namespace Ppci\Libraries;
 
 use \Ppci\Models\Gacltotp;
@@ -36,13 +37,12 @@ class Totp extends PpciLibrary
     function create()
     {
         if ($this->acllogin->isTotp()) {
-            $this->message->set(_("Vous avez déjà activé l'identification à double facteur : contactez un administrateur de l'application pour réinitialiser cette fonction"), true);
+            $_SESSION["filterMessages"][] = "Vous avez déjà activé l'identification à double facteur : contactez un administrateur de l'application pour réinitialiser cette fonction";
+            return redirect("default");
         }
         unset($_SESSION["totpSecret"]);
-        if (!isset($_SESSION["totpSecret"])) {
-            $_SESSION["totpSecret"] = $this->gacltotp->createSecret();
-            $this->gacltotp->createQrCode();
-        }
+        $_SESSION["totpSecret"] = $this->gacltotp->createSecret();
+        $this->gacltotp->createQrCode();
         $vue = service("Smarty");
         $vue->set("ppci/droits/otpCreate.tpl", "corps");
         return $vue->Send();
@@ -105,15 +105,17 @@ class Totp extends PpciLibrary
                 $this->message->set(_("Vous êtes maintenant connecté"));
                 $this->login->postLogin("totp");
                 $_SESSION["adminSessionTime"] = time();
-                unset ($_SESSION["menu"]);
+                unset($_SESSION["menu"]);
                 /**
                  * Generate the cookie to inhibit the totp control
                  */
                 if (isset($_POST["otptrusted"])) {
                     helper('cookie');
                     $maxAge = 2592000;
-                    $content = json_encode(["uid"=>$_SESSION["login"],
-                    "exp"=>time() + $maxAge]);
+                    $content = json_encode([
+                        "uid" => $_SESSION["login"],
+                        "exp" => time() + $maxAge
+                    ]);
                     $encoded = $this->gacltotp->encode($content, "priv");
                     $cookie = new Cookie(
                         'totpTrustBrowser',
@@ -134,10 +136,9 @@ class Totp extends PpciLibrary
         }
         if (!empty($_SESSION["moduleRequired"])) {
             $retour = $_SESSION["moduleRequired"];
-            unset ($_SESSION["moduleRequired"]);
+            unset($_SESSION["moduleRequired"]);
             return redirect()->to($retour);
         }
         return $this->defaultPage->display();
     }
 }
-
