@@ -18,6 +18,8 @@ class LegacyRouteFilter implements FilterInterface
          */
         $session = session();
         $newroute = "";
+        print_r($_REQUEST);
+        //die;
         if (!empty($_REQUEST["module"])) {
             $newroute = $_REQUEST["module"];
             unset($_REQUEST["module"]);

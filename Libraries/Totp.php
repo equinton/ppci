@@ -11,14 +11,12 @@ class Totp extends PpciLibrary
     protected Gacltotp $gacltotp;
     protected Acllogin $acllogin;
     protected Login $login;
-    protected $appConfig;
     protected $datalogin;
     protected $defaultPage;
 
     function __construct()
     {
         parent::__construct();
-        $this->appConfig = config("App");
         $this->gacltotp = new Gacltotp($this->appConfig->privateKey, $this->appConfig->pubKey);
         $this->acllogin = new Acllogin();
         $this->datalogin = $this->acllogin->getFromLogin($_SESSION["login"]);

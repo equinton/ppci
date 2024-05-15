@@ -1,6 +1,7 @@
 <?php
 namespace Ppci\Libraries;
 
+use Config\App;
 use Ppci\Models\PpciModel;
 
 class PpciLibrary
@@ -8,7 +9,7 @@ class PpciLibrary
     protected $session;
     protected $message;
     protected PpciModel $dataClass;
-    protected $appConfig;
+    protected App $appConfig;
     protected $log;
     protected int $id;
     public $vue;
@@ -17,10 +18,10 @@ class PpciLibrary
     function __construct()
     {
         $this->message = service('MessagePpci');
-        $this->init = service("PpciInit");
+        //$this->init = service("PpciInit");
         $this->appConfig = config("App");
         $this->log = service("Log");
-        $this->init::Init();
+        //$this->init::Init();
     }
 
     /**

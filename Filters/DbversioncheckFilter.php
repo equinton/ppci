@@ -1,9 +1,13 @@
 <?php
+
 namespace Ppci\Filters;
 
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\App;
+use Config\Database;
+use Ppci\Libraries\MessagePpci;
 use \Ppci\Models\Dbversion;
 
 /**
@@ -11,17 +15,20 @@ use \Ppci\Models\Dbversion;
  */
 class DbversioncheckFilter implements FilterInterface
 {
+    public bool $isDbversionOk = false;
     public function before(RequestInterface $request, $arguments = null)
     {
+        /**
+         * @var Message
+         */
+        $message = service('MessagePpci');
         try {
             if (!isset($_SESSION["dbversionCheck"])) {
-                $paramApp = config("App");
                 /**
-                 * set the connection
+                 * @var App
                  */
-                $db = db_connect();
-                $db->query("set search_path = " . $_ENV["database.default.searchpath"]);
-                $message = service('MessagePpci');
+                $paramApp = config("App");
+
                 /**
                  * Verify the database version
                  */

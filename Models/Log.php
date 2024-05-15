@@ -1,6 +1,8 @@
 <?php
+
 namespace Ppci\Models;
 
+use Config\App;
 use Ppci\Models\PpciModel;
 use Ppci\Libraries\Mail;
 
@@ -58,6 +60,9 @@ class Log extends PpciModel
      */
     public function setLog($login, $module, $commentaire = null)
     {
+        /**
+         * @var App
+         */
         $paramApp = config("App");
         $GACL_aco = $paramApp->GACL_aco;
         $data = array(
@@ -91,7 +96,7 @@ class Log extends PpciModel
     public function purge($nbJours)
     {
         if ($nbJours > 0) {
-            $sql = "delete from " . $this->table . "
+            $sql = "delete from log
 					where log_date < current_date - interval '" . $nbJours . " day'";
             $this->executeSQL($sql);
         }
@@ -126,6 +131,9 @@ class Log extends PpciModel
      */
     public function getLastConnexion()
     {
+        /**
+         * @var App
+         */
         $paramApp = config("App");
         $GACL_aco = $paramApp->GACL_aco;
         if (isset($_SESSION["login"])) {
@@ -153,6 +161,9 @@ class Log extends PpciModel
      */
     public function getLastConnections($duration = 36000)
     {
+        /**
+         * @var App
+         */
         $paramApp = config("App");
         $GACL_aco = $paramApp->GACL_aco;
         $connections = array();
@@ -206,6 +217,9 @@ class Log extends PpciModel
     {
 
         if (!empty($login)) {
+            /**
+             * @var App
+             */
             $paramApp = config("App");
             $GACL_aco = $paramApp->GACL_aco;
             $like = " like '" . $GACL_aco . "-connection%'";
@@ -239,6 +253,9 @@ class Log extends PpciModel
      */
     public function isAccountBlocked($login, $maxtime = 600, $nbMax = 10)
     {
+        /**
+         * @var App
+         */
         $paramApp = config("App");
         $GACL_aco = $paramApp->GACL_aco;
         $is_blocked = true;
@@ -334,7 +351,13 @@ class Log extends PpciModel
     public function getCallsToModule($moduleName, $maxNumber, $duration)
     {
         $APPLI_address = base_url(uri_string());
+        /**
+         * @var App
+         */
         $paramApp = config("App");
+        /**
+         * @var MessagePpci
+         */
         $message = service('MessagePpci');
         $GACL_aco = $paramApp->GACL_aco;
         $sql = "select count(*) as nombre from log
@@ -356,8 +379,7 @@ class Log extends PpciModel
                 array("login" => $_SESSION["login"], "module" => $moduleName, "date" => date($_SESSION["MASKDATELONG"])),
                 $moduleName,
                 $_SESSION["login"]
-            )
-            ;
+            );
             return false;
         } else {
             return true;
@@ -374,7 +396,13 @@ class Log extends PpciModel
      */
     public function sendMailToAdmin($subject, $templateName, $data, $moduleName, $login)
     {
+        /**
+         * @var MessagePpci
+         */
         $message = service('MessagePpci');
+        /**
+         * @var App
+         */
         $paramApp = config("App");
         $APP_mail = $paramApp->APP_mail;
         $MAIL_enabled = $paramApp->MAIL_enabled;

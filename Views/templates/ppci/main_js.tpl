@@ -251,10 +251,13 @@
                 format: 'HH:mm:ss'
             });
             $('.date, .datepicker, .timepicker, .datetimepicker').attr('autocomplete', 'off');
-            function deleteLegacyFields() {
-                $(this.form).find("input[name='moduleBase']").remove();
-                $(this.form).find("input[name='module']").remove();
-                $(this.form).find("input[name='action']").remove();
+            /**
+             * Legacy
+             */
+            function deleteLegacyFields(form) {
+                $(form).find("input[name='moduleBase']").remove();
+                $(form).find("input[name='module']").remove();
+                $(form).find("input[name='action']").remove();
             }
             $(".button-valid").on("keyup click", function () {
                 var module = $(this.form).find("input[name='moduleBase']").val();
@@ -265,17 +268,19 @@
                     } else {
                         $(this.form).attr("action", module);
                     }
-                    deleteLegacyFields();
+                    deleteLegacyFields($(this.form));
                 }
             });
-            $(".button-delete").on("keyup click", function () {
+            $(".button-delete").on("keyup click", function (e) {
                 if (confirm("{t}Confirmez-vous la suppression ?{/t}")) {
                     var module = $(this.form).find("input[name='moduleBase']").val();
                     if (module) {
                         $(this.form).attr("action", module + "Delete");
-                        deleteLegacyFields();
+                        deleteLegacyFields($(this.form));
                     }
                     $(this.form).submit();
+                } else {
+                    e.preventDefault();
                 }
             });
             /*

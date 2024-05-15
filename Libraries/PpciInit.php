@@ -1,9 +1,10 @@
 <?php
+
 namespace Ppci\Libraries;
 
 use Config\App;
 use \Ppci\Models\Log;
-use \Ppci\Models\PpciException;
+use \Ppci\Libraries\PpciException;
 use \Ppci\Models\Dbversion;
 use App\Libraries\BeforeSession;
 
@@ -49,17 +50,46 @@ class PpciInit
              * Get parameters stored in ini file
              * and populate App/Config/App class
              */
+            /**
+             * @var App
+             */
             $appConfig = config("App");
             $appConfig->setParameters();
+            /**
+             * @var App
+             */
+            $identConfig = config("IdentificationConfig");
+            /**
+             * @var App
+             */
+            $dbConfig = config("Database");
             if (is_file($appConfig->paramIniFile)) {
                 $params = parse_ini_file($appConfig->paramIniFile, true);
                 foreach ($params as $key => $value) {
+                    $paramType = "app";
+                    if (isset($identConfig->$key)) {
+                        $paramType = "ident";
+                    } elseif (isset($dbConfig->$key)) {
+                        $paramType = "db";
+                    }
                     if (is_array($value)) {
                         foreach ($value as $k => $v) {
-                            $appConfig->$key[$k] = $v;
+                            if ($paramType == "app") {
+                                $appConfig->$key[$k] = $v;
+                            } elseif ($paramType == "ident") {
+                                $identConfig->$key[$k] = $v;
+                            } elseif ($paramType == "db") {
+                                $dbConfig->$key[$k] = $v;
+                            }
                         }
                     } else {
-                        $appConfig->$key = $value;
+                        if ($paramType == "app") {
+                            $appConfig->$key = $value;
+                        } elseif ($paramType == "ident") {
+                            $identConfig->$key = $value;
+                        } elseif ($paramType == "db") {
+                            $dbConfig->$key = $value;
+                        }
                     }
                 }
             }
@@ -90,13 +120,6 @@ class PpciInit
                 }
             }
             try {
-                $paramApp = config("App");
-                /**
-                 * set the connection
-                 */
-                /*$db = db_connect();
-                $db->query("set search_path = " . $_ENV["database.default.searchpath"]);
-                */
                 /**
                  * Set locale parameters
                  */
@@ -113,19 +136,30 @@ class PpciInit
                         $language = substr($language[0], 0, 2);
                     }
                 }
-                if (in_array($language, $paramApp->languages)) {
+                if (in_array($language, $appConfig->languages)) {
                     $locale = service('Locale');
                     $locale->setLocale($language);
                     helper('cookie');
                     set_cookie("locale", $language, 31536000);
                 }
-
+                /**
+                 * @var Database
+                 */
+                $paramDb = config("Database");
+                /**
+                 * set the connection
+                 */
+                $db = db_connect();
+                $db->query("set search_path = " . $paramDb->default["searchpath"]);
                 /**
                  * purge logs
                  */
                 if (!isset($_SESSION["log_purged"]) || !$_SESSION["log_purged"]) {
+                    /**
+                     * @var Log
+                     */
                     $log = service('Log');
-                    $log->purge($paramApp->logDuration);
+                    $log->purge($appConfig->logDuration);
                     $_SESSION["log_purged"] = true;
                 }
             } catch (PpciException $e) {

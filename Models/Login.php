@@ -3,6 +3,7 @@ namespace Ppci\Models;
 
 use Config\App;
 use CodeIgniter\Cookie\Cookie;
+use Ppci\Libraries\PpciException;
 
 class Login
 {
