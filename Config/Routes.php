@@ -116,3 +116,4 @@ $routes->add('lexicalGet', '\Ppci\Controllers\Utils\Lexical::index');
 
 $routes->add('doctotp_fr', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_fr.md');
 $routes->add('doctotp_en', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_en.md');
+$routes->add("getLastRelease", '\Ppci\Controllers\Utils::getLastRelease');
