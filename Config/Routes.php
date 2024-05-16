@@ -56,11 +56,6 @@ $routes->add('dbstructureLatex', '\Ppci\Controllers\Miscellaneous::structureLate
 $routes->add('dbstructureSchema', '\Ppci\Controllers\Miscellaneous::structureSchema');
 
 /**
- * Submenus
- */
-$routes->add('administration', '\Ppci\Controllers\Submenu::administration');
-
-/**
  * GACL configuration
  */
 $routes->add('appliList', '\Ppci\Controllers\Gacl::appliindex');
@@ -113,7 +108,16 @@ $routes->post('passwordlostReinitwrite', '\Ppci\Controllers\PasswordLost::reinit
 
 $routes->add('lexicalGet', '\Ppci\Controllers\Utils\Lexical::index');
 
-
-$routes->add('doctotp_fr', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_fr.md');
-$routes->add('doctotp_en', '\Ppci\Controllers\Utils\Markdown::framework/documentation/totp_en.md');
+/**
+ * Submenus
+ */
+$routes->add('administration', '\Ppci\Controllers\Utils::submenu/administration');
+/**
+ * Documentation
+ */
+$routes->add('doctotp_fr', '\Ppci\Controllers\Utils::markdown/vendor/equinton/ppci/Documentation/totp_fr.md');
+$routes->add('doctotp_en', '\Ppci\Controllers\Utils::markdown/vendor/equinton/ppci/Documentation/totp_en.md');
+/**
+ * get last published release
+ */
 $routes->add("getLastRelease", '\Ppci\Controllers\Utils::getLastRelease');

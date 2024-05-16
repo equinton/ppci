@@ -3,7 +3,7 @@ namespace Ppci\Libraries;
 use \Ppci\Models\Menu;
 class Submenu extends PpciLibrary {
 
-    function generateSubmenu (string $name) {
+    function index (string $name) {
         $vue = service ("Smarty");
         $menu = new Menu($this->appConfig->APP_menufile);
         $vue->set($menu->getSubmenu($name),"submenu");

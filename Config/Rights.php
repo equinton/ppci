@@ -47,6 +47,7 @@ class Rights extends RightsPpci
         "backupSend" => ["admin"],
         "systemShowServer" => ["admin"],
         "systemShowSession" => ["admin"],
+        "administration" => ["admin"],  
     ];
 
 }
