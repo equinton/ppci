@@ -1,5 +1,7 @@
 <?php
 namespace Ppci\Models;
+
+use Ppci\Libraries\PpciException;
 use Ppci\Models\PpciModel;
 
 /**

@@ -1,6 +1,7 @@
 <?php
 namespace Ppci\Libraries;
 
+use App\Libraries\PostLogin;
 use Ppci\Models\Gacltotp;
 use CodeIgniter\Cookie\Cookie;
 
@@ -138,5 +139,9 @@ class Login extends PpciLibrary
             );
             set_cookie($cookie);
         }
+        /**
+         * call to postLogin App
+         */
+        PostLogin::index();
     }
 }

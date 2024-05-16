@@ -6,7 +6,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Redirect to route from legacy variables "module" or "moduleBase" + "action"
+ * Redirect to route from legacy variables "module" (direct links - not forms)
  */
 class LegacyRouteFilter implements FilterInterface
 {
@@ -18,23 +18,10 @@ class LegacyRouteFilter implements FilterInterface
          */
         $session = session();
         $newroute = "";
-        print_r($_REQUEST);
-        //die;
-        if (!empty($_REQUEST["module"])) {
-            $newroute = $_REQUEST["module"];
+        if (!empty($_GET["module"])) {
+            $newroute = $_GET["module"];
             unset($_REQUEST["module"]);
             unset($_GET["module"]);
-        } else if (!empty($_REQUEST["moduleBase"]) && !empty($_REQUEST["action"])) {
-            $newroute = $_REQUEST["moduleBase"] . $_REQUEST["action"];
-            unset($_REQUEST["moduleBase"]);
-            unset($_REQUEST["action"]);
-            unset($_GET["moduleBase"]);
-            unset($_GET["action"]);
-        }
-        if (!empty($newroute)) {
-            if (!empty($_POST)) {
-                $session->setFlashData("POST", $_POST);
-            }
             if (!empty($_GET)) {
                 $session->setFlashData("GET", $_GET);
                 /**

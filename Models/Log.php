@@ -481,7 +481,7 @@ class Log extends PpciModel
         $login = strtolower($login);
         $sql = "select count(*) as nombre from log
                 where login = :login:
-                and log_date::date > :date
+                and log_date::date > :date:
                 and commentaire = 'db-ok-expired'";
         $data = $this->lireParamAsPrepared($sql, array("login" => $login, "date" => $date));
         return $data["nombre"];
