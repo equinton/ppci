@@ -1,7 +1,9 @@
 <?php
 namespace Ppci\Controllers;
+
 use Ppci\Libraries\About;
 use Ppci\Libraries\Dbparam;
+use Ppci\Libraries\LastRelease;
 use Ppci\Libraries\News;
 use Ppci\Libraries\Phpinfo;
 use Ppci\Libraries\Structure;
@@ -53,6 +55,11 @@ class Miscellaneous extends PpciController {
     function dbparamWriteGlobal(){
         $dbparam = new Dbparam();
         return $dbparam->writeGlobal();
+    }
+
+    function getLastRelease() {
+        $lib = new LastRelease();
+        return $lib->index();
     }
 
     function test() {

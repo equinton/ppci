@@ -55,6 +55,8 @@ $routes->add('dbstructureHtml', '\Ppci\Controllers\Miscellaneous::structureHtml'
 $routes->add('dbstructureLatex', '\Ppci\Controllers\Miscellaneous::structureLatex');
 $routes->add('dbstructureSchema', '\Ppci\Controllers\Miscellaneous::structureSchema');
 
+$routes->add("getLastRelease", '\Ppci\Controllers\Miscellaneous::getLastRelease');
+
 /**
  * GACL configuration
  */
@@ -118,7 +120,4 @@ $routes->add('documentation_en', '\Ppci\Controllers\Utils::submenu/documentation
  */
 $routes->add('doctotp_fr', '\Ppci\Controllers\Utils::markdown/vendor/equinton/ppci/Documentation/totp_fr.md');
 $routes->add('doctotp_en', '\Ppci\Controllers\Utils::markdown/vendor/equinton/ppci/Documentation/totp_en.md');
-/**
- * get last published release
- */
-$routes->add("getLastRelease", '\Ppci\Controllers\Utils::getLastRelease');
+
