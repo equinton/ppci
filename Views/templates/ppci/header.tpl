@@ -20,11 +20,11 @@
 		<ul class="nav navbar-nav md navbar-right hidden-xs hidden-sm">
 			<li><a href="{if $isLogged}#{else}connexion{/if}">{if $isLogged }{$login}{else}{t}Connexion{/t}{/if} <span class="caret"></span></a>
 				<ul class="dropdown-menu">
-				    <li><a href='setlanguage&langue=fr'> <img
+				    <li><a href='setlanguage?langue=fr'> <img
 								src='display/images/drapeau_francais.png#180313' width='16'  border='0'>
 								Français
 							</a></li>
-				    <li><a href='setlanguage&langue=en'> <img
+				    <li><a href='setlanguage?langue=en'> <img
 								src='display/images/drapeau_anglais.png#refresh180313' width='16'  border='0'>
 								English
 							</a> </li>

@@ -53,16 +53,16 @@ class PpciInit
             /**
              * @var App
              */
-            $appConfig = config("App");
+            $appConfig = service("AppConfig");
             $appConfig->setParameters();
             /**
              * @var App
              */
-            $identConfig = config("IdentificationConfig");
+            $identConfig = service("IdentificationConfig");
             /**
              * @var App
              */
-            $dbConfig = config("Database");
+            $dbConfig = service("Database");
             if (is_file($appConfig->paramIniFile)) {
                 $params = parse_ini_file($appConfig->paramIniFile, true);
                 foreach ($params as $key => $value) {

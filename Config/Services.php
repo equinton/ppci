@@ -14,6 +14,10 @@ use Ppci\Models\Dbparam;
 use Ppci\Libraries\Views\BinaryView;
 use Ppci\Libraries\Views\FileView;
 use Ppci\Config\IdentificationConfig;
+use Ppci\Libraries\Views\AjaxView;
+use Ppci\Libraries\Views\CsvView;
+use Ppci\Libraries\Views\JsonFileView;
+use Ppci\Libraries\Views\PdfView;
 
 /**
  * Services Configuration file.
@@ -51,42 +55,60 @@ class Services extends BaseService
     {
         return ($getShared === true ? static::getSharedInstance('PpciInit') : new PpciInit());
     }
-    public static function Log($getShared = true) {
+    public static function Log($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance('Log') : new Log());
     }
-    public static function Locale($getShared = true) {
+    public static function Locale($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance('Locale') : new Locale());
     }
 
     /**
      * Configurations
      */
-    public static function Dbparam($getShared = true) {
+    public static function Dbparam($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance('Dbparam') : new Dbparam());
     }
-    public static function AppConfig($getShared = true) {
+    public static function AppConfig($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance('AppConfig') : new App());
     }
-
-    public static function IdentificationConfig($getShared = true) {
+    public static function IdentificationConfig($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance("IdentificationConfig") : new IdentificationConfig());
     }
 
     /**
      * Views
      */
-        public static function Smarty($getShared = true)
+    public static function Smarty($getShared = true)
     {
         return ($getShared === true ? static::getSharedInstance('Smarty') : new SmartyPpci());
-
     }
-
     public static function BinaryView($getShared = true)
     {
         return ($getShared === true ? static::getSharedInstance('BinaryView') : new BinaryView());
-        
     }
-    public static function FileView($getShared = true) {
+    public static function FileView($getShared = true)
+    {
         return ($getShared === true ? static::getSharedInstance('FileView') : new FileView());
+    }
+    public static function AjaxView($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('AjaxView') : new AjaxView());
+    }
+    public static function CsvView($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('CsvView') : new CsvView());
+    }
+    public static function JsonFileView($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('JsonFileView') : new JsonFileView());
+    }
+    public static function PdfView($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('PdfView') : new PdfView());
     }
 }

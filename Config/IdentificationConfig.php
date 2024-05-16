@@ -126,11 +126,6 @@ class IdentificationConfig extends BaseConfig
     /***********************
      * ADMIN parameters
      ***********************/
-
-    /**
-     * Maximum period of inactivity for accessing an administration module
-     */
-    public $APPLI_admin_ttl = 600;
     /**
      * Duration of identification to access to the admin modules
      *

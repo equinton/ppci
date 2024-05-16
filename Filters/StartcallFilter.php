@@ -5,11 +5,15 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Config\App;
+use Ppci\Libraries\PpciInit;
 
 class StartcallFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
+        /**
+         * @var PpciInit
+         */
         $init = service("PpciInit");
         $init::init();
         $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
