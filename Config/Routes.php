@@ -97,8 +97,7 @@ $routes->add('setlanguage', '\Ppci\Controllers\Setlanguage::index');
 $routes->add('setlanguagefr', '\Ppci\Controllers\Setlanguage::fr');
 $routes->add('setlanguageen', '\Ppci\Controllers\Setlanguage::en');
 $routes->add('setlanguageus', '\Ppci\Controllers\Setlanguage::us');
-$routes->add('documentation_fr', '\Ppci\Controllers\Utils\Submenu::index');
-$routes->add('documentation_en', '\Ppci\Controllers\Utils\Submenu::index');
+
 $routes->add('documentationGetFile', '\Ppci\Controllers\Utils\File::documentationGetFile');
 
 $routes->add('passwordlostIslost', '\Ppci\Controllers\PasswordLost::isLost');
@@ -112,6 +111,8 @@ $routes->add('lexicalGet', '\Ppci\Controllers\Utils\Lexical::index');
  * Submenus
  */
 $routes->add('administration', '\Ppci\Controllers\Utils::submenu/administration');
+$routes->add('documentation_fr', '\Ppci\Controllers\Utils::submenu/documentation_fr');
+$routes->add('documentation_en', '\Ppci\Controllers\Utils::submenu/documentation_en');
 /**
  * Documentation
  */

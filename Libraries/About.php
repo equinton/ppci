@@ -7,7 +7,8 @@ class About extends PpciLibrary
     {
         $vue = service("Smarty");
         $vue->set($this->appConfig->version, "version");
-        $vue->set(_($this->appConfig->versionDate), "versiondate");
+        printA(($this->appConfig->versionDate));
+        $vue->set($this->appConfig->versionDate, "versiondate");
         $locale = $_SESSION["FORMATDATE"];
         $search = APPPATH."Views/templates/about_" . $locale . ".tpl";
         if (file_exists($search)) {

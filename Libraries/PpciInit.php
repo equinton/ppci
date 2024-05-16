@@ -54,7 +54,6 @@ class PpciInit
              * @var App
              */
             $appConfig = service("AppConfig");
-            $appConfig->setParameters();
             /**
              * @var App
              */
