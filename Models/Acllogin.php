@@ -1,4 +1,5 @@
 <?php
+
 namespace Ppci\Models;
 
 
@@ -32,6 +33,15 @@ class Acllogin extends PpciModel
         parent::__construct();
     }
 
+    function delete($id = null, bool $purge = false)
+    {
+        /**
+         * Delete from groups
+         */
+        $sql = "delete from acllogingroup where acllogin_id = :id:";
+        $this->executeQuery($sql, ["id"=>$id]);
+        parent::delete($id);
+    }
     function getListLogins()
     {
         $sql = "select acllogin_id, login, logindetail,

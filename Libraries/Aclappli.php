@@ -47,10 +47,9 @@ class Aclappli extends PpciLibrary
     }
     function delete()
     {
-        try {
-            $this->dataDelete( $this->id);
+        if ($this->dataDelete($this->id)) {
             return $this->list();
-        } catch (\Exception $e) {
+        } else {
             return $this->change();
         }
     }

@@ -272,10 +272,41 @@ class PpciModel extends Model
             ]
         );
     }
+/**
+ * Delete an item
+ *
+ * @param [type] $id
+ * @param boolean $purge
+ * @return void
+ */
+    function delete( $id = null, bool $purge = false) {
+        if (! parent::delete($id)) {
+            throw new PpciException($this->db->error()["message"]);
+        }
+    }
 
     function supprimer($id)
     {
-        return parent::delete($id);
+        $this->delete($id);
+    }
+
+    /**
+     * Delete one ou multiple records in a table
+     * Used to delete records in a child table
+     * when field is the parent key
+     *
+     * @param integer $id
+     * @param string $field
+     * @return void
+     */
+    function deleteFromField(int $id, string $field) {
+        $key = $this->qi . $field . $this->qi;
+    $sql = "delete from " . $this->table . " where " . $key . "= :id:";
+    $data["id"] = $id;
+    $this->executeQuery($sql, $data, true);
+    }
+    function supprimerChamp (int $id, string $field) {
+        $this->deleteFromField($id, $field);
     }
 
     /******************

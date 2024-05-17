@@ -97,7 +97,7 @@ class PpciLibrary
                 $this->message->set(_("Suppression effectuée"));
             }
             $this->log->setLog($_SESSION["login"], get_class($this->dataClass) . "-delete", $id);
-            return $ret;
+            return true;
         } catch (\Exception $e) {
             $this->message->setSyslog($e->getMessage());
             /**
@@ -116,6 +116,7 @@ class PpciLibrary
             if ($isPartOfTransaction) {
                 throw new PpciException(sprintf("Suppression impossible de l'enregistrement %s"), $id);
             }
+            return false;
         }
     }
 }

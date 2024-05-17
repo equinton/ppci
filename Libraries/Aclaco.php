@@ -46,10 +46,9 @@ class Aclaco extends PpciLibrary
     }
     function delete()
     {
-        try {
-            $this->dataDelete( $this->id);
+        if ($this->dataDelete($this->id)) {
             return $this->display();
-        } catch (\Exception $e) {
+        } else {
             return $this->change();
         }
     }

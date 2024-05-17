@@ -66,10 +66,9 @@ class LoginGestionLib extends PpciLibrary
     }
     function delete()
     {
-        try {
-            $this->dataDelete($_POST["id"]);
+        if ($this->dataDelete($this->id)) {
             return $this->index();
-        } catch (\Exception $e) {
+        } else {
             return $this->change();
         }
     }

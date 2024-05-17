@@ -1,5 +1,9 @@
 <?php
 namespace Ppci\Models;
+
+use Ldap;
+use Ppci\Libraries\PpciException;
+
 /**
  * ORM de gestion de la table aclgroup
  *
@@ -73,7 +77,7 @@ class Aclgroup extends PpciModel
              * Recuperation des attributs depuis l'annuaire LDAP
              */
             $groupesLdap = array();
-            $ldap = new Ldap();
+            $ldap = new Ldap($ldapParam);
             $conn = $ldap->connect();
 
             /**
