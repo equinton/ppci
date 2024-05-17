@@ -25,6 +25,14 @@ $routes->post('loginDelete', '\Ppci\Controllers\LoginGestion::delete');
 $routes->add('loginChangePassword', '\Ppci\Controllers\LoginGestion::changePassword');
 $routes->post('loginChangePasswordExec', '\Ppci\Controllers\LoginGestion::changePasswordExec');
 /**
+ * password lost
+ */
+$routes->add("passwordlostIslost", '\Ppci\Controllers\Passwordlost::isLost');
+$routes->post("passwordlostSendmail", '\Ppci\Controllers\Passwordlost::sendMail');
+$routes->add("passwordlostReinitchange", '\Ppci\Controllers\Passwordlost::reinitChange');
+$routes->post("passwordlostReinitwrite", '\Ppci\Controllers\Passwordlost::reinitWrite');
+
+/**
  * TOTP
  */
 $routes->add('totpCreate', '\Ppci\Controllers\Totp::create');

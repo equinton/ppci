@@ -78,7 +78,8 @@ class LoginGestionLib extends PpciLibrary
         if ($this->log->getLastConnexionType($_SESSION["login"]) == "db") {
             $vue = service("Smarty");
             $vue->set("ppci/ident/loginChangePassword.tpl", "corps");
-            $vue->set($this->appConfig->APPLI_passwordMinLength, "passwordMinLength");
+            $vue->set($this->appConfig->APP_passwordMinLength, "passwordMinLength");
+            return ($vue->send());
         } else {
             $this->message->set(_("Le mode d'identification utilisé pour votre compte n'autorise pas la modification du mot de passe depuis cette application"), true);
             defaultPage();
@@ -86,26 +87,30 @@ class LoginGestionLib extends PpciLibrary
     }
     function changePasswordExec()
     {
-        if (!$this->dataClass->changePassword($_REQUEST["oldPassword"], $_REQUEST["pass1"], $_REQUEST["pass2"])) {
-        } else {
+        try {
+            $this->dataClass->changePassword($_REQUEST["oldPassword"], $_REQUEST["pass1"], $_REQUEST["pass2"]);
             /**
              * Send mail to the user
              */
             $data = $this->dataClass->lireByLogin($_SESSION["login"]);
-            if (!empty($data["mail"]) && $this->config->MAIL_enabled) {
+            if (!empty($data["mail"]) && $this->appConfig->MAIL_enabled) {
                 $dbparam = service("Dbparam");
                 $subject = sprintf(_("%s - changement de mot de passe"), $dbparam->getParam("APPLI_title"));
                 require_once "ppci/utils/mail.class.php";
-                $mail = new Mail($this->config->MAIL_param);
-                $data["APPLI_address"] = $APPLI_address;
+                $mail = new Mail($this->appConfig->MAIL_param);
+                $data["APPLI_address"] = $this->appConfig->baseURL;
                 $data["applicationName"] = $_SESSION["APPLI_title"];
-                if ($mail->SendMailSmarty($SMARTY_param, $data["mail"], $subject, "ppci/mail/passwordChanged.tpl", $data)) {
+                if ($mail->SendMailSmarty( $data["mail"], $subject, "ppci/mail/passwordChanged.tpl", $data)) {
                     $log->setLog($_SESSION["login"], "password mail confirm", "ok");
                 } else {
                     $log->setLog($_SESSION["login"], "password mail confirm", "ko");
                 }
             }
+            $this->message->set(_("La modification du mot de passe a été enregistrée"));
+        } catch (PpciException $e) {
+            $this->message->set($e->getMessage(),true);
+        } finally {
+            defaultPage();
         }
-        defaultPage();
     }
 }

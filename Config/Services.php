@@ -17,6 +17,7 @@ use Ppci\Config\IdentificationConfig;
 use Ppci\Libraries\Views\AjaxView;
 use Ppci\Libraries\Views\CsvView;
 use Ppci\Libraries\Views\JsonFileView;
+use Ppci\Libraries\views\Mail;
 use Ppci\Libraries\Views\PdfView;
 
 /**

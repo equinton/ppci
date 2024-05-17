@@ -1,5 +1,5 @@
 <?php
-namespace Ppci\Libraries\views;
+namespace Ppci\Libraries;
 use \Ppci\Config\SmartyParam;
 /**
  * @author Eric Quinton

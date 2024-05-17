@@ -64,14 +64,16 @@ class Passwordlost extends PpciModel
             $lg = new LoginGestion();
             $dl = $lg->getFromMail($mail);
             if ($dl["id"] > 0) {
-                global $log;
+                $log = service ("Log");
                 if ($log->getLastConnexionType($dl["login"]) == "db") {
                     if ($dl["actif"] == 1) {
-                        $this->auto_date = 0;
+                        $this->autoFormatDate = 0;
                         $data = array();
                         $data["id"] = $dl["id"];
                         $data["token"] = $this->generateToken();
-                        $data["expiration"] = date(DATELONGMASK, time() + $duree_token);
+                        printA($_SESSION["date"]["datemasklong"]);
+                        printA(time() + $duree_token);
+                        $data["expiration"] = date("Y-m-d H:i:s", time() + $duree_token);
                         $this->ecrire($data);
                     } else {
                         throw new \Ppci\Libraries\PpciException(_("Le compte n'est pas actif"));
@@ -128,7 +130,7 @@ class Passwordlost extends PpciModel
      */
     function disableToken($token)
     {
-        $this->auto_date = 0;
+        $this->autoFormatDate = 0;
         $data = $this->verifyToken($token);
         if ($data["passwordlost_id"] > 0) {
             $data["usedate"] = date("Y-m-d H:i:s", time());

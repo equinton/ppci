@@ -3,8 +3,8 @@
 namespace Ppci\Models;
 
 use Config\App;
-use Ppci\Models\PpciModel;
 use Ppci\Libraries\Mail;
+use Ppci\Models\PpciModel;
 
 /**
  * Classe permettant d'enregistrer toutes les operations effectuees dans la base

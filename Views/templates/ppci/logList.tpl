@@ -1,9 +1,7 @@
 <div class="row">
     <div class="col-md-12 col-lg-8">
         <div class="row">
-            <form class="form-horizontal protoform" id="log_search" action="index.php" method="POST">
-                <input id="moduleBase" type="hidden" name="moduleBase" value="log">
-                <input id="action" type="hidden" name="action" value="List">
+            <form class="form-horizontal protoform" id="log_search" action="logList" method="POST">
                 <input id="isSearch" type="hidden" name="isSearch" value="1">
                 <div class="form-group">
                     <label for="logmodule" class="col-md-2 control-label">{t}Nom du module :{/t}</label>

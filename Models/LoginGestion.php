@@ -4,6 +4,8 @@ namespace Ppci\Models;
 use ZxcvbnPhp\Zxcvbn;
 use Ppci\Config\SmartyParam;
 use Ppci\Libraries\Mail;
+use Ppci\Libraries\PpciException;
+use Ppci\Libraries\views\Mail as ViewsMail;
 
 /**
  * Classe permettant de manipuler les logins stockés en base de données locale
@@ -14,14 +16,23 @@ class LoginGestion extends PpciModel
     private $publicKey = "/etc/ssl/certs/ssl-cert-snakeoil.pem";
     public $nbattempts = 2;
     public $attemptdelay = 6;
-    public Mail $mail;
+    /**
+     * Instance Ppci Mail
+     *
+     * @var ViewsMail
+     */
+    public $mail;
+    /**
+     * instance App parameters
+     *
+     * @var App
+     */
     public $paramApp;
 
 
     public function __construct()
     {
         $this->table = "logingestion";
-        $this->id_auto = 1;
         $this->fields = array(
             "id" => array(
                 "type" => 1,
@@ -91,7 +102,7 @@ class LoginGestion extends PpciModel
         $login = strtolower($login);
         if (!empty($login) && !empty($password)) {
             $sql = "select id, login, password, nbattempts, lastattempt, is_expired from LoginGestion where login = :login: and actif = 1";
-            $this->auto_date = 0;
+            $this->autoFormatDate = false;
             $data = $this->lireParamAsPrepared($sql, array("login" => $login));
             if (!$data["id"] > 0) {
                 $tests = false;
@@ -169,9 +180,9 @@ class LoginGestion extends PpciModel
              * Verify if the account is not expired
              */
             $log = service("Log");
-            $this->auto_date = 0;
+            $this->autoFormatDate = false;
             $data = $this->getFromLogin($login);
-            $this->auto_date = 1;
+            $this->autoFormatDate = true;
             $nb = $log->countNbExpiredConnectionsFromDate($login, $data["datemodif"]);
             if ($nb > 0) {
                 $message = service("MessagePpci");
@@ -287,13 +298,12 @@ class LoginGestion extends PpciModel
                  * Send a mail
                  */
                 if (!isset($this->mail)) {
-                    $this->mail = new Mail($this->paramApp->MAIL_param);
+                    $this->mail = new ViewsMail($this->paramApp->MAIL_param);
                 }
                 $SMARTY_param = new SmartyParam();
                 $APPLI_address = "https://" . $_SERVER["HTTP_HOST"];
                 $subject = $_SESSION["APP_title"] . " - " . _("Activation de votre compte");
                 $this->mail->SendMailSmarty(
-                        $SMARTY_param::params,
                     $data["mail"],
                     $subject,
                     "ppci/mail/accountActivate.tpl",
@@ -413,29 +423,26 @@ class LoginGestion extends PpciModel
      */
     public function changePassword($oldpassword, $pass1, $pass2)
     {
-        global $log, $message;
-        $retour = false;
         if (isset($_SESSION["login"])) {
             $oldData = $this->lireByLogin($_SESSION["login"]);
+            $log = new Log();
             if ($log->getLastConnexionType($_SESSION["login"]) == "db") {
                 if ($this->_testPassword($_SESSION["login"], $oldpassword, $oldData["password"])) {
                     /*
                      * Verifications de validite du mot de passe
                      */
                     if ($this->_passwordVerify($pass1, $pass2)) {
-                        $retour = $this->writeNewPassword($_SESSION["login"], $pass1);
+                        $this->writeNewPassword($_SESSION["login"], $pass1);
                     } else {
-                        $message->set(_("La modification du mot de passe a échoué"), true);
+                        throw new PpciException(_("La modification du mot de passe a échoué"));
                     }
                 } else {
-                    $message->set(_("L'ancien mot de passe est incorrect"), true);
+                    throw new PpciException(_("L'ancien mot de passe est incorrect"));
                 }
             } else {
-                $message->set(_("Le mode d'identification utilisé pour votre compte n'autorise pas la modification du mot de passe depuis cette application"), true);
+                throw new PpciException(_("Le mode d'identification utilisé pour votre compte n'autorise pas la modification du mot de passe depuis cette application"));
             }
         }
-
-        return $retour;
     }
 
     /**
@@ -448,11 +455,11 @@ class LoginGestion extends PpciModel
      */
     public function changePasswordAfterLost($login, $pass1, $pass2)
     {
-        $retour = false;
         if (!empty($login) && $this->_passwordVerify($pass1, $pass2)) {
-            $retour = $this->writeNewPassword($login, $pass1);
+            $this->writeNewPassword($login, $pass1);
+        } else {
+            throw new PpciException(_("Le mot de passe que vous avez indiqué n'est pas assez complexe, ou un problème est survenu lors de l'enregistrement"));
         }
-        return $retour;
     }
 
     /**
@@ -474,11 +481,11 @@ class LoginGestion extends PpciModel
         if ($log->getLastConnexionType($login) == "db") {
             $data = $oldData;
             $data["password"] = $this->_encryptPassword($pass);
-            $this->auto_date = false;
+            $this->autoFormatDate = false;
             $data["datemodif"] = date("Y-m-d");
             $data["is_expired"] = 0;
             if ($this->ecrire($data) > 0) {
-                $this->auto_date = true;
+                $this->autoFormatDate = true;
                 $retour = true;
                 $log->setLog($login, "password_change", "ip:" . $_SESSION["remoteIP"]);
                 $message->set(_("Le mot de passe a été modifié"));
@@ -487,13 +494,12 @@ class LoginGestion extends PpciModel
                      * Send a mail
                      */
                     if (!isset($this->mail)) {
-                        $this->mail = new Mail($this->paramApp->MAIL_param);
+                        $this->mail = new ViewsMail($this->paramApp->MAIL_param);
                     }
                     $SMARTY_param = new SmartyParam();
                     $dbparam = service("Dbparam");
                     $subject = $dbparam->params["APP_title"] . " - " . _("Modification de votre mot de passe");
                     $this->mail->SendMailSmarty(
-                        $SMARTY_param->params,
                         $data["mail"],
                         $subject,
                         "ppci/mail/passwordChanged.tpl",
@@ -614,11 +620,9 @@ class LoginGestion extends PpciModel
      */
     public function lireByLogin($login)
     {
-        $login = strtolower($login);
-        $login = $this->encodeData($login);
-        $sql = "select * from " . $this->table . "
-				where login = '" . $login . "'";
-        return $this->lireParam($sql);
+        $sql = "select * from logingestion
+				where lower(login) = lower(:login:)";
+        return $this->lireParam($sql, ["login"=>$login]);
     }
 
     /**

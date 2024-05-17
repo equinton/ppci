@@ -86,14 +86,12 @@ $("#pass1").on('input', function()
 <h2>{t}Modifier le mot de passe{/t}</h2>
 <div class="row">
 <div class="col-lg-6">
-<form id="formPassword" method="post" class="form-horizontal protoform" action="index.php">
+<form id="formPassword" method="post" class="form-horizontal" action="{if $passwordLost == 1}passwordlostReinitwrite{else}loginChangePasswordExec{/if}">
 <input type="hidden" name="id" value="{$data.id}">
 <input type="hidden" name="is_expired" value="0">
 {if $passwordLost == 1}
 <input type="hidden" name="token" value="{$token}">
-<input type="hidden" name="module" value="passwordlostReinitwrite">
 {else}
-<input type="hidden" name="module" value="loginChangePasswordExec">
 <div class="form-group">
 <label for="oldPassword" class="control-label col-md-4">{t}Ancien mot de passe :{/t}</label>
 <div class="col-md-7">

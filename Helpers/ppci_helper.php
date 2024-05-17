@@ -1,27 +1,4 @@
 <?php
-use CodeIgniter\CodeIgniter;
-
-/**
- * Affiche le nom et le contenu d'une variable
- * @param $tableau
- */
-function printr($tableau, $mode_dump = 0, $force = false)
-{
-    global $APPLI_modeDeveloppement;
-    if ($APPLI_modeDeveloppement || $force) {
-        if ($mode_dump == 1) {
-            var_dump($tableau);
-        } else {
-            if (is_array($tableau)) {
-                print_r($tableau);
-            } else {
-                $content .= $tableau;
-            }
-        }
-        $content .= "<br>";
-    }
-    return $content;
-}
 
 function test($content = "")
 {
