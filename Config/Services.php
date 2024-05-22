@@ -17,7 +17,7 @@ use Ppci\Config\IdentificationConfig;
 use Ppci\Libraries\Views\AjaxView;
 use Ppci\Libraries\Views\CsvView;
 use Ppci\Libraries\Views\JsonFileView;
-use Ppci\Libraries\views\Mail;
+use Ppci\Libraries\views\DisplayView;
 use Ppci\Libraries\Views\PdfView;
 
 /**
@@ -111,5 +111,9 @@ class Services extends BaseService
     public static function PdfView($getShared = true)
     {
         return ($getShared === true ? static::getSharedInstance('PdfView') : new PdfView());
+    }
+    public static function DisplayView($getShared = true)
+    {
+        return ($getShared === true ? static::getSharedInstance('DisplayView') : new DisplayView());
     }
 }

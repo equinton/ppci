@@ -37,6 +37,8 @@ class Locale
                 "maskdate" => "m/d/Y",
                 "maskdateexport" => 'Y-m-d'
             ];
+        } else {
+            $locale = "fr";
         }
         session()->set($this->LANG);
         /**
@@ -62,6 +64,9 @@ class Locale
             throw new \Ppci\Libraries\PpciException("Locale not initialized");
         }
         ;
+        if (empty ($locale)) {
+            $locale = "fr";
+        }
         bindtextdomain($locale, $param->localePath);
         bind_textdomain_codeset($locale, "UTF-8");
         textdomain($locale);

@@ -1,6 +1,7 @@
 <?php
 namespace Ppci\Libraries\Views;
 
+use Config\App;
 use \Smarty\Smarty;
 use \Ppci\Config\SmartyParam;
 use \Ppci\Models\Menu;
@@ -72,6 +73,9 @@ class SmartyPpci
         }
         /**
          * Assign variables from app/Config/App
+         */
+        /**
+         * @var App
          */
         $appConfig = config("App");
         $this->set($appConfig->copyright, "copyright");

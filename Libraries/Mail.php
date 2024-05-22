@@ -1,6 +1,8 @@
 <?php
 namespace Ppci\Libraries;
 use \Ppci\Config\SmartyParam;
+use Ppci\Libraries\Views\DisplayView;
+
 /**
  * @author Eric Quinton
  * @copyright Copyright (c) 2015, IRSTEA / Eric Quinton
@@ -22,19 +24,22 @@ class Mail
      * @var App
      */
     private $paramApp;
-
+    public $templateMain;
     /**
      * Constructeur de la classe, avec passage des parametres
      *
      * @param array $param
      */
-    function __construct(array $param = array())
+    function __construct()
     {
-        $this->setParam($param);
-        if (!isset($this->param["from"])) {
-            $this->paramApp = service("AppConfig");
-            $this->param["from"] = $this->paramApp->APP_mail;
-        }
+        $this->smarty = new \Smarty();
+        $smp = new SmartyParam();
+        $this->smarty->caching = false;
+        $this->smarty->setTemplateDir($smp->params["templateDir"]);
+        $this->smarty->setCompileDir(ROOTPATH . $smp->params["compileDir"]);
+        $this->templateMain = $smp->params["template_main"];
+        $this->smarty->setCacheDir(WRITEPATH.'cache');
+        $this->paramApp = service ("AppConfig");
     }
 
     /**
@@ -64,36 +69,46 @@ class Mail
      */
     function SendMailSmarty( string $dest, string $subject, string $template_name, array $data, string $locale = "fr")
     {
-        if (!isset($this->smarty)) {
-            $this->smarty = new \Smarty();
-            //new SmartyParam();
-        $this->smarty->caching = false;
-        $this->smarty->setTemplateDir(SmartyParam::$params["templateDir"]);
-        $this->smarty->setCompileDir(ROOTPATH . SmartyParam::$params["compileDir"]);
-        }
         $currentLocale = $_SESSION['LANG']["locale"];
         if ($locale != $currentLocale) {
+            /**
+             * @var Locale
+             */
             $localeClass = service("Locale");
             $localeClass->initGettext($locale);
         }
+        foreach (["dest","subject","template_name"] as $var) {
+            if (!empty ($$var)) {
+                $this->param[$var] = $$var;
+            }
+        }
         foreach ($data as $variable => $value) {
-            $this->smarty->set($variable, $value);
+            $this->smarty->assign($variable, $value);
         }
         $this->smarty->assign("mailContent", $template_name);
         /**
          * Add the logo to the main template
          */
         $this->smarty->assign("logo", "data:image/png;base64," . chunk_split(base64_encode(file_get_contents(FCPATH."favicon.png"))));
-        if (!$this->paramApp["MAIL_param"]["mailDebug"]) {
-            $status = mail($dest, $subject, $this->smarty->fetch($this->param["mailTemplate"]), $this->getHeaders());
+        $content = $this->smarty->fetch($this->param["mailTemplate"]);
+        if ($this->paramApp->MAIL_param["mailDebug"] == 0) {
+            $status = mail($this->param["dest"], $this->param["subject"], $content, $this->getHeaders());
         } else {
-            printA($this->param);
-            printA($data);
-            $this->smarty->display($this->param["mailTemplate"]);
+            /**
+             * @var DisplayView
+             */
+            $view = service( "DisplayView");
+            $view->set(print(_("Fac-similé de l'envoi d'un mail - mode debug").getLineFeed()));
+            $view->set(print(_("Paramètres du mail :").getLineFeed()));
+            $view->set(printA($this->param));
+            $view->set(print(_("Données transmises :").getLineFeed()));
+            $view->set(printA($data));
+            $view->set($content);
+            $view->send();
             $status = true;
         }
         if ($locale != $currentLocale) {
-            initGettext($currentLocale);
+            $localeClass->initGettext($currentLocale);
         }
         /**
          * Generate logs
@@ -101,6 +116,9 @@ class Mail
         $log = service("Log");
         empty($_SESSION["login"]) ? $login = "system" : $login = $_SESSION["login"];
         $log->setLog($login, "sendMail", "$dest / $subject");
+        if (!$status) {
+            throw new PpciException(_("Un problème a été rencontré lors de l'envoi du mail"));
+        }
         return $status;
     }
 

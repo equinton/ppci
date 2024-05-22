@@ -5,7 +5,6 @@ use ZxcvbnPhp\Zxcvbn;
 use Ppci\Config\SmartyParam;
 use Ppci\Libraries\Mail;
 use Ppci\Libraries\PpciException;
-use Ppci\Libraries\views\Mail as ViewsMail;
 
 /**
  * Classe permettant de manipuler les logins stockés en base de données locale
@@ -19,7 +18,7 @@ class LoginGestion extends PpciModel
     /**
      * Instance Ppci Mail
      *
-     * @var ViewsMail
+     * @var Mail
      */
     public $mail;
     /**
@@ -298,9 +297,8 @@ class LoginGestion extends PpciModel
                  * Send a mail
                  */
                 if (!isset($this->mail)) {
-                    $this->mail = new ViewsMail($this->paramApp->MAIL_param);
+                    $this->mail = new Mail($this->paramApp->MAIL_param);
                 }
-                $SMARTY_param = new SmartyParam();
                 $APPLI_address = "https://" . $_SERVER["HTTP_HOST"];
                 $subject = $_SESSION["APP_title"] . " - " . _("Activation de votre compte");
                 $this->mail->SendMailSmarty(
@@ -489,28 +487,6 @@ class LoginGestion extends PpciModel
                 $retour = true;
                 $log->setLog($login, "password_change", "ip:" . $_SESSION["remoteIP"]);
                 $message->set(_("Le mot de passe a été modifié"));
-                if ($this->paramApp->MAIL_enabled == 1 && !empty($data["mail"])) {
-                    /**
-                     * Send a mail
-                     */
-                    if (!isset($this->mail)) {
-                        $this->mail = new ViewsMail($this->paramApp->MAIL_param);
-                    }
-                    $SMARTY_param = new SmartyParam();
-                    $dbparam = service("Dbparam");
-                    $subject = $dbparam->params["APP_title"] . " - " . _("Modification de votre mot de passe");
-                    $this->mail->SendMailSmarty(
-                        $data["mail"],
-                        $subject,
-                        "ppci/mail/passwordChanged.tpl",
-                        array(
-                            "prenom" => $data["prenom"],
-                            "nom" => $data["nom"],
-                            "applicationName" => $_SESSION["APP_title"],
-                            "APPLI_address" => $APPLI_address
-                        )
-                    );
-                }
             } else {
                 $message->set(_("Echec de la modification du mot de passe pour une raison inconnue. Si le problème persiste, contactez l'assistance"), true);
             }

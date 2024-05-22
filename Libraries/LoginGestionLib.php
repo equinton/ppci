@@ -96,14 +96,13 @@ class LoginGestionLib extends PpciLibrary
             if (!empty($data["mail"]) && $this->appConfig->MAIL_enabled) {
                 $dbparam = service("Dbparam");
                 $subject = sprintf(_("%s - changement de mot de passe"), $dbparam->getParam("APPLI_title"));
-                require_once "ppci/utils/mail.class.php";
                 $mail = new Mail($this->appConfig->MAIL_param);
                 $data["APPLI_address"] = $this->appConfig->baseURL;
                 $data["applicationName"] = $_SESSION["APPLI_title"];
                 if ($mail->SendMailSmarty( $data["mail"], $subject, "ppci/mail/passwordChanged.tpl", $data)) {
-                    $log->setLog($_SESSION["login"], "password mail confirm", "ok");
+                    $this->log->setLog($_SESSION["login"], "password mail confirm", "ok");
                 } else {
-                    $log->setLog($_SESSION["login"], "password mail confirm", "ko");
+                    $this->log->setLog($_SESSION["login"], "password mail confirm", "ko");
                 }
             }
             $this->message->set(_("La modification du mot de passe a été enregistrée"));
