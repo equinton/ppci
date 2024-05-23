@@ -103,10 +103,11 @@ $routes->add('errorbefore', '\Ppci\Controllers\Errorbefore::index');
 $routes->add('errorlogin', '\Ppci\Controllers\Errorlogin::index');
 $routes->add('test', 'Test::index');
 
-$routes->add('setlanguage', '\Ppci\Controllers\Setlanguage::index');
-$routes->add('setlanguagefr', '\Ppci\Controllers\Setlanguage::fr');
-$routes->add('setlanguageen', '\Ppci\Controllers\Setlanguage::en');
-$routes->add('setlanguageus', '\Ppci\Controllers\Setlanguage::us');
+$routes->add('setlanguage', '\Ppci\Controllers\Locale::index');
+$routes->add('setlanguagefr', '\Ppci\Controllers\Locale::index/fr');
+$routes->add('setlanguageen', '\Ppci\Controllers\Locale::index/en');
+$routes->add('setlanguageus', '\Ppci\Controllers\Locale::index/us');
+$routes->add("setlocale", "\Ppci\Controllers\Locale::index");
 
 $routes->add('documentationGetFile', '\Ppci\Controllers\Utils\File::documentationGetFile');
 

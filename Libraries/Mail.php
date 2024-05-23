@@ -69,13 +69,13 @@ class Mail
      */
     function SendMailSmarty( string $dest, string $subject, string $template_name, array $data, string $locale = "fr")
     {
-        $currentLocale = $_SESSION['LANG']["locale"];
+        $currentLocale = $_SESSION["locale"];
         if ($locale != $currentLocale) {
             /**
              * @var Locale
              */
-            $localeClass = service("Locale");
-            $localeClass->initGettext($locale);
+            $localeClass = new Locale();
+            $localeClass->setLocale($locale);
         }
         foreach (["dest","subject","template_name"] as $var) {
             if (!empty ($$var)) {
@@ -108,7 +108,7 @@ class Mail
             $status = true;
         }
         if ($locale != $currentLocale) {
-            $localeClass->initGettext($currentLocale);
+            $localeClass->setLocale($currentLocale);
         }
         /**
          * Generate logs

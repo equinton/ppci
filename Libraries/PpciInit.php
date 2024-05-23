@@ -92,55 +92,24 @@ class PpciInit
                     }
                 }
             }
-            /**
-             * Set the locale
-             */
-            $locale = service("Locale");
-            if (isset($_SESSION["locale"]) && $_ENV["CI_ENVIRONMENT"] != "development") {
-                $locale->setLocale($_SESSION["locale"]);
-            } else {
-                /*
-                 * Recuperation le cas echeant du cookie
-                 */
-                if (isset($_COOKIE["locale"])) {
-                    $language = $_COOKIE["locale"];
-                } else {
-                    /*
-                     * Recuperation de la langue du navigateur
-                     */
-                    $language = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-                    $language = substr($language[0], 0, 2);
-                }
-                /*
-                 * Mise a niveau du langage
-                 */
-                if (in_array($language, array("fr", "en", "us"))) {
-                    $locale->setLocale($language);
-                }
-            }
             try {
                 /**
-                 * Set locale parameters
+                 * Set the locale
                  */
-                if (isset($_SESSION["locale"])) {
-                    $language = $_SESSION["locale"];
-                } else {
+                if (!isset($_SESSION["locale"])) {
+                    $locale = new Locale();
                     if (isset($_COOKIE["locale"])) {
                         $language = $_COOKIE["locale"];
                     } else {
-                        /*
+                        /**
                          * Recuperation de la langue du navigateur
                          */
                         $language = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
                         $language = substr($language[0], 0, 2);
                     }
-                }
-                if (in_array($language, $appConfig->languages)) {
-                    $locale = service('Locale');
                     $locale->setLocale($language);
-                    helper('cookie');
-                    set_cookie("locale", $language, 31536000);
                 }
+
                 /**
                  * @var Database
                  */

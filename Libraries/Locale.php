@@ -1,6 +1,8 @@
 <?php
+
 namespace Ppci\Libraries;
 
+use Config\App;
 use Ppci\Config\Ppci;
 use Ppci\Models\PpciException;
 
@@ -23,52 +25,27 @@ class Locale
 
     function setLocale(string $locale)
     {
-        if ($locale = "en") {
-            $this->LANG["locale"] = "en";
-            $this->LANG["date"]["locale"] = "en";
-        } else if ($locale = "us") {
-            $this->LANG["locale"] = "us";
-            $this->LANG["date"] = [
-                "locale" => "us",
-                "formatdate" => "MM/DD/YYYY",
-                "formatdatetime" => "MM/DD/YYYY HH:mm:ss",
-                "formatdatecourt" => "mm/dd/yy",
-                "maskdatelong" => "m/d/Y H:i:s",
-                "maskdate" => "m/d/Y",
-                "maskdateexport" => 'Y-m-d'
-            ];
-        } else {
-            $locale = "fr";
+        /**
+         * @var App
+         */
+        $appConfig = service("AppConfig");
+        if (!array_key_exists($locale, $appConfig->locales)) {
+            $locale = array_key_first($appConfig->locales);
         }
-        session()->set($this->LANG);
+        $_SESSION["date"] = $appConfig->locales[$locale];
+        $_SESSION["locale"] = $locale;
+        helper('cookie');
+        set_cookie("locale", $locale, 31536000);
+
         /**
          * Parameters for gettext
          */
-        $param = new Ppci();
         if (!setlocale(LC_ALL, "C")) {
             throw new \Ppci\Libraries\PpciException("Locale not initialized");
-        }
-        ;
-        bindtextdomain($locale, $param->localePath);
+        };
+        bindtextdomain($locale, $appConfig->localePath);
         bind_textdomain_codeset($locale, "UTF-8");
         textdomain($locale);
-        $this->initGettext($locale);
     }
 
-    function initGettext($locale) {
-        /**
-         * Parameters for gettext
-         */
-        $param = new Ppci();
-        if (!setlocale(LC_ALL, "C")) {
-            throw new \Ppci\Libraries\PpciException("Locale not initialized");
-        }
-        ;
-        if (empty ($locale)) {
-            $locale = "fr";
-        }
-        bindtextdomain($locale, $param->localePath);
-        bind_textdomain_codeset($locale, "UTF-8");
-        textdomain($locale);
-    }
 }
