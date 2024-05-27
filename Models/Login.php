@@ -188,7 +188,7 @@ class Login
                         }
                         $login_id = $this->loginGestion->ecrire($dlogin);
                         if ($login_id > 0) {
-                            $this->updateLoginFromIdentification($login, $userparams, true);
+                            $this->updateLoginFromIdentification($login, $userparams);
                             if (!$verify) {
                                 /**
                                  * Send mail to administrators
@@ -239,7 +239,7 @@ class Login
      * @param array $params
      * @return void
      */
-    function updateLoginFromIdentification(string $login, array $params, $withCreateAclLogin = false)
+    function updateLoginFromIdentification(string $login, array $params)
     {
         if (isset($params["email"]) && !isset($params["mail"])) {
             $params["mail"] = $params["email"];
@@ -271,20 +271,18 @@ class Login
         } else {
             $id = $dacllogin["acllogin_id"];
         }
-        if ($id > 0 || $withCreateAclLogin) {
-            if (!empty($params["lastname"]) && !empty($params["firstname"])) {
-                $dacllogin["logindetail"] = ucwords(strtolower($params["lastname"] . " " . $params["firstname"]));
-            } else if (!empty($params["name"])) {
-                $dacllogin["logindetail"] = ucwords(strtolower($params["name"]));
-            } else if (empty($dacllogin["logindetail"])) {
-                $dacllogin["logindetail"] = $login;
-            }
-            if (!empty($params["mail"])) {
-                $dacllogin["email"] = $params["mail"];
-            }
-            $id = $this->acllogin->ecrire($dacllogin);
-            $this->dacllogin = $dacllogin;
+        if (!empty($params["lastname"]) && !empty($params["firstname"])) {
+            $dacllogin["logindetail"] = ucwords(strtolower($params["lastname"] . " " . $params["firstname"]));
+        } else if (!empty($params["name"])) {
+            $dacllogin["logindetail"] = ucwords(strtolower($params["name"]));
+        } else if (empty($dacllogin["logindetail"])) {
+            $dacllogin["logindetail"] = $login;
         }
+        if (!empty($params["mail"])) {
+            $dacllogin["email"] = $params["mail"];
+        }
+        $id = $this->acllogin->ecrire($dacllogin);
+        $this->dacllogin = $dacllogin;
         /**
          * Add acllogin to the main group, if exists
          */
