@@ -1,4 +1,5 @@
 <?php
+
 namespace Ppci\Config;
 
 use CodeIgniter\Config\BaseConfig;
@@ -13,6 +14,8 @@ class IdentificationConfig extends BaseConfig
      * HEADER : use the login transmitted by the web server (identification SAML with Mellon)
      * LDAP-BDD : test first LDAP, then BDD
      * CAS-BDD : a button to use CAS identification
+     * OIDC : use an OIDC server
+     * OIDC-BDD : add choice to use OIDC identification in addition to BDD
      *
      * @var string
      */
@@ -95,6 +98,15 @@ class IdentificationConfig extends BaseConfig
         "CAS_get_groups" => 1,
         "CAS_group_attribute" => "supannEntiteAffectation"
     );
+
+    public array $OIDC = [
+        "name" => "INRAE",
+        "provider" => 'https://id.provider.com',
+        "clientId" => 'ClientIDHere',
+        "clientSecret" => 'ClientSecretHere',
+        "logo" => "display/images/inrae.png",
+        "attributes" => "openid,profile,email,address,phone"
+    ];
     /**
      * Number of tentatives of connection before block
      *

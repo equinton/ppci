@@ -1,4 +1,5 @@
 <?php
+
 namespace Ppci\Libraries;
 
 use App\Libraries\PostLogin;
@@ -28,17 +29,18 @@ class Login extends PpciLibrary
     {
         try {
             $ident_type = $this->identificationConfig->identificationMode;
-            if (in_array($ident_type, ["BDD", "CAS", "CAS-BDD"]) && in_array($_REQUEST["identificationType"], ["CAS", "BDD"])) {
+            if (in_array($ident_type, ["BDD", "CAS", "CAS-BDD", "OIDC", "OIDC-BDD"]) && in_array($_REQUEST["identificationType"], ["CAS", "BDD", "OIDC"])) {
                 $ident_type = $_REQUEST["identificationType"];
             }
             if (
-                in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])
+                in_array($ident_type, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD", "OIDC-BDD"])
                 && empty($_POST["login"])
                 && empty($_SESSION["login"])
                 && empty($_COOKIE["tokenIdentity"])
                 && empty($_REQUEST["cas_required"])
                 && empty($_GET["ticket"])
                 && !isset($_SESSION["phpCAS"])
+                && !isset($_SESSION["openid_connect_nonce"])
             ) {
                 return "login";
             } else {
@@ -99,11 +101,16 @@ class Login extends PpciLibrary
     {
         $vue = service('Smarty');
         $vue->set("ppci/ident/login.tpl", "corps");
+        $CAS_enabled = 0;
         if ($this->identificationConfig->identificationMode == "CAS-BDD") {
-            $vue->set(1, "CAS_enabled");
-        } else {
-            $vue->set(0, "CAS_enabled");
+            $CAS_enabled = 1;
         }
+        if ($this->identificationConfig->identificationMode == "OIDC-BDD") {
+            $OIDC_enabled = 1;
+            $vue->set($this->identificationConfig->OIDC["logo"],"logo");
+        }
+        $vue->set($CAS_enabled, "CAS_enabled");
+        $vue->set($OIDC_enabled, "OIDC_enabled");
         $vue->set($this->identificationConfig->tokenIdentityValidity, "tokenIdentityValidity");
         $vue->set($this->identificationConfig->APPLI_lostPassword, "lostPassword");
         $vue->set("", "moduleCalled");

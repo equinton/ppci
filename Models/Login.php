@@ -1,9 +1,11 @@
 <?php
+
 namespace Ppci\Models;
 
 use Config\App;
 use CodeIgniter\Cookie\Cookie;
 use Ppci\Libraries\PpciException;
+use Jumbojett\OpenIDConnectClient;
 
 class Login
 {
@@ -19,7 +21,9 @@ class Login
 
     function __construct()
     {
-
+        /**
+         * @var App
+         */
         $this->paramApp = config("App");
         $this->loginGestion = new LoginGestion();
         $this->loginGestion->setKeys($this->paramApp->privateKey, $this->paramApp->pubKey);
@@ -37,6 +41,8 @@ class Login
 
         if ($type_authentification == "CAS-BDD") {
             $type_authentification = "CAS";
+        } elseif ($type_authentification == "OIDC-BDD") {
+            $type_authentification = "OIDC";
         }
         $this->loginGestion->attemptdelay = $this->identificationConfig->CONNECTION_blocking_duration;
         $this->loginGestion->nbattempts = $this->identificationConfig->CONNECTION_max_attempts;
@@ -85,6 +91,9 @@ class Login
                 $login = $this->getLoginCas();
             }
             $_SESSION["realIdentificationMode"] = "CAS";
+        } elseif ($type_authentification == "OIDC") {
+            $tauth = "oidc";
+            $login = $this->getOidc();
         } elseif ($type_authentification == "LDAP" || $type_authentification == "LDAP-BDD") {
             $tauth = "ldap";
             $login = $this->getLoginLdap($_POST["login"], $_POST["password"]);
@@ -232,6 +241,9 @@ class Login
      */
     function updateLoginFromIdentification(string $login, array $params)
     {
+        if (isset($params["email"]) && !isset($params["mail"])) {
+            $params["mail"] = $params["email"];
+        }
         /**
          * Update logingestion
          */
@@ -332,8 +344,8 @@ class Login
         $loginOk = "";
         if (!empty($login) && !empty($password)) {
             $login = str_replace(
-                array('\\', '*', '(', ')', ),
-                array('\5c', '\2a', '\28', '\29', ),
+                array('\\', '*', '(', ')',),
+                array('\5c', '\2a', '\28', '\29',),
                 $login
             );
             for ($i = 0; $i < strlen($login); $i++) {
@@ -382,7 +394,7 @@ class Login
             if (@ldap_bind($ldap, $dn, $password)) {
                 $loginOk = $login;
             } else {
-                $this->log->setLog($login,"connection-ldap", "ko");
+                $this->log->setLog($login, "connection-ldap", "ko");
                 throw new \Ppci\Libraries\PpciException(sprintf(_("La connexion auprès de l'annuaire LDAP pour l'utilisateur %s a échoué"), $login));
             }
         }
@@ -427,9 +439,9 @@ class Login
             $cookie = new Cookie("tokenIdentity", "", [time() - 42000]);
             set_cookie($cookie);
         }
-        $vars=["login","userRights","menu","isLogged"];
+        $vars = ["login", "userRights", "menu", "isLogged"];
         foreach ($vars as $var) {
-            unset ($_SESSION[$var]);
+            unset($_SESSION[$var]);
         }
         // Finalement, on détruit la session.
         //session()->destroy();
@@ -450,6 +462,32 @@ class Login
                 \phpCAS::setNoCasServerValidation();
             }
             \phpCAS::logout(array("url" => "https://" . $_SERVER["HTTP_HOST"]));
+        } else if ($identificationMode == "oidc") {
+            $oidc = new OpenIDConnectClient(
+                $this->identificationConfig->OIDC["provider"],
+                $this->identificationConfig->OIDC["clientId"],
+                $this->identificationConfig->OIDC["clientSecret"]
+            );
+            $redirect = $this->paramApp->baseURL;
+            $oidc->signOut($_SESSION["oidcIdToken"],$redirect);
         }
+    }
+    function getOidc(): string
+    {
+        $oidc = new OpenIDConnectClient(
+            $this->identificationConfig->OIDC["provider"],
+            $this->identificationConfig->OIDC["clientId"],
+            $this->identificationConfig->OIDC["clientSecret"]
+        );
+        $attributes = explode(",", $this->identificationConfig->OIDC["attributes"]);
+        $oidc->addScope($attributes);
+        $oidc->authenticate();
+        $oidcAttrs = [];
+        foreach ($attributes as $attr) {
+            $oidcAttrs[$attr] = $oidc->requestUserInfo($attr);
+        }
+        printA($oidcAttrs);
+        $_SESSION["oidcIdToken"] = $oidc->getIdToken();
+        return $oidc->getVerifiedClaims('sub');
     }
 }

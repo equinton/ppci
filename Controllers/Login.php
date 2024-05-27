@@ -1,4 +1,5 @@
 <?php
+
 namespace Ppci\Controllers;
 
 
@@ -10,7 +11,7 @@ class Login extends PpciController
     {
         $login = new \Ppci\Libraries\Login();
         $idConfig = service("IdentificationConfig");
-        if (in_array($idConfig->identificationMode, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD"])) {
+        if (in_array($idConfig->identificationMode, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD", "OIDC-BDD"])) {
             return ($login->display());
         } else {
             /**
@@ -31,11 +32,12 @@ class Login extends PpciController
             } else {
                 if ($idConfig->identificationMode == "CAS") {
                     return redirect()->to("loginCasExec");
+                } else if ($idConfig->identificationMode == "OIDC") {
+                    return redirect()->to("oidcExec");
                 }
             }
             $_SESSION["filterMessages"][] = _("Le mode d'identification dans l'application ne vous permet pas d'accéder à la page de connexion");
-            $defaultPage = new \Ppci\Libraries\DefaultPage();
-            return ($defaultPage->display());
+            defaultPage();
         }
     }
     public function loginExec()
@@ -56,6 +58,19 @@ class Login extends PpciController
             $ident_type = "CAS";
         }
         if ($ident_type == "CAS") {
+            $login = new \Ppci\Libraries\Login();
+            return $this->defaultReturn($login->getLogin());
+        } else {
+            return redirect()->to(site_url());
+        }
+    }
+    public function oidcExec () {
+        $config = service("IdentificationConfig");
+         $ident_type = $config->identificationMode;
+        if ($ident_type == "OIDC-BDD" && $_REQUEST["identificationType"] != "BDD") {
+            $ident_type = "OIDC";
+        }
+        if ($ident_type == "OIDC") {
             $login = new \Ppci\Libraries\Login();
             return $this->defaultReturn($login->getLogin());
         } else {

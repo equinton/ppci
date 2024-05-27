@@ -67,7 +67,23 @@
 			<div class="form-group">
 				<label for="cas" class="control-label col-sm-4">{t}ou :{/t}</label>
 				<div class="col-sm-8">
-					<button type="submit" id="cas" class="btn btn-info">{t}Se connecter avec l'identification centralisée{/t}</button>
+					<button type="submit" id="cas" class="btn btn-info">
+						{t}Se connecter avec l'identification centralisée{/t}
+					</button>
+				</div>
+			</div>
+		</form>
+		{/if}
+		{if $OIDC_enabled == 1}
+		<form id="loginCasForm" method="GET" action="oidcExec">
+			<input type="hidden" name="identificationType" value="OIDC">
+			<div class="form-group">
+				<label for="oidc" class="control-label col-sm-4">{t}ou :{/t}</label>
+				<div class="col-sm-8">					
+					<button type="submit" id="oidc" class="btn btn-info">
+						<img src="{$logo}" height="25">
+						{t}Se connecter avec l'identification centralisée{/t}
+					</button>
 				</div>
 			</div>
 		</form>
