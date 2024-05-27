@@ -28,7 +28,8 @@ class Acllogin extends PpciModel
             "logindetail" => array(
                 "type" => 0,
             ),
-            "totp_key" => array("type" => 0)
+            "totp_key" => array("type" => 0),
+            "email" => ["type" => 0]
         );
         parent::__construct();
     }
@@ -39,12 +40,12 @@ class Acllogin extends PpciModel
          * Delete from groups
          */
         $sql = "delete from acllogingroup where acllogin_id = :id:";
-        $this->executeQuery($sql, ["id"=>$id]);
+        $this->executeQuery($sql, ["id" => $id]);
         parent::delete($id);
     }
     function getListLogins()
     {
-        $sql = "select acllogin_id, login, logindetail,
+        $sql = "select acllogin_id, login, logindetail, email,
             case when totp_key is null then 0 else 1 end as totp_key
             from acllogin";
         return $this->getListeParam($sql);
@@ -90,7 +91,7 @@ class Acllogin extends PpciModel
      * @param string $name
      * @return int|void
      */
-    function addLoginByLoginAndName($login, $name = null)
+    function addLoginByLoginAndName($login, $name = null, $email = null)
     {
         if (is_null($name)) {
             $name = $login;
@@ -102,7 +103,7 @@ class Acllogin extends PpciModel
             /**
              * Recherche d'un login correspondant
              */
-            $sql = "select acllogin_id, login, logindetail from acllogin where lower(login) = :login:";
+            $sql = "select acllogin_id, login, logindetail, email from acllogin where lower(login) = :login:";
             $data = $this->lireParamAsPrepared($sql, array("login" => strtolower($login)));
             if (!$data["acllogin_id"] > 0) {
                 $data["acllogin_id"] = 0;
@@ -113,6 +114,7 @@ class Acllogin extends PpciModel
                 }
             }
             $data["login"] = strtolower($login);
+            $data["email"] = strtolower($email);
             return $this->ecrire($data);
         } else {
             throw new \Ppci\Libraries\PpciException(_("L'ajout d'un login à la table des comptes (gestion des droits) n'est pas possible : le login n'est pas fourni"));
@@ -190,7 +192,7 @@ class Acllogin extends PpciModel
     function getFromLogin($login)
     {
         if (!empty($login)) {
-            $sql = "select acllogin_id, login, logindetail from acllogin where lower(login) = :login:";
+            $sql = "select acllogin_id, login, logindetail, email from acllogin where lower(login) = :login:";
             return $this->lireParamAsPrepared($sql, array("login" => strtolower($login)));
         } else {
             return array();
@@ -218,7 +220,6 @@ class Acllogin extends PpciModel
             /*
              * Recherche s'il existe un login correspondant
              */
-            require_once 'framework/identification/loginGestion.class.php';
             $loginGestion = new LoginGestion();
             $dlg = $loginGestion->getFromLogin($data["login"]);
             if ($dlg["id"] > 0) {

@@ -55,7 +55,7 @@ class LoginGestionLib extends PpciLibrary
                 } else {
                     $nom = $_REQUEST["login"];
                 }
-                $acllogin->addLoginByLoginAndName($_REQUEST["login"], $nom);
+                $acllogin->addLoginByLoginAndName($_REQUEST["login"], $nom, $_REQUEST["mail"]);
                 return $this->index();
             }
         } catch (\Exception $e) {

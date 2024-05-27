@@ -188,7 +188,7 @@ class Login
                         }
                         $login_id = $this->loginGestion->ecrire($dlogin);
                         if ($login_id > 0) {
-                            $this->updateLoginFromIdentification($login, $userparams);
+                            $this->updateLoginFromIdentification($login, $userparams, true);
                             if (!$verify) {
                                 /**
                                  * Send mail to administrators
@@ -239,7 +239,7 @@ class Login
      * @param array $params
      * @return void
      */
-    function updateLoginFromIdentification(string $login, array $params)
+    function updateLoginFromIdentification(string $login, array $params, $withCreateAclLogin = false)
     {
         if (isset($params["email"]) && !isset($params["mail"])) {
             $params["mail"] = $params["email"];
@@ -271,15 +271,20 @@ class Login
         } else {
             $id = $dacllogin["acllogin_id"];
         }
-        if (!empty($params["lastname"]) && !empty($params["firstname"])) {
-            $dacllogin["logindetail"] = ucwords(strtolower($params["lastname"] . " " . $params["firstname"]));
-        } else if (!empty($params["name"])) {
-            $dacllogin["logindetail"] = ucwords(strtolower($params["name"]));
-        } else if (empty($dacllogin["logindetail"])) {
-            $dacllogin["logindetail"] = $login;
+        if ($id > 0 || $withCreateAclLogin) {
+            if (!empty($params["lastname"]) && !empty($params["firstname"])) {
+                $dacllogin["logindetail"] = ucwords(strtolower($params["lastname"] . " " . $params["firstname"]));
+            } else if (!empty($params["name"])) {
+                $dacllogin["logindetail"] = ucwords(strtolower($params["name"]));
+            } else if (empty($dacllogin["logindetail"])) {
+                $dacllogin["logindetail"] = $login;
+            }
+            if (!empty($params["mail"])) {
+                $dacllogin["email"] = $params["mail"];
+            }
+            $id = $this->acllogin->ecrire($dacllogin);
+            $this->dacllogin = $dacllogin;
         }
-        $id = $this->acllogin->ecrire($dacllogin);
-        $this->dacllogin = $dacllogin;
         /**
          * Add acllogin to the main group, if exists
          */
@@ -469,7 +474,7 @@ class Login
                 $this->identificationConfig->OIDC["clientSecret"]
             );
             $redirect = $this->paramApp->baseURL;
-            $oidc->signOut($_SESSION["oidcIdToken"],$redirect);
+            $oidc->signOut($_SESSION["oidcIdToken"], $redirect);
         }
     }
     function getOidc(): string
@@ -479,15 +484,34 @@ class Login
             $this->identificationConfig->OIDC["clientId"],
             $this->identificationConfig->OIDC["clientSecret"]
         );
-        $attributes = explode(",", $this->identificationConfig->OIDC["attributes"]);
+        $keys = ["name", "email", "group"];
+        $attributes = [
+            $this->identificationConfig->OIDC["nameAttribute"],
+            $this->identificationConfig->OIDC["emailAttribute"],
+            $this->identificationConfig->OIDC["groupAttribute"]
+        ];
         $oidc->addScope($attributes);
         $oidc->authenticate();
         $oidcAttrs = [];
         foreach ($attributes as $attr) {
             $oidcAttrs[$attr] = $oidc->requestUserInfo($attr);
         }
-        printA($oidcAttrs);
+        /**
+         * Used for disconnect
+         */
         $_SESSION["oidcIdToken"] = $oidc->getIdToken();
-        return $oidc->getVerifiedClaims('sub');
+        /**
+         * login
+         */
+        $login = $oidc->getVerifiedClaims('sub');
+        /**
+         * Upgrade or create acllogin
+         */
+        $aclparams = [];
+        for ($i = 0; $i < 3; $i++) {
+            $aclparams[$keys[$i]] = $oidcAttrs[$attributes[$i]];
+        }
+        $this->updateLoginFromIdentification($login, $aclparams);
+        return $login;
     }
 }

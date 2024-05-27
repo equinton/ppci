@@ -105,7 +105,9 @@ class IdentificationConfig extends BaseConfig
         "clientId" => 'ClientIDHere',
         "clientSecret" => 'ClientSecretHere',
         "logo" => "display/images/inrae.png",
-        "attributes" => "openid,profile,email,address,phone"
+        "nameAttribute" => "name",
+        "emailAttribute" => "email",
+        "groupAttribute" => "affectation"
     ];
     /**
      * Number of tentatives of connection before block

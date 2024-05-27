@@ -7,3 +7,4 @@ values (
 'Code of the application, to export data'
 ) 
 on conflict do nothing;
+alter table gacl.acllogin add column email varchar;
