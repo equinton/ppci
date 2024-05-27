@@ -81,7 +81,7 @@
 				<label for="oidc" class="control-label col-sm-4">{t}ou :{/t}</label>
 				<div class="col-sm-8">					
 					<button type="submit" id="oidc" class="btn btn-info">
-						<img src="{$logo}" height="25">
+						<img src="oidcGetLogo" height="25">
 						{t}Se connecter avec l'identification centralisée{/t}
 					</button>
 				</div>

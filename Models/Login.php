@@ -241,7 +241,7 @@ class Login
      */
     function updateLoginFromIdentification(string $login, array $params)
     {
-        if (isset($params["email"]) && !isset($params["mail"])) {
+        if (!empty($params["email"])) {
             $params["mail"] = $params["email"];
         }
         /**
@@ -482,33 +482,51 @@ class Login
             $this->identificationConfig->OIDC["clientId"],
             $this->identificationConfig->OIDC["clientSecret"]
         );
-        $keys = ["name", "email", "group"];
+    
+        //$oidc->addScope($attributes);
+        $oidc->addScope(["profile", "email"]);
+        if (!empty($this->identificationConfig->OIDC["scopeGroup"])) {
+            $oidc->addScope([$this->identificationConfig->OIDC["scopeGroup"]]);
+        }
+        $oidc->authenticate();
+        /**
+         * login
+         */
+        $login = $oidc->getVerifiedClaims('sub');
+        $email = $oidc->requestUserInfo('email');
+        /**
+         * Get attributes
+         */
+        $userInfo = $oidc->requestUserInfo();
+        $keys = ["name", "email", "firstname", "lastname", "group"];
         $attributes = [
             $this->identificationConfig->OIDC["nameAttribute"],
             $this->identificationConfig->OIDC["emailAttribute"],
+            $this->identificationConfig->OIDC["firstnameAttribute"],
+            $this->identificationConfig->OIDC["lastnameAttribute"],
             $this->identificationConfig->OIDC["groupAttribute"]
         ];
-        $oidc->addScope($attributes);
-        $oidc->authenticate();
         $oidcAttrs = [];
         foreach ($attributes as $attr) {
-            $oidcAttrs[$attr] = $oidc->requestUserInfo($attr);
+            $oidcAttrs[$attr] = $userInfo->$attr;
         }
+        /*printA("Attributs demandés");
+        printA($attributes);
+        printA("Attributs récupérés");
+        printA($oidcAttrs);
+        die;*/
         /**
          * Used for disconnect
          */
         $_SESSION["oidcIdToken"] = $oidc->getIdToken();
         /**
-         * login
-         */
-        $login = $oidc->getVerifiedClaims('sub');
-        /**
          * Upgrade or create acllogin
          */
         $aclparams = [];
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < count($keys); $i++) {
             $aclparams[$keys[$i]] = $oidcAttrs[$attributes[$i]];
         }
+        $aclparams["mail"] = $email;
         $this->updateLoginFromIdentification($login, $aclparams);
         return $login;
     }

@@ -77,6 +77,18 @@ class Login extends PpciController
             return redirect()->to(site_url());
         }
     }
+    public function oidcGetLogo() {
+        $vue = service("BinaryView");
+        $config = service("IdentificationConfig");
+
+        $vue->setParam(
+            array(
+                "disposition" => "inline",
+                "tmp_name" => $config->OIDC["logo"]
+            )
+        );
+        return $vue->send();
+    }
     public function disconnect()
     {
         $login = new \Ppci\Models\Login();

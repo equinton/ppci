@@ -104,10 +104,13 @@ class IdentificationConfig extends BaseConfig
         "provider" => 'https://id.provider.com',
         "clientId" => 'ClientIDHere',
         "clientSecret" => 'ClientSecretHere',
-        "logo" => "display/images/inrae.png",
+        "logo" => ROOTPATH . "inrae.png",
         "nameAttribute" => "name",
         "emailAttribute" => "email",
-        "groupAttribute" => "affectation"
+        "groupAttribute" => "supannEntiteAffectationPrincipale",
+        "firstnameAttribute" => "given_name",
+        "lastnameAttribute" => "family_name",
+        "scopeGroup" => "affectation"
     ];
     /**
      * Number of tentatives of connection before block
