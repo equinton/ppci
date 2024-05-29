@@ -43,7 +43,7 @@ class Login extends PpciController
     public function loginExec()
     {
         $config = service("IdentificationConfig");
-        if (!in_array($config->identificationMode, ["BDD", "LDAP", "CAS", "LDAP-BDD", "CAS-BDD"])) {
+        if (!in_array($config->identificationMode, ["BDD", "LDAP", "CAS", "LDAP-BDD", "CAS-BDD", "OIDC-BDD"])) {
             return redirect()->to(site_url());
         } else {
             $login = new \Ppci\Libraries\Login();

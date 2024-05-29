@@ -38,7 +38,6 @@ class Login
     function getLogin(string $type_authentification): ?string
     {
         $tauth = "";
-
         if ($type_authentification == "CAS-BDD") {
             $type_authentification = "CAS";
         } elseif ($type_authentification == "OIDC-BDD") {
@@ -103,7 +102,7 @@ class Login
                 $login = $this->getLoginBDD($_POST["login"], $_POST["password"]);
                 $_SESSION["realIdentificationMode"] = "BDD";
             }
-        } elseif ($type_authentification == "BDD" || $type_authentification == "CAS-BDD") {
+        } elseif ($type_authentification == "BDD" || $type_authentification == "CAS-BDD" || $type_authentification == "OIDC-BDD") {
             $tauth = "db";
             $login = $this->getLoginBDD($_POST["login"], $_POST["password"]);
             $_SESSION["realIdentificationMode"] = "BDD";
