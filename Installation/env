@@ -1,0 +1,39 @@
+#--------------------------------------------------------------------
+# IDENTIFICATION
+#--------------------------------------------------------------------
+# Identification mode
+# BDD : logins in database
+# LDAP : login in LDAP xxx
+# CAS : use a CAS server
+# OIDC : use an OIDC server
+# HEADER : use the login transmitted by the web server (identification SAML with Mellon)
+# LDAP-BDD : test first LDAP, then BDD
+# CAS-BDD : a button to use CAS identification
+# OIDC-BDD : a button to use OIDC identification
+Ppci\Config\IdentificationConfig.identificationMode = BDD
+#Ppci\Config\IdentificationConfig.CAS.CAS_address = CAS_server
+#Ppci\Config\IdentificationConfig.CAS.CAS_debug = 1
+#Ppci\Config\IdentificationConfig.LDAP.address = 'LDAPS://ldap.mysociety.fr'
+#Ppci\Config\IdentificationConfig.LDAP.basedn = 'dc=inra,dc=fr'
+#Ppci\Config\IdentificationConfig.LDAP.port = 636
+#Ppci\Config\IdentificationConfig.LDAP.tls = 0
+
+#--------------------------------------------------------------------
+# DATABASE
+#--------------------------------------------------------------------
+
+database.default.hostname = localhost
+database.default.database = dbname
+database.default.username = dbuser
+database.default.password = password
+database.default.DBDriver = Postgre
+database.default.DBPrefix =
+database.default.port = 5432
+database.default.searchpath = public,schema_name,gacl
+
+#--------------------------------------------------------------------
+# LOGGER
+#--------------------------------------------------------------------
+
+logger.threshold = 4
+
