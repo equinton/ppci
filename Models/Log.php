@@ -426,18 +426,18 @@ class Log extends PpciModel
             /*
              * Envoi des mails aux administrateurs
              */
-            if (isset($APPLI_mailToAdminPeriod)) {
-                $period = $APPLI_mailToAdminPeriod;
+            if (isset($APP_mailToAdminPeriod)) {
+                $period = $APP_mailToAdminPeriod;
             } else {
                 $period = 7200;
             }
             $lastDate = date('Y-m-d H:i:s', time() - $period);
             $mail = new Mail($MAIL_param);
-            $loginGestion = new LoginGestion($this->connection, $this->paramori);
+            $acllogin = new Acllogin();
             foreach ($logins as $value) {
                 $admin = $value["login"];
-                $dataLogin = $loginGestion->lireByLogin($admin);
-                if (!empty($dataLogin["mail"]) && $dataLogin["actif"] == 1) {
+                $dataLogin = $acllogin->getFromLogin($admin);
+                if (!empty($dataLogin["email"])) {
                     /**
                      * search if a mail has been send to this admin for the same event and the same user recently
                      */
@@ -457,12 +457,10 @@ class Log extends PpciModel
                         $dataSql
                     );
                     if (!$logval["log_id"] > 0) {
-                        global $SMARTY_param;
-                        if ($mail->SendMailSmarty($SMARTY_param, $dataLogin["mail"], $subject, $templateName, $data)) {
+                        if ($mail->SendMailSmarty( $dataLogin["mail"], $subject, $templateName, $data)) {
                             $this->setLog($login, $moduleName, $value["login"]);
                         } else {
-                            global $message;
-                            $message->setSyslog("error_sendmail_to_admin:" . $dataLogin["mail"]);
+                            $this->message->setSyslog("error_sendmail_to_admin:" . $dataLogin["mail"]);
                         }
                     }
                 }
