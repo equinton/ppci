@@ -3,7 +3,7 @@ namespace Ppci\Models;
 
 use Config\App;
 use OTPHP\TOTP;
-
+use chillerlan\QRCode\QRCode as QRCodeQRCode;
 
 /**
  * Management of TOTP identification
@@ -53,10 +53,14 @@ class Gacltotp
         $this->otp->setLabel($_SESSION["login"]);
         $dbparam = service("Dbparam");
         $this->otp->setIssuer($dbparam->getParam("otp_issuer"));
-        include_once ROOTPATH . 'plugins/phpqrcode/qrlib.php';
+        //include_once ROOTPATH . 'plugins/phpqrcode/qrlib.php';
+        /**
+         * @var App
+         */
         $paramApp = config("App");
         $filename = $paramApp->APP_temp . "/" . $_SESSION["login"] . "_totp.png";
-        \QRcode::png($this->otp->getProvisioningUri(), $filename);
+        $qrcode = new QRCodeQRCode();
+        $qrcode->render($this->otp->getProvisioningUri(), $filename);
     }
     /**
      * Verify the otp code
