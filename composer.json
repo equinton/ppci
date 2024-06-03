@@ -1,13 +1,13 @@
 {
-"name": "equinton/ppci",
+    "name": "equinton/ppci",
+    "description": "PrototypePHP to CodeIgniter",
     "type": "library",
-    "description": "PrototypePHP - implementation for CodeIgniter",
-    "keywords": [
-        "framework",
-        "CodeIgniter"
-    ],
-    "homepage": "https://equinton.github.io/ppcidocs/",
     "license": "BSD",
+    "autoload": {
+        "psr-4": {
+            "Ppci\\": "src/"
+        }
+    },
     "authors": [
         {
             "name": "Eric Quinton",
@@ -18,7 +18,7 @@
         "issues": "https://github.com/equinton/ppci/issues"
     },
     "require": {
-        "php": "^8.1",
+		"php": "^8.1",
         "jumbojett/openid-connect-php": "*",
         "smarty/smarty": "*",
         "smarty-gettext/smarty-gettext": "*",
@@ -26,11 +26,5 @@
         "spomky-labs/otphp": "*",
         "bjeavons/zxcvbn-php": "*",
         "chillerlan/php-qrcode": "*"
-
-    },
-    "autoload": {
-        "classmap": [
-            "libs/"
-        ]
-    }
+		}
 }
