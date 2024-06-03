@@ -2,7 +2,7 @@
     "name": "equinton/ppci",
     "description": "PrototypePHP to CodeIgniter",
     "type": "library",
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "autoload": {
         "psr-4": {
             "Ppci\\": "src/"
@@ -19,12 +19,12 @@
     },
     "require": {
 		"php": "^8.1",
-        "jumbojett/openid-connect-php": "*",
-        "smarty/smarty": "*",
-        "smarty-gettext/smarty-gettext": "*",
-        "apereo/phpcas": "*",
-        "spomky-labs/otphp": "*",
-        "bjeavons/zxcvbn-php": "*",
-        "chillerlan/php-qrcode": "*"
+        "jumbojett/openid-connect-php": "^1.0",
+        "smarty/smarty": "^4.0",
+        "smarty-gettext/smarty-gettext": "^1.6",
+        "apereo/phpcas": "^1.6",
+        "spomky-labs/otphp": "~10.0",
+        "bjeavons/zxcvbn-php": "^1.3",
+        "chillerlan/php-qrcode": "^5.0"
 		}
 }
