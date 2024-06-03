@@ -3,21 +3,30 @@
     "type": "library",
     "description": "PrototypePHP - implementation for CodeIgniter",
     "keywords": [
-        "framework"
+        "framework",
+        "CodeIgniter"
     ],
-    "homepage": "https://smarty-php.github.io/smarty/",
+    "homepage": "https://equinton.github.io/ppcidocs/",
     "license": "BSD",
     "authors": [
         {
             "name": "Eric Quinton",
-            "email": "quinton.eric@gmail.com"
+            "homepage": "https://github.com/equinton"
         }
     ],
     "support": {
         "issues": "https://github.com/equinton/ppci/issues"
     },
     "require": {
-        "php": "^7.1 || ^8.0"
+        "php": "^8.1",
+        "jumbojett/openid-connect-php": "*",
+        "smarty/smarty": "*",
+        "smarty-gettext/smarty-gettext": "*",
+        "apereo/phpcas": "*",
+        "spomky-labs/otphp": "*",
+        "bjeavons/zxcvbn-php": "*",
+        "chillerlan/php-qrcode": "*"
+
     },
     "autoload": {
         "classmap": [

@@ -104,7 +104,7 @@ class IdentificationConfig extends BaseConfig
         "provider" => 'https://id.provider.com',
         "clientId" => 'ClientIDHere',
         "clientSecret" => 'ClientSecretHere',
-        "logo" => ROOTPATH . "inrae.png",
+        "logo" => "",
         "nameAttribute" => "name",
         "emailAttribute" => "email",
         "groupAttribute" => "supannEntiteAffectationPrincipale",

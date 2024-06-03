@@ -54,44 +54,6 @@ class PpciInit
              * @var App
              */
             $appConfig = service("AppConfig");
-            /**
-             * @var App
-             */
-            $identConfig = service("IdentificationConfig");
-            /**
-             * @var App
-             */
-            $dbConfig = service("Database");
-            if (is_file($appConfig->paramIniFile)) {
-                $params = parse_ini_file($appConfig->paramIniFile, true);
-                foreach ($params as $key => $value) {
-                    $paramType = "app";
-                    if (isset($identConfig->$key)) {
-                        $paramType = "ident";
-                    } elseif (isset($dbConfig->$key)) {
-                        $paramType = "db";
-                    }
-                    if (is_array($value)) {
-                        foreach ($value as $k => $v) {
-                            if ($paramType == "app") {
-                                $appConfig->$key[$k] = $v;
-                            } elseif ($paramType == "ident") {
-                                $identConfig->$key[$k] = $v;
-                            } elseif ($paramType == "db") {
-                                $dbConfig->$key[$k] = $v;
-                            }
-                        }
-                    } else {
-                        if ($paramType == "app") {
-                            $appConfig->$key = $value;
-                        } elseif ($paramType == "ident") {
-                            $identConfig->$key = $value;
-                        } elseif ($paramType == "db") {
-                            $dbConfig->$key = $value;
-                        }
-                    }
-                }
-            }
             try {
                 /**
                  * Set the locale
