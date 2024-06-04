@@ -96,15 +96,16 @@ class IdentificationConfig extends BaseConfig
         "CAS_debug" => false,
         "CAS_CApath" => "",
         "CAS_get_groups" => 1,
-        "CAS_group_attribute" => "supannEntiteAffectation"
+        "CAS_group_attribute" => "supannEntiteAffectation",
     );
+
+    public $identificationLogo = FCPATH."favicon.ico";
 
     public array $OIDC = [
         "name" => "INRAE",
         "provider" => 'https://id.provider.com',
         "clientId" => 'ClientIDHere',
         "clientSecret" => 'ClientSecretHere',
-        "logo" => "",
         "nameAttribute" => "name",
         "emailAttribute" => "email",
         "groupAttribute" => "supannEntiteAffectationPrincipale",

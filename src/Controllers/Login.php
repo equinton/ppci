@@ -84,7 +84,7 @@ class Login extends PpciController
         $vue->setParam(
             array(
                 "disposition" => "inline",
-                "tmp_name" => $config->OIDC["logo"]
+                "tmp_name" => $config->identificationLogo
             )
         );
         return $vue->send();
