@@ -44,6 +44,9 @@ try {
                         $rights .= ",";
                     }
                     $i++;
+                    if ($r == "gestion" ) {
+                        $r = "manage";
+                    }
                     $rights .= '"' . $r . '"';
                 }
                 $rights .= '],' . PHP_EOL;
@@ -55,19 +58,23 @@ try {
             if (!empty ($action)) {
                 $action = str_replace(".php", "", $action);
                 $aAction = explode("/", $action);
+                $param = $node->getAttribute("param");
+                if (empty ($param)) {
+                    $param = "index";
+                }
+                $verb = "add";
+                if (in_array($param, ["write", "delete"])) {
+                    $verb = "post";
+                }
                 $aAction[0] == "framework" ? $radical = "\Ppci\Controllers\\" : $radical = "";
                 //$action = str_replace(["modules/","ppci/", ".php"], ["","",""], $action);
 
-                $routes .= '$routes->add(' . "'" . lcfirst($node->tagName) . "', '" . $radical;
+                $routes .= '$routes->'.$verb."('" . lcfirst($node->tagName) . "', '" . $radical;
                 for ($i = 1; $i < count($aAction); $i++) {
                     if ($i > 1) {
                         $routes .= "\\";
                     }
                     $routes .= ucfirst($aAction[$i]);
-                }
-                $param = $node->getAttribute("param");
-                if (empty ($param)) {
-                    $param = "index";
                 }
                 $routes .= "::" . $param . "');" . PHP_EOL;
             }

@@ -1,3 +1,4 @@
+set search_path = app,gacl,public;
 create unique index if not exists dbparamname_idx on dbparam (dbparam_name);
 insert into dbparam (dbparam_name, dbparam_value, dbparam_description, dbparam_description_en)
 values (

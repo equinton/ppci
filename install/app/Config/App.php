@@ -300,13 +300,13 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $APP_help_address = "https://gitlab.irstea.fr/eabx-applis_web/metabo/-/issues/new";
+    public $APP_help_address = "https://github.com/equinton/ppci/issues/new";
     /**
      * Copyright - don't change directly here, but in setParameters function
      *
      * @var string
      */
-    public $copyright = "Copyright © 2020-2024 - All rights reserved. Author : Éric Quinton, for INRAE - EABX - Logiciel distributed under AGPL license";
+    public $copyright = "Copyright © 2024 - All rights reserved. Author : Éric Quinton - Software distributed under AGPL license";
 
     /**
      * Max duration of a session

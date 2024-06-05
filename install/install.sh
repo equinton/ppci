@@ -7,6 +7,8 @@ cp -Rf $PPCI/app/Libraries/* app/Libraries/
 cp -Rf $PPCI/public/* public/
 cp -f $PPCI/.gitignore .
 cp -Rf $PPCI/locales .
+mkdir app/Views/templates
+cp -Rf $PPCI/Views/templates/* app/Views/templates/
 echo "add javascript components"
 cd public/display
 npm update
