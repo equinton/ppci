@@ -6,6 +6,8 @@ cp -Rf $PPCI/app/Config/* app/Config/
 cp -Rf $PPCI/app/Libraries/* app/Libraries/
 cp -Rf $PPCI/public/* public/
 cp -f $PPCI/.gitignore .
+cp -Rf $PPCI/locales .
+echo "add javascript components"
 cd public/display
 npm update
 cd ../..
@@ -15,6 +17,7 @@ touch writable/templates_c/.gitkeep
 touch writable/temp/.gitkeep
 chmod -R g+w writable
 chgrp -R www-data writable
+echo "generate encryption keys"
 openssl genpkey -algorithm rsa -out id_app -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in id_app -pubout -out id_app.pub
 chown www-data id_app
