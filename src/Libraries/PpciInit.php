@@ -90,6 +90,29 @@ class PpciInit
                      */
                     $log = service('Log');
                     $log->purge($appConfig->logDuration);
+                    /**
+                     * Delete old files in temp folder
+                     */
+                    $liveDuration = 3600 * 24; // delete all files longer than 24 hours
+                    /*
+                     * open the folder
+                     */
+                    $folder = opendir($appConfig->APP_temp);
+                    while (false !== ($entry = readdir($folder))) {
+                        $path = $appConfig->APP_temp . "/" . $entry;
+                        $file = fopen($path, 'r');
+                        $stat = fstat($file);
+                        $atime = $stat["atime"];
+                        fclose($file);
+                        $infos = pathinfo($path);
+                        if (!is_dir($path) && ($infos["basename"] != ".gitkeep")) {
+                            $age = time() - $atime;
+                            if ($age > $liveDuration) {
+                                unlink($path);
+                            }
+                        }
+                    }
+                    closedir($folder);
                     $_SESSION["log_purged"] = true;
                 }
             } catch (PpciException $e) {
