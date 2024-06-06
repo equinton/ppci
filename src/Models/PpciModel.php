@@ -141,6 +141,18 @@ class PpciModel extends Model
                 throw new \Ppci\Libraries\PpciException(sprintf(_("Le champ %s est obligatoire mais n'a pas été renseigné"), $fieldName));
             }
         }
+        /**
+         * Geom fields preparation
+         */
+        $geom = [];
+        if (!empty($this->geomFields)) {
+            foreach ($this->geomFields as $fieldName) {
+                if (!empty($row[$fieldName])) {
+                    $geom[$fieldName] = $row[$fieldName];
+                    unset($row[$fieldName]);
+                }
+            }
+        }
         $isInsert = false;
         if ($row[$this->primaryKey] == 0) {
             unset($row[$this->primaryKey]);
@@ -176,6 +188,22 @@ class PpciModel extends Model
             if (!parent::update($id, $row)) {
                 throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
             }
+        }
+        /**
+         * Geom fields update
+         */
+        if (!empty($geom)) {
+            $sql = "update " . $this->qi . $this->table . $this->qi . " set ";
+            $param = [];
+            $comma = "";
+            foreach ($geom as $k => $v) {
+                $sql .= $comma . $this->qi . $k . $this->qi . " = ST_GeomFromText( :" . $k . ": , " . $this->srid . ")";
+                $param[$k] = $v;
+                $comma = ",";
+            }
+            $sql .= " where " . $this->qi . $this->primaryKey . $this->qi . " = :id:";
+            $param["id"] = $id;
+            $this->executeSQL($sql, $param, true);
         }
 
         return $id;
@@ -272,15 +300,16 @@ class PpciModel extends Model
             ]
         );
     }
-/**
- * Delete an item
- *
- * @param [type] $id
- * @param boolean $purge
- * @return void
- */
-    function delete( $id = null, bool $purge = false) {
-        if (! parent::delete($id)) {
+    /**
+     * Delete an item
+     *
+     * @param [type] $id
+     * @param boolean $purge
+     * @return void
+     */
+    function delete($id = null, bool $purge = false)
+    {
+        if (!parent::delete($id)) {
             throw new PpciException($this->db->error()["message"]);
         }
     }
@@ -299,13 +328,15 @@ class PpciModel extends Model
      * @param string $field
      * @return void
      */
-    function deleteFromField(int $id, string $field) {
+    function deleteFromField(int $id, string $field)
+    {
         $key = $this->qi . $field . $this->qi;
-    $sql = "delete from " . $this->table . " where " . $key . "= :id:";
-    $data["id"] = $id;
-    $this->executeQuery($sql, $data, true);
+        $sql = "delete from " . $this->table . " where " . $key . "= :id:";
+        $data["id"] = $id;
+        $this->executeQuery($sql, $data, true);
     }
-    function supprimerChamp (int $id, string $field) {
+    function supprimerChamp(int $id, string $field)
+    {
         $this->deleteFromField($id, $field);
     }
 
