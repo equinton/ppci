@@ -127,3 +127,7 @@ nb-configuration.xml
 
 /results/
 /phpunit*.xml
+
+# PPCI configuration
+id_app.pub
+id_app

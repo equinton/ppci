@@ -15,6 +15,9 @@
 #--------------------------------------------------------------------
 
 CI_ENVIRONMENT = development
+# disable totp identification in admin mode
+# Only for first connection in development mode
+Ppci\Config\IdentificationConfig.disableTotpToAdmin=1
 
 #--------------------------------------------------------------------
 # Ppci configuration
@@ -66,27 +69,27 @@ database.default.charset = utf8
 
 # List of parameters to use SAML identification with apache2-mellon
 #
-# Ppci\Config\Identification.identification_type = BDD
-# Ppci\Config\Identification.ident_header_vars.radical = 'MELLON'
-# Ppci\Config\Identification.ident_header_vars.login = 'MELLON_MAIL'
-# Ppci\Config\Identification.ident_header_vars.mail = 'MELLON_MAIL'
-# Ppci\Config\Identification.ident_header_vars.cn = 'MELLON_CN'
-# Ppci\Config\Identification.ident_header_vars.organization = 'MELLON_SHACHOMEORGANIZATION'
-# Ppci\Config\Identification.ident_header_vars.createUser = true
-# Ppci\Config\Identification.ident_header_logout_address = 
+# Ppci\Config\IdentificationConfig.identification_type = BDD
+# Ppci\Config\IdentificationConfig.ident_header_vars.radical = 'MELLON'
+# Ppci\Config\IdentificationConfig.ident_header_vars.login = 'MELLON_MAIL'
+# Ppci\Config\IdentificationConfig.ident_header_vars.mail = 'MELLON_MAIL'
+# Ppci\Config\IdentificationConfig.ident_header_vars.cn = 'MELLON_CN'
+# Ppci\Config\IdentificationConfig.ident_header_vars.organization = 'MELLON_SHACHOMEORGANIZATION'
+# Ppci\Config\IdentificationConfig.ident_header_vars.createUser = true
+# Ppci\Config\IdentificationConfig.ident_header_logout_address = 
 
 # Organizations granted for Header connection
 # each organization must be separated by a comma
-# Ppci\Config\Identification.organizationsGranted = 
+# Ppci\Config\IdentificationConfig.organizationsGranted = 
 
 
 # CAS parameters
-# Ppci\Config\Identification.CAS.CAS_address = 
-# Ppci\Config\Identification.CAS.CAS_uri = "/cas"
-# Ppci\Config\Identification.CAS.CAS_Port = 443
-# Ppci\Config\Identification.CAS.CAS_debug = false
-# Ppci\Config\Identification.CAS.CAS_get_groups = 1
-# Ppci\Config\Identification.CAS.CAS_group_attribute = "supannEntiteAffectation"
+# Ppci\Config\IdentificationConfig.CAS.CAS_address = 
+# Ppci\Config\IdentificationConfig.CAS.CAS_uri = "/cas"
+# Ppci\Config\IdentificationConfig.CAS.CAS_Port = 443
+# Ppci\Config\IdentificationConfig.CAS.CAS_debug = false
+# Ppci\Config\IdentificationConfig.CAS.CAS_get_groups = 1
+# Ppci\Config\IdentificationConfig.CAS.CAS_group_attribute = "supannEntiteAffectation"
 
 # OIDC parameters
 # Ppci\Config\IdentificationConfig.OIDC.name = INRAE
@@ -94,36 +97,36 @@ database.default.charset = utf8
 # Ppci\Config\IdentificationConfig.OIDC.clientId =
 # Ppci\Config\IdentificationConfig.OIDC.clientSecret =
 
-# Ppci\Config\Identification.CONNECTION_max_attempts = 5
-# Ppci\Config\Identification.CAS.CONNECTION_blocking_duration = 600
+# Ppci\Config\IdentificationConfig.CONNECTION_max_attempts = 5
+# Ppci\Config\IdentificationConfig.CAS.CONNECTION_blocking_duration = 600
 # Time to resend an email to the administrator if an account is blocked
-# Ppci\Config\Identification.CAS.APPLI_maiToAdminPeriod = 7200
+# Ppci\Config\IdentificationConfig.CAS.APPLI_maiToAdminPeriod = 7200
 # Maximum period of inactivity for accessing an administration module
-# Ppci\Config\Identification.CAS.APPLI_admin_ttl = 600
+# Ppci\Config\IdentificationConfig.CAS.APPLI_admin_ttl = 600
 
-# Ppci\Config\Identification.CAS.APPLI_passwordMinLength = 12
+# Ppci\Config\IdentificationConfig.CAS.APPLI_passwordMinLength = 12
 # If set to 1, authorises recovery of a new password in the event of loss
-# Ppci\Config\Identification.CAS.APPLI_lostPassword = 1
+# Ppci\Config\IdentificationConfig.CAS.APPLI_lostPassword = 1
 
 # LDAP parameters
-# Ppci\Config\Identification.LDAP.address = 
-# Ppci\Config\Identification.LDAP.port = 389
-# Ppci\Config\Identification.LDAP.rdn = "cn=manager,dc=example,dc=com"
-# Ppci\Config\Identification.LDAP.basedn = "ou=people,ou=example,o=societe,c=fr"
-# Ppci\Config\Identification.LDAP.user_attrib = "uid"
-# Ppci\Config\Identification.LDAP.v3 = true
-# Ppci\Config\Identification.LDAP.tls = false
-# Ppci\Config\Identification.LDAP.upn_suffix = 
-# Ppci\Config\Identification.LDAP.groupSupport = false
-# Ppci\Config\Identification.LDAP.commonNameAttribute = "displayname"
-# Ppci\Config\Identification.LDAP.mailAttribute = "mail"
-# Ppci\Config\Identification.LDAP.groupnameAttribute = "cn"
-# Ppci\Config\Identification.LDAP.loginnameAttribute = "memberuid"
-# Ppci\Config\Identification.LDAP.basedngroup = 'ou=example,o=societe,c=fr'
-# Ppci\Config\Identification.LDAP.timeout = 2
-# Ppci\Config\Identification.LDAP.ldapnoanonymous = false
-# Ppci\Config\Identification.LDAP.ldaplogin = 
-# Ppci\Config\Identification.LDAP.ldappassword = 
+# Ppci\Config\IdentificationConfig.LDAP.address = 
+# Ppci\Config\IdentificationConfig.LDAP.port = 389
+# Ppci\Config\IdentificationConfig.LDAP.rdn = "cn=manager,dc=example,dc=com"
+# Ppci\Config\IdentificationConfig.LDAP.basedn = "ou=people,ou=example,o=societe,c=fr"
+# Ppci\Config\IdentificationConfig.LDAP.user_attrib = "uid"
+# Ppci\Config\IdentificationConfig.LDAP.v3 = true
+# Ppci\Config\IdentificationConfig.LDAP.tls = false
+# Ppci\Config\IdentificationConfig.LDAP.upn_suffix = 
+# Ppci\Config\IdentificationConfig.LDAP.groupSupport = false
+# Ppci\Config\IdentificationConfig.LDAP.commonNameAttribute = "displayname"
+# Ppci\Config\IdentificationConfig.LDAP.mailAttribute = "mail"
+# Ppci\Config\IdentificationConfig.LDAP.groupnameAttribute = "cn"
+# Ppci\Config\IdentificationConfig.LDAP.loginnameAttribute = "memberuid"
+# Ppci\Config\IdentificationConfig.LDAP.basedngroup = 'ou=example,o=societe,c=fr'
+# Ppci\Config\IdentificationConfig.LDAP.timeout = 2
+# Ppci\Config\IdentificationConfig.LDAP.ldapnoanonymous = false
+# Ppci\Config\IdentificationConfig.LDAP.ldaplogin = 
+# Ppci\Config\IdentificationConfig.LDAP.ldappassword = 
 
 #--------------------------------------------------------------------
 # Ppci Rights

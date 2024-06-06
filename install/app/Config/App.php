@@ -188,9 +188,9 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public string $versionDate = "13/12/2023";
-    public string $dbversion = "23.0";
-    public string $databaseSchemaFile = ROOTPATH . "documentation/metabo_database.png";
+    public string $versionDate = "06/06/2024";
+    public string $dbversion = "24.0";
+    public string $databaseSchemaFile = ROOTPATH . "documentation/schema.png";
     /**
      * Duration of conservation of logs in table log
      *
@@ -241,13 +241,13 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $GACL_aco = "metabo";
+    public $GACL_aco = "app";
     /**
      * Generic mail used to send messages to the administrators
      *
      * @var string
      */
-    public $APP_mail = "metabo@inrae.fr";
+    public $APP_mail = "mail@society.com";
     /**
      * Set true if send mails is enabled
      *
@@ -288,7 +288,6 @@ class App extends BaseConfig
     /**
      * Ini file to add new parameters
      */
-    public $paramIniFile = ROOTPATH . "param.ini";
     public $APP_menufile = APPPATH . "Config/menu.xml";
     /**
      * Address to give help or to declare bug
@@ -325,10 +324,10 @@ class App extends BaseConfig
      */
     public $APPLI_release = [
         "provider" => "github",
-        "url" => "https://api.github.com/repos/collec-science/collec-science/releases/latest",
+        "url" => "https://api.github.com/repos/equinton/ppci/releases/latest",
         "tag" => "tag_name",
         "date" => "published_at",
-        "user_agent" => 'collec-science/collec-science',
+        "user_agent" => 'equinton/ppci',
         "description" => "body",
     ];
     /**
