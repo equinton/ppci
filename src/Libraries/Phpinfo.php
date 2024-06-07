@@ -11,7 +11,7 @@ class Phpinfo extends PpciLibrary
         ob_end_clean();
         $vue = service("Smarty");
         $vue->set($phpinfo, "phpinfo");
-        $vue->set("phpinfo.tpl", "corps");
+        $vue->set("ppci/phpinfo.tpl", "corps");
         return $vue->send();
     }
 }
