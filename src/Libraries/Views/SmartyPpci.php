@@ -129,6 +129,7 @@ class SmartyPpci
             if ($message->is_error) {
                 $this->set(1, "messageError");
             }
+            $this->set($_SESSION["userRights"], "rights");
             /**
              * Encode data before send
              */

@@ -1,5 +1,7 @@
 <?php
 namespace Ppci\Libraries;
+
+use Ppci\Libraries\Aclappli as LibrariesAclappli;
 use Ppci\Models\Aclappli;
 use Ppci\Models\Aclgroup;
 
@@ -38,9 +40,10 @@ class Aclaco extends PpciLibrary
     function write()
     {
         try {
-            $this->id = $this->dataWrite( $_REQUEST);
-            return $this->display();
-        } catch (\Exception $e) {
+            $this->id = $this->dataWrite( $_POST);
+            $appli = new LibrariesAclappli();
+            return $appli->display();
+        } catch (\Exception) {
             return $this->change();
         }
     }

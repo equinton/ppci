@@ -110,7 +110,11 @@ class PpciModel extends Model
             /*$this->message->setSyslog($this->db->error()->code.": ".$this->db->error()->message);*/
             //throw new \Ppci\Libraries\PpciException(_("Une erreur s'est produite lors de l'exécution d'une requête vers la base de données"));
         }
-        return $query;
+        if (!$onlyExecute) {
+            return $query->getResultArray();
+        } else {
+            return $query;
+        }
     }
     protected function executeSQL(string $sql, array $data = null, $onlyExecute = false)
     {
@@ -155,10 +159,15 @@ class PpciModel extends Model
         }
         $isInsert = false;
         if ($row[$this->primaryKey] == 0) {
-            unset($row[$this->primaryKey]);
             $isInsert = true;
         } else {
             $id = $row[$this->primaryKey];
+        }
+        /**
+         * Disable the deletion of primary key if not autoincrement in insert context
+         */
+        if (!($isInsert && !$this->useAutoIncrement)) {
+            unset($row[$this->primaryKey]);
         }
         if ($this->autoFormatDate) {
             $row = $this->formatDatesToDB($row);
@@ -185,9 +194,31 @@ class PpciModel extends Model
                 throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
             }
         } else {
-            if (!parent::update($id, $row)) {
-                throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
+            /**
+             * Generate update sql
+             */
+            $sql = "update " . $this->qi . $this->table . $this->qi . " set ";
+            $param = [];
+            $comma = "";
+            foreach ($row as $k => $v) {
+                if (array_key_exists($k, $this->fields) && $this->fields["type"] != 4) {
+                    if (strlen($v) == 0) {
+                        $sql .= $comma . $this->qi . $k . $this->qi . " = NULL ";
+                    } else {
+                        $sql .= $comma . $this->qi . $k . $this->qi . " = :$k: ";
+                        $param[$k] = $v;
+                    }
+                    $comma = ",";
+                }
             }
+            $sql .= " where " . $this->qi . $this->primaryKey . $this->qi . " = :id:";
+            $param["id"] = $id;
+            if ($comma == ",") {
+                $this->executeQuery($sql, $param, true);
+            }
+            // if (!parent::update($id, $row)) {
+            //     throw new \Ppci\Libraries\PpciException($this->db->error()["message"]);
+            // }
         }
         /**
          * Geom fields update
@@ -205,7 +236,9 @@ class PpciModel extends Model
             $param["id"] = $id;
             $this->executeSQL($sql, $param, true);
         }
-
+        /**
+         * Return key
+         */
         return $id;
     }
     public function ecrire(array $row): int
@@ -242,9 +275,9 @@ class PpciModel extends Model
          */
         $sql = "select " . $k2 . " from " . $tablename . " where " . $k1 . " = :id:";
         $origin = array();
-        $query = $this->executeQuery($sql, ["id" => $id]);
-        if ($query) {
-            foreach ($query->getResultArray() as $row) {
+        $result = $this->executeQuery($sql, ["id" => $id]);
+        if (!empty($result)) {
+            foreach ($result as $row) {
                 $origin[] = $row[$secondKey];
             }
         }
@@ -263,14 +296,14 @@ class PpciModel extends Model
             $sql = "delete from " . $tablename . " where " . $k1 . " = :id: and " . $k2 . "= :key2:";
             foreach ($delete as $key2) {
                 $param["key2"] = $key2;
-                $this->executeQuery($sql, $param);
+                $this->executeQuery($sql, $param, true);
             }
         }
         if (count($create) > 0) {
             $sql = "insert into $tablename (" . $k1 . "," . $k2 . ") values ( :id:, :key2:)";
             foreach ($create as $key2) {
                 $param["key2"] = $key2;
-                $this->executeQuery($sql, $param);
+                $this->executeQuery($sql, $param,true);
             }
         }
     }
@@ -531,7 +564,7 @@ class PpciModel extends Model
     {
         foreach ($this->dateFields as $field) {
             if (!empty($row[$field])) {
-                $date = date_create_from_format("Y-m-d H:i:s", $row[$field]);
+                $date = date_create_from_format("Y-m-d", $row[$field]);
                 if ($date) {
                     $row[$field] = date_format($date, $this->dateFormatMask);
                 }
@@ -560,17 +593,44 @@ class PpciModel extends Model
     {
         return $this->formatDateLocaleToDB($value);
     }
+    /**
+     * Format a date/time furnished by the database to the locale format
+     *
+     * @param string $value
+     * @return string
+     */
+    function formatDateDBtoLocal(string $value)
+    {
+        $date = date_create_from_format("Y-m-d", $value);
+        if ($date) {
+            return date_format($date, $this->dateFormatMask);
+        } else {
+            return "";
+        }
+    }
+    function formatDateDBversLocal(string $value)
+    {
+        return $this->formatDateDBtoLocal($value);
+    }
+    function formatDateTimeDBtoLocal(string $value)
+    {
+        $date = date_create_from_format("Y-m-d H:i:s", $value);
+        if ($date) {
+            return date_format($date, $this->datetimeFormat);
+        } else {
+            return "";
+        }
+    }
+    function formatDatetimeDBversLocal(string $value)
+    {
+        return $this->formatDatetimeDBtoLocal($value);
+    }
     function getBinaryField(int $id, string $fieldName)
     {
         $sql = "select " . $this->db->escape($fieldName) .
             "from " . $this->db->escape($this->tablename) .
-            " where " . $this->db->escape($this->key) . " = :id";
-        return $this->executeQuery(
-            $sql,
-            [
-                "id" => $id
-            ]
-        );
+            " where " . $this->db->escape($this->key) . " = :id:";
+        return $this->executeQuery($sql, ["id" => $id]);
     }
 
     /**************************
@@ -604,9 +664,8 @@ class PpciModel extends Model
     function getUUID(): string
     {
         $sql = "select gen_random_uuid() as uuid";
-        $query = $this->executeQuery($sql);
-        $result = $query->getFirstRow("array");
-        return $result["uuid"];
+        $res = $this->executeQuery($sql);
+        return $res[0]["uuid"];
     }
 
     function getDateTime(): string
