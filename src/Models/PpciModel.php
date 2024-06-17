@@ -564,14 +564,14 @@ class PpciModel extends Model
     {
         foreach ($this->dateFields as $field) {
             if (!empty($row[$field])) {
-                $date = date_create_from_format("Y-m-d", $row[$field]);
+                $date = date_create_from_format("Y-m-d H:i:s", $row[$field]);
                 if ($date) {
                     $row[$field] = date_format($date, $this->dateFormatMask);
                 }
             }
         }
         foreach ($this->datetimeFields as $field) {
-            if (strlen($row[$field]) > 0) {
+            if (!empty($row[$field])) {
                 $date = date_create_from_format("Y-m-d H:i:s", $row[$field]);
                 if ($date) {
                     $row[$field] = date_format($date, $this->datetimeFormat);
