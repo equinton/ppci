@@ -93,12 +93,12 @@ class Log extends PpciModel
      * @param int $nbJours : nombre de jours de conservation
      *
      */
-    public function purge($nbJours)
+    public function purge(int $nbJours)
     {
         if ($nbJours > 0) {
             $sql = "delete from log
 					where log_date < current_date - interval '" . $nbJours . " day'";
-            $this->executeSQL($sql);
+            $this->executeSQL($sql,null, true);
         }
     }
 
