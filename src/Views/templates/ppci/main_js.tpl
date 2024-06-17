@@ -146,7 +146,7 @@
             "language": dataTableLanguage,
             "paging": false,
             "searching": true,
-            "scrollY": scroll,
+            /*"scrollY": scroll,*/
             "scrollX": true,
             fixedHeader: {
                 header: true,
@@ -158,7 +158,7 @@
             "paging": false,
             "searching": false,
             "ordering": false,
-            "scrollY": scroll,
+            /*"scrollY": scroll,*/
             fixedHeader: {
                 header: true,
                 footer: true
@@ -179,7 +179,7 @@
             dom: 'Bfrtip',
             "language": dataTableLanguage,
             "paging": false,
-            "scrollY": scroll,
+            /*"scrollY": scroll,*/
             "scrollX": true,
             fixedHeader: {
                 header: true,
