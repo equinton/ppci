@@ -65,5 +65,6 @@ class FileView extends DefaultView
         fwrite($fp, $this->data);
         fclose($fp);
         ob_flush();
+        exit();
     }
 }

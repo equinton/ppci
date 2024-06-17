@@ -33,5 +33,6 @@ class AjaxView extends DefaultView
         ob_clean();
         echo $json;
         ob_flush();
+        exit();
     }
 }

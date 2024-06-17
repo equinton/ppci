@@ -1,6 +1,7 @@
 <?php
 
 namespace Ppci\Libraries\Views;
+
 /**
  * Send an array in csv format
  */
@@ -41,7 +42,7 @@ class CsvView extends DefaultView
                 $filename = $this->filename;
             }
             if (empty($filename)) {
-                $filename = $_SESSION["dbparams"]["APPLI_code"] . date('Y-m-d-His') . ".csv";
+                $filename = $_SESSION["dbparams"]["APPLI_code"] . "-" . date('Y-m-d-His') . ".csv";
             }
             if (empty($delimiter)) {
                 $delimiter = $this->delimiter;
@@ -65,6 +66,7 @@ class CsvView extends DefaultView
             }
             fclose($fp);
             ob_flush();
+            exit();
         }
     }
 

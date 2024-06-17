@@ -28,6 +28,7 @@ class DisplayView extends DefaultView
         if ($this->fp) {
             fclose($this->fp);
             ob_flush();
+            exit();
         }
     }
 }

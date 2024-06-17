@@ -86,5 +86,6 @@ class BinaryView extends DefaultView
         } else {
             fpassthru($this->param["handle"]);
         }
+        exit();
     }
 }

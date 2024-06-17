@@ -67,6 +67,7 @@ class PdfView extends DefaultView
             flush();
             if (!empty($this->filename)) {
                 readfile($this->filename);
+                exit();
             } else {
                 throw new PpciException(_("Le fichier ne peut pas être envoyé au navigateur"));
             }

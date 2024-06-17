@@ -73,6 +73,7 @@ class JsonFileView extends DefaultView
             echo $json;
             fclose($fp);
             ob_flush();
+            exit();
         }
     }
     /**
