@@ -21,7 +21,10 @@
  
 <div class="form-group">
 <label for="aco" class="control-label col-md-4"><span class="red">*</span> {t}Nom du droit utilisé dans l'application :{/t}</label>
-<div class="col-md-8"><input type="text" class="form-control" id="aco" name="aco" value="{$data.aco}" autofocus required></div>
+<div class="col-md-8"><input type="text" class="form-control" 
+  id="aco" name="aco" value="{$data.aco}" autofocus required
+  {if $newRightEnabled == 0} readonly{/if}>
+</div>
 </div>
 <div class="form-group">
 <fieldset class="col-lg-12">

@@ -35,6 +35,7 @@ class Aclaco extends PpciLibrary
 		$vue->set($aclAppli->lire($data["aclappli_id"]), "dataAppli");
 		$aclgroup = new Aclgroup();
 		$vue->set($aclgroup->getGroupsFromAco($this->id), "groupes");
+        $this->appConfig->GACL_disable_new_right == 1 ? $vue->set(0, "newRightEnabled") : $vue->set(1, "newRightEnabled");
         return $vue->send();
     }
     function write()

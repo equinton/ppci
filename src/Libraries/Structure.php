@@ -49,7 +49,7 @@ class Structure extends PpciLibrary
                 "\\end{tabular}"
             )
         );
-        $vue->setParam(array("filename" => $_SESSION["dbparam"]["APPLI_code"]."-dbstructure.tex"));
+        $vue->setParam(array("filename" => $_SESSION["dbparams"]["APPLI_code"]."-dbstructure.tex"));
         return $vue->send();
     }
     /**
@@ -61,8 +61,7 @@ class Structure extends PpciLibrary
     {
         $realfilename = $this->appConfig->databaseSchemaFile;
         if (file_exists($realfilename)) {
-            $dbconf = service ("Dbparam");
-            $generatedfilename = $dbconf->getParam("APPLI_code")."-database-schema.png";
+            $generatedfilename = $_SESSION["dbparams"]["APPLI_code"]."-database-schema.png";
             $vue = service("BinaryView");
             $vue->setParam(
                 array(
@@ -74,7 +73,7 @@ class Structure extends PpciLibrary
             return $vue->send();
         } else {
             $this->message->set(_("Le fichier contenant le schéma de la base de données n'a pas été trouvé"), true);
-            return "default";
+            return defaultPage();
         }
     }
 }
