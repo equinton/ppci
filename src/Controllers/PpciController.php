@@ -3,6 +3,7 @@ namespace Ppci\Controllers;
 
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\App;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,6 +29,9 @@ class PpciController extends \App\Controllers\BaseController
     ) {
         parent::initController($request, $response, $logger);
         $this->message = service('MessagePpci');
+        /**
+         * @var App
+         */
         $this->config = config("App");
         $session = session();
         if ($session->getFlashdata("POST")){

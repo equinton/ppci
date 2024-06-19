@@ -1,6 +1,6 @@
 <script src="display/node_modules/markdown-it/dist/markdown-it.min.js"></script>
 <script src="display/node_modules/markdown-it-attrs/markdown-it-attrs.browser.js"></script>
-<script>
+<script >
     $( document ).ready( function () {
         var md = window.markdownit();
         md.use( markdownItAttrs );

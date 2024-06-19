@@ -173,7 +173,7 @@ class App extends BaseConfig
      * @see http://www.html5rocks.com/en/tutorials/security/content-security-policy/
      * @see http://www.w3.org/TR/CSP/
      */
-    public bool $CSPEnabled = false;
+    public bool $CSPEnabled = true;
 
     /**
      * --------------------------------------------------------------------------
@@ -182,14 +182,24 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public string $version = "v23.0.0";
+    public string $version = "v24.0.0";
     /**
      * versionDate - don't change here, but in function setParameters() below
      *
      * @var string
      */
-    public string $versionDate = "06/06/2024";
+    public string $versionDate = "30/06/2024";
+    /**
+     * Number of the database version
+     *
+     * @var string
+     */
     public string $dbversion = "24.0";
+    /**
+     * Location of the database schema
+     *
+     * @var string
+     */
     public string $databaseSchemaFile = ROOTPATH . "documentation/schema.png";
     /**
      * Duration of conservation of logs in table log
@@ -225,17 +235,9 @@ class App extends BaseConfig
             "maskdatelong" => "d/m/Y H:i:s",
             "maskdate" => "d/m/Y",
             "maskdateexport" => 'd-m-Y'
-        ],
-        "us" => [
-            "formatdate" => "MM/DD/YYYY",
-            "formatdatetime" => "MM/DD/YYYY HH:mm:ss",
-            "formatdatecourt" => "mm/dd/yy",
-            "maskdatelong" => "m/d/Y H:i:s",
-            "maskdate" => "m/d/Y",
-            "maskdateexport" => 'Y-m-d'
         ]
     ];
-    public $localePath = APPPATH.'locale';
+    public $localePath = APPPATH . 'locale';
     /**
      * Domain of defined rights
      *
@@ -314,10 +316,16 @@ class App extends BaseConfig
      */
     public $APPLI_absolute_session = 36000; // 10 hours
 
-    public $GACL_disable_new_right = 0;
+    /**
+     * Disable the possibility to create or modifiy a right into the application
+     *
+     * @var integer
+     */
+    public $GACL_disable_new_right = 1;
 
     /**
      * Get last release informations
+     * Ask Github or Gitlab to obtains informations on the last published release
      */
     /**
      * Github server

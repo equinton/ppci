@@ -104,10 +104,11 @@ class Login extends PpciLibrary
         $CAS_enabled = 0;
         if ($this->identificationConfig->identificationMode == "CAS-BDD") {
             $CAS_enabled = 1;
+            $vue->set($this->identificationConfig->identificationLogo,"getLogo");
         }
         if ($this->identificationConfig->identificationMode == "OIDC-BDD") {
             $OIDC_enabled = 1;
-            $vue->set($this->identificationConfig->OIDC["logo"],"logo");
+            $vue->set($this->identificationConfig->identificationLogo,"getLogo");
         }
         $vue->set($CAS_enabled, "CAS_enabled");
         $vue->set($OIDC_enabled, "OIDC_enabled");

@@ -1,4 +1,4 @@
-<script>
+<script >
 	$(document).ready(function () {
 		var visible = false;
 		$(".passwordVisible").click(function () {
@@ -73,7 +73,9 @@
 					<label for="cas" class="control-label col-sm-4">{t}ou :{/t}</label>
 					<div class="col-sm-8">
 						<button type="submit" id="cas" class="btn btn-info">
-							<img src="oidcGetLogo" height="25">
+							{if !empty ($getLogo)}
+							<img src="getLogo" height="25">
+							{/if}
 							{t}Se connecter avec l'identification centralisée{/t}
 						</button>
 					</div>

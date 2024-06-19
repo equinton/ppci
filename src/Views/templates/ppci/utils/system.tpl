@@ -1,4 +1,4 @@
-<script>
+<script >
   scroll = "75vh";
 </script>
 <div class="col-md-12">

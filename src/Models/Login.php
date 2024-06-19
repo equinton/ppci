@@ -121,6 +121,12 @@ class Login
     function getLoginFromHeader()
     {
         $ident_header_vars = $this->identificationConfig->ident_header_vars;
+        if (!empty($this->identificationConfig->organizationGranted)) {
+            $ident_header_vars["organizationGranted"] = explode(",", $this->identificationConfig->organizationGranted);
+        }
+        if (!empty($this->identificationConfig->groupsGranted)) {
+            $ident_header_vars["groupsGranted"] = explode(",", $this->identificationConfig->groupsGranted);
+        }
         $userparams = $this->getUserParams($ident_header_vars, $_SERVER);
         $login = $userparams["login"];
         $verify = false;
@@ -481,7 +487,7 @@ class Login
             $this->identificationConfig->OIDC["clientId"],
             $this->identificationConfig->OIDC["clientSecret"]
         );
-    
+
         //$oidc->addScope($attributes);
         $oidc->addScope(["profile", "email"]);
         if (!empty($this->identificationConfig->OIDC["scopeGroup"])) {

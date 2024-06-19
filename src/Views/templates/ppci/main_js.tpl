@@ -71,7 +71,7 @@
 
 
 <!--  Automatic implementation of classes -->
-<script>
+<script >
     var dataTableLanguage = {
         "sProcessing": "{t}Traitement en cours...{/t}",
         "sSearch": "{t}Rechercher :{/t}",

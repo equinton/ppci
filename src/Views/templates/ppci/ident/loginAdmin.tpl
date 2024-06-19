@@ -1,4 +1,4 @@
-<script>
+<script >
 	$(document).ready(function () {
 		var visible = false;
 		$(".passwordVisible").click(function () {

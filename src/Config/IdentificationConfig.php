@@ -45,6 +45,19 @@ class IdentificationConfig extends BaseConfig
      * @var string
      */
     public $organizationsGranted = "";
+
+    /**
+     * Groups that users are automatically granted for Header connection
+     * Each group must be separated by a comma
+     * @var string
+     */
+    public $groupsGranted = "";
+    
+    /**
+     * Address to disconnect from header connection
+     *
+     * @var string
+     */
     public $ident_header_logout_address = "";
     /**
      * Attributes used to populate the login. CAS identification
@@ -99,7 +112,7 @@ class IdentificationConfig extends BaseConfig
         "CAS_group_attribute" => "supannEntiteAffectation",
     );
 
-    public $identificationLogo = FCPATH."favicon.ico";
+    public $identificationLogo = FCPATH."favicon.png";
 
     public array $OIDC = [
         "name" => "INRAE",

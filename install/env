@@ -23,6 +23,8 @@ Ppci\Config\IdentificationConfig.disableTotpToAdmin=1
 # Ppci configuration
 #--------------------------------------------------------------------
 app.baseURL = 'https://myapp.mysociety.com'
+BASE_DIR = "/var/webroot/project-root"
+FRONT_DIR = "${BASE_DIR}/public"
 # If you have trouble with `.`, you could also use `_`.
 app.CSPEnabled = true
 # Duration of conservation of logs in table gacl.log
@@ -47,7 +49,6 @@ database.default.charset = utf8
 #--------------------------------------------------------------------
 # Encryption
 #--------------------------------------------------------------------
-#BASE_DIR = "/var/webroot/project-root"
 #app.privateKey = ${BASE_DIR}/id_app
 #app.pubKey = ${BASE_DIR}/id_app.pub
 
@@ -64,7 +65,7 @@ database.default.charset = utf8
 # OIDC : OIDC identification
 # OIDC-BDD : a button to use OIDC identification
 
-# Ppci\Config\IdentificationConfig.identificationMode = BDD
+Ppci\Config\IdentificationConfig.identificationMode = BDD
 # APP_passwordMinLength = 12
 
 # List of parameters to use SAML identification with apache2-mellon
@@ -80,7 +81,11 @@ database.default.charset = utf8
 
 # Organizations granted for Header connection
 # each organization must be separated by a comma
-# Ppci\Config\IdentificationConfig.organizationsGranted = 
+# Ppci\Config\IdentificationConfig.organizationGranted = 
+
+# Groups that users are automatically activated
+# each group must be separated by a comma
+# Ppci\Config\IdentificationConfig\groupsGranted = 
 
 
 # CAS parameters
@@ -96,6 +101,9 @@ database.default.charset = utf8
 # Ppci\Config\IdentificationConfig.OIDC.provider =
 # Ppci\Config\IdentificationConfig.OIDC.clientId =
 # Ppci\Config\IdentificationConfig.OIDC.clientSecret =
+
+# Logo displayed on the button for CAS or OIDC
+Ppci\Config\IdentificationConfig.identificationLogo = "${FRONT_DIR}/favicon.png"
 
 # Ppci\Config\IdentificationConfig.CONNECTION_max_attempts = 5
 # Ppci\Config\IdentificationConfig.CAS.CONNECTION_blocking_duration = 600

@@ -14,7 +14,7 @@ $routes->add('loginValid', '\Ppci\Controllers\Login::valid');
 $routes->post('loginExec', '\Ppci\Controllers\Login::loginExec');
 $routes->add('loginCasExec', '\Ppci\Controllers\Login::loginCasExec');
 $routes->add('oidcExec', '\Ppci\Controllers\Login::oidcExec');
-$routes->add('oidcGetLogo', '\Ppci\Controllers\Login::oidcGetLogo');
+$routes->add('getLogo', '\Ppci\Controllers\Login::getLogo');
 $routes->add('disconnect', '\Ppci\Controllers\Login::disconnect');
 /**
  * Manage loginGestion

@@ -77,7 +77,7 @@ class Login extends PpciController
             return redirect()->to(site_url());
         }
     }
-    public function oidcGetLogo() {
+    public function getLogo() {
         $vue = service("BinaryView");
         $config = service("IdentificationConfig");
 
