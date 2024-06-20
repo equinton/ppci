@@ -30,6 +30,9 @@ app.CSPEnabled = true
 # Duration of conservation of logs in table gacl.log
 # logDuration = 365
 
+# Duration of the session (4 hours)
+session.expiration = 14400
+
 #--------------------------------------------------------------------
 # DATABASE with PPCI
 #--------------------------------------------------------------------
@@ -49,8 +52,8 @@ database.default.charset = utf8
 #--------------------------------------------------------------------
 # Encryption
 #--------------------------------------------------------------------
-#app.privateKey = ${BASE_DIR}/id_app
-#app.pubKey = ${BASE_DIR}/id_app.pub
+# privateKey = ${BASE_DIR}/id_app
+# pubKey = ${BASE_DIR}/id_app.pub
 
 #--------------------------------------------------------------------
 # Ppci identification

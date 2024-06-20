@@ -142,7 +142,9 @@ class Login extends PpciLibrary
                 'tokenIdentity',
                 $encoded,
                 [
-                    'max-age' => $maxAge
+                    'max-age' => $maxAge,
+                    'secure'   => true,
+                    'httponly' => true,
                 ]
             );
             set_cookie($cookie);

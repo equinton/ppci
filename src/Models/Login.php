@@ -54,6 +54,10 @@ class Login
                 $login = $_REQUEST["login"];
                 $_SESSION["realIdentificationMode"] = "ws";
             }
+        } elseif ($type_authentification == "HEADER") {
+            $tauth = "header";
+            $login = $this->getLoginFromHeader();
+            $_SESSION["realIdentificationMode"] = "HEADER";
         } elseif (isset($_COOKIE["tokenIdentity"])) {
             $tauth = "token";
             /**
@@ -61,16 +65,20 @@ class Login
              */
             try {
 
-                $gaclTotp = new Gacltotp($this->identificationConfig->privateKey, $this->identificationConfig->pubKey);
+                $gaclTotp = new Gacltotp($this->paramApp->privateKey, $this->paramApp->pubKey);
                 $token = json_decode($gaclTotp->decode($_COOKIE["tokenIdentity"], "pub"), true);
                 if ($token["exp"] > time()) {
-                    $_SESSION["login"] = $token["uid"];
+                    $login = $token["uid"];
                     $_SESSION["isLogged"] = 1;
                 } else {
                     throw new PpciException(_("Le jeton fourni n'est pas valide"));
                 }
             } catch (PpciException $e) {
-                $this->message->set(_("L'identification par jeton n'a pas abouti"), true);
+                $_SESSION["filterMessages"][] = _("L'identification par jeton n'a pas abouti");
+                if ($_ENV["CI_ENVIRONMENT"] == "development") {
+                    $_SESSION["filterMessages"][] = $e->getMessage();
+                }
+                //$this->message->set(_("L'identification par jeton n'a pas abouti"), true);
                 $this->message->setSyslog($e->getMessage());
                 /**
                  * Destroy the token
@@ -78,10 +86,6 @@ class Login
                 helper('cookie');
                 setcookie('tokenIdentity', "", time() - 36000);
             }
-        } elseif ($type_authentification == "HEADER") {
-            $tauth = "header";
-            $login = $this->getLoginFromHeader();
-            $_SESSION["realIdentificationMode"] = "HEADER";
         } elseif ($type_authentification == "CAS") {
             $tauth = "cas";
             if (isset($_SESSION["phpCAS"])) {
@@ -435,17 +439,26 @@ class Login
         // Si vous voulez détruire complètement la session, effacez également
         // le cookie de session.
         // Note : cela détruira la session et pas seulement les données de session !
-        helper("cookie");
         if (isset($_COOKIE[session_name()])) {
-            $cookie = new Cookie(session_name(), "", [time() - 42000]);
-            set_cookie($cookie);
+            setcookie(session_name(), "", [
+                'expires'=>time() - 42000,
+                'secure'   => true,
+                'httponly' => true,
+            ]);
         }
         /*
          * Suppression du cookie d'identification
          */
         if (isset($_COOKIE["tokenIdentity"])) {
-            $cookie = new Cookie("tokenIdentity", "", [time() - 42000]);
-            set_cookie($cookie);
+            setcookie(
+                "tokenIdentity",
+                "",
+                [
+                    'expires'=>time() - 42000,
+                    'secure'   => true,
+                    'httponly' => true,
+                ]
+            );
         }
         $vars = ["login", "userRights", "menu", "isLogged"];
         foreach ($vars as $var) {

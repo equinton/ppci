@@ -2,15 +2,15 @@
 
 namespace Ppci\Controllers;
 
-
-use \Ppci\Controllers\PpciController;
-
 class Login extends PpciController
 {
     function index()
     {
         $login = new \Ppci\Libraries\Login();
         $idConfig = service("IdentificationConfig");
+        if (isset($_COOKIE["tokenIdentity"])) {
+            return $this->defaultReturn($login->getLogin());
+        }
         if (in_array($idConfig->identificationMode, ["BDD", "LDAP", "LDAP-BDD", "CAS-BDD", "OIDC-BDD"])) {
             return ($login->display());
         } else {
@@ -44,7 +44,7 @@ class Login extends PpciController
     {
         $config = service("IdentificationConfig");
         if (!in_array($config->identificationMode, ["BDD", "LDAP", "CAS", "LDAP-BDD", "CAS-BDD", "OIDC-BDD"])) {
-            return redirect()->to(site_url());
+            return defaultPage();
         } else {
             $login = new \Ppci\Libraries\Login();
             return $this->defaultReturn($login->getLogin());
@@ -106,8 +106,7 @@ class Login extends PpciController
             }
         }
         if (empty($retour)) {
-            $lib = new \Ppci\Libraries\DefaultPage();
-            return ($lib->display());
+           return defaultPage();
         } else {
             return redirect()->to($retour);
         }
