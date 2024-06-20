@@ -1,5 +1,7 @@
 <?php
 
+use Ppci\Models\Log;
+
 function test($content = "")
 {
     global $testOccurrence;
@@ -68,6 +70,9 @@ function getLineFeed()
 
 function setLogRequest($request, $comment = null)
 {
+    /**
+     * @var Log
+     */
     $log = service("Log");
     if (isset($_SESSION["login"])) {
         $login = $_SESSION["login"];

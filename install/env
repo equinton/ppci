@@ -73,7 +73,6 @@ Ppci\Config\IdentificationConfig.identificationMode = BDD
 
 # List of parameters to use SAML identification with apache2-mellon
 #
-# Ppci\Config\IdentificationConfig.identification_type = BDD
 # Ppci\Config\IdentificationConfig.ident_header_vars.radical = 'MELLON'
 # Ppci\Config\IdentificationConfig.ident_header_vars.login = 'MELLON_MAIL'
 # Ppci\Config\IdentificationConfig.ident_header_vars.mail = 'MELLON_MAIL'
@@ -92,7 +91,7 @@ Ppci\Config\IdentificationConfig.identificationMode = BDD
 
 
 # CAS parameters
-# Ppci\Config\IdentificationConfig.CAS.CAS_address = 
+# Ppci\Config\IdentificationConfig.CAS.CAS_address = "address.without.https"
 # Ppci\Config\IdentificationConfig.CAS.CAS_uri = "/cas"
 # Ppci\Config\IdentificationConfig.CAS.CAS_Port = 443
 # Ppci\Config\IdentificationConfig.CAS.CAS_debug = false
@@ -142,6 +141,8 @@ Ppci\Config\IdentificationConfig.identificationLogo = "${FRONT_DIR}/favicon.png"
 #--------------------------------------------------------------------
 # Ppci Rights
 #--------------------------------------------------------------------
+# Name of the application in the right module
+# app.GACL_aco = app
 
 # Set 1 to disable the creation of new rights in table aclaco
 #

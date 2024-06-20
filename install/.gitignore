@@ -82,7 +82,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 tests/coverage*
 
 # Don't save phpunit under version control.
-phpunit
+#phpunit
 
 #-------------------------
 # Composer
@@ -103,24 +103,6 @@ _modules/*
 .idea/
 *.iml
 
-# Netbeans
-nbproject/
-build/
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
-nb-configuration.xml
-.nb-gradle/
-
-# Sublime Text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-.phpintel
-/api/
 
 # Visual Studio Code
 .vscode/
@@ -129,5 +111,6 @@ nb-configuration.xml
 /phpunit*.xml
 
 # PPCI configuration
-id_app.pub
 id_app
+id_app.pub
+writable/templates_c/*
