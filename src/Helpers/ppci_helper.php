@@ -1,6 +1,7 @@
 <?php
 
 use Ppci\Models\Log;
+use Config\App;
 
 function test($content = "")
 {
@@ -113,4 +114,19 @@ function defaultPage()
 {
     $default = new \Ppci\Libraries\DefaultPage();
     $default->display();
+}
+
+/**
+ * Set locale
+ */
+function set_translation_language($language)
+{
+    $lang_path = APPPATH . 'Language/locales';
+    /**
+     * @var App
+     */
+    $app = service("AppConfig");
+    bindtextdomain('lang', $lang_path);
+    textdomain('lang');
+    setlocale(LC_ALL, $app->localesGettext[$language]);
 }

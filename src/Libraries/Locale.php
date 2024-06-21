@@ -40,12 +40,7 @@ class Locale
         /**
          * Parameters for gettext
          */
-        if (!setlocale(LC_ALL, "C")) {
-            throw new \Ppci\Libraries\PpciException("Locale not initialized");
-        };
-        bindtextdomain($locale, $appConfig->localePath);
-        bind_textdomain_codeset($locale, "UTF-8");
-        textdomain($locale);
+        set_translation_language($locale);
     }
 
 }

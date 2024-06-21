@@ -4,6 +4,7 @@ cp -f $PPCI/env .
 cp -f env .env
 cp -Rf $PPCI/app/Config/* app/Config/
 cp -Rf $PPCI/app/Libraries/* app/Libraries/
+cp -Rf $PPCI/app/Language/* app/Language/
 cp -Rf $PPCI/public/* public/
 cp -f $PPCI/.gitignore .
 cp -Rf $PPCI/locales .

@@ -173,7 +173,7 @@ class App extends BaseConfig
      * @see http://www.html5rocks.com/en/tutorials/security/content-security-policy/
      * @see http://www.w3.org/TR/CSP/
      */
-    public bool $CSPEnabled = true;
+    public bool $CSPEnabled = false;
 
     /**
      * --------------------------------------------------------------------------
@@ -216,7 +216,7 @@ class App extends BaseConfig
     public $privateKey = ROOTPATH . "id_app";
     public $pubKey = ROOTPATH . "id_app.pub";
     /**
-     * List of supported locales
+     * List of locales date formats
      *
      * @var array
      */
@@ -237,7 +237,16 @@ class App extends BaseConfig
             "maskdateexport" => 'd-m-Y'
         ]
     ];
-    public $localePath = APPPATH . 'locale';
+    /**
+     * List of locales used in the app. The second parameter must be declared in 
+     * /etc/locale.gen (locale-gen en-GB.UTF-8 to generate it)
+     *
+     * @var array
+     */
+    public $localesGettext = [
+        "en" => "en_GB.UTF-8",
+        "fr" => "C.UTF-8"
+    ];
     /**
      * Domain of defined rights
      *

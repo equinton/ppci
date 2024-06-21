@@ -70,6 +70,8 @@ class PpciInit
                         $language = substr($language[0], 0, 2);
                     }
                     $locale->setLocale($language);
+                } else {
+                    set_translation_language($_SESSION["locale"]);
                 }
 
                 /**
