@@ -24,3 +24,12 @@ echo "generate encryption keys"
 openssl genpkey -algorithm rsa -out id_app -pkeyopt rsa_keygen_bits:2048
 openssl rsa -in id_app -pubout -out id_app.pub
 chown www-data id_app
+
+# Treatment of locales
+echo ""
+echo "Activation of locales"
+echo "You must edit the file /etc/locale.gen, and uncomment the line:"
+echo "en_GB.UTF-8"
+echo "and after, run these commands:"
+echo "locale-gen"
+echo "systemctl restart apache2"
