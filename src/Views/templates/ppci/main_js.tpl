@@ -5,7 +5,7 @@
 <!-- Bootstrap -->
 <link rel="stylesheet" href="display/javascript/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="display/javascript/bootstrap/css/bootstrap-theme.min.css">
-<script src="display/javascript/bootstrap/js/bootstrap.min.js"></script>
+<script src="display/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <!--JqueryUI-->
 <script src="display/node_modules/jquery-ui/dist/jquery-ui.min.js"></script>

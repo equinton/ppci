@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "alpaca": "^1.5.27",
+    "bootstrap": "^3.4.1",
     "combobox": "^1.0.1",
     "datatables.net": "^1.10.22",
     "datatables.net-bs": "^1.10.22",
