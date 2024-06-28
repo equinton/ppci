@@ -9,5 +9,5 @@ values (
 ) 
 on conflict do nothing;
 alter table gacl.acllogin add column email varchar;
-update gacl.aclgroup set groupe = 'manage' where group = 'gestion';
+update gacl.aclgroup set groupe = 'manage' where groupe = 'gestion';
 update gacl.aclaco set aco = 'manage' where aco = 'gestion';
