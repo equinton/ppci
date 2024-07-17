@@ -1,6 +1,8 @@
 <?php
+
 namespace Ppci\Models;
 
+use App\Libraries\PpciExtends;
 use Ldap;
 use Ppci\Libraries\PpciException;
 
@@ -137,30 +139,25 @@ class Aclgroup extends PpciModel
             }
         }
         /**
-         * Récupération des groupes du serveur CAS
+         * Récupération des groupes des serveurs d'identification
          */
-        global $CAS_group_attribute, $CAS_get_groups;
-        if (isset($_SESSION["CAS_attributes"][$CAS_group_attribute]) && $CAS_get_groups == 1) {
-            $groupesCas = array();
-            if (
-                !is_array(
-                    $_SESSION["CAS_attributes"][$CAS_group_attribute]
-                ) &&
-                !empty($_SESSION["CAS_attributes"][$CAS_group_attribute]
-            )
-            ) {
-                $_SESSION["CAS_attributes"][$CAS_group_attribute] = array($_SESSION["CAS_attributes"][$CAS_group_attribute]);
+        if (isset($_SESSION["userAttributes"]) && !empty($_SESSION["userAttributes"]["groups"])) {
+            $groups = $_SESSION["userAttributes"]["groups"];
+            $realGroups = [];
+            if (!is_array($groups)) {
+                $groups = explode(",", $groups);
             }
-            foreach ($_SESSION["CAS_attributes"][$CAS_group_attribute] as $value) {
-                $search = $this->getGroupFromName($value);
+            foreach ($groups as $group) {
+                $search = $this->getGroupFromName($group);
                 foreach ($search as $value) {
                     if ($value["aclgroup_id"] > 0) {
-                        $groupesCas[] = $value;
+                        $realGroups[] = $value;
                     }
                 }
             }
-            $groupes = array_merge($groupes, $groupesCas);
+            $groupes = array_merge($groupes, $realGroups);
         }
+
         /*
          * Recuperation des groupes parents
          */
@@ -315,7 +312,7 @@ class Aclgroup extends PpciModel
      *
      * @see ObjetBDD::write()
      */
-    function write(array $data):int
+    function write(array $data): int
     {
         if ($data["aclgroup_id"] > 0 && $data["aclgroup_id"] == $data["aclgroup_id_parent"]) {
             throw new \Ppci\Libraries\PpciException(_("Un groupe ne peut être son propre parent"));
@@ -372,9 +369,8 @@ class Aclgroup extends PpciModel
                     /**
                      * Delete others records attached to the group
                      */
-                    if (function_exists("deleteChildrenForGroup")) {
-                        deleteChildrenForGroup($id);
-                    }
+                    $extends = new PpciExtends();
+                    $extends->deleteChildrenForGroup($id);
                     return parent::supprimer($id);
                 } catch (PpciException $e) {
                     $message = service('MessagePpci');;

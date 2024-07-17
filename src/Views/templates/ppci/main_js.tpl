@@ -261,13 +261,9 @@
             }
             $(".button-valid").on("keyup click", function () {
                 var module = $(this.form).find("input[name='moduleBase']").val();
-                if (module) {
-                    var action = $(this.form).find("input[name='action']").val();
-                    if (action) {
-                        $(this.form).attr("action", module + action);
-                    } else {
-                        $(this.form).attr("action", module);
-                    }
+                var action = $(this.form).find("input[name='action']").val();
+                if (module && action) {
+                    $(this.form).attr("action", module + action);
                     deleteLegacyFields($(this.form));
                 }
             });

@@ -26,17 +26,18 @@ class IdentificationConfig extends BaseConfig
      *
      * @var array
      */
-    public $ident_header_vars = array(
+    public $HEADER = array(
         "login" => "MELLON_MAIL",
-        "mail" => "MELLON_MAIL",
+        "email" => "MELLON_MAIL",
         "name" => "MELLON_cn",
         "firstname" => "MELLON_givenname",
         "lastname" => "MELLON_sn",
         "organization" => "MELLON_supannentiteaffectationprincipale",
         "organizationGranted" => array(),
         "createUser" => true,
-        "groupAttribute" => "MELLON_supannentiteaffectation",
-        "groupsGranted" => array()
+        "groups" => "MELLON_supannentiteaffectation",
+        "groupsGranted" => array(),
+        "getGroups" => 1,
     );
     /**
      * Organizations granted for Header connection
@@ -45,13 +46,6 @@ class IdentificationConfig extends BaseConfig
      * @var string
      */
     public $organizationsGranted = "";
-
-    /**
-     * Groups that users are automatically granted for Header connection
-     * Each group must be separated by a comma
-     * @var string
-     */
-    public $groupsGranted = "";
     
     /**
      * Address to disconnect from header connection
@@ -59,18 +53,6 @@ class IdentificationConfig extends BaseConfig
      * @var string
      */
     public $ident_header_logout_address = "";
-    /**
-     * Attributes used to populate the login. CAS identification
-     *
-     * @var array
-     */
-    public array $user_attributes = array(
-        "mail" => "mail",
-        "firstname" => "givenName",
-        "lastname" => "sn",
-        "name" => "cn",
-        "groups" => "supannentiteaffectation"
-    );
     /**
      * Parameters for LDAP identification
      *
@@ -103,13 +85,17 @@ class IdentificationConfig extends BaseConfig
      * @var array
      */
     public array $CAS = array(
-        "CAS_address" => "localhost",
-        "CAS_uri" => "/cas",
-        "CAS_port" => 443,
-        "CAS_debug" => false,
-        "CAS_CApath" => "",
-        "CAS_get_groups" => 1,
-        "CAS_group_attribute" => "supannEntiteAffectation",
+        "address" => "localhost",
+        "uri" => "/cas",
+        "port" => 443,
+        "debug" => false,
+        "CApath" => "",
+        "getGroups" => 1,
+        "groups" => "supannEntiteAffectation",
+        "email" => "mail",
+        "firstname" => "givenName",
+        "lastname" => "sn",
+        "name" => "cn",
     );
 
     public $identificationLogo = FCPATH."favicon.png";
@@ -119,12 +105,13 @@ class IdentificationConfig extends BaseConfig
         "provider" => 'https://id.provider.com',
         "clientId" => 'ClientIDHere',
         "clientSecret" => 'ClientSecretHere',
-        "nameAttribute" => "name",
-        "emailAttribute" => "email",
-        "groupAttribute" => "supannEntiteAffectationPrincipale",
-        "firstnameAttribute" => "given_name",
-        "lastnameAttribute" => "family_name",
-        "scopeGroup" => "affectation"
+        "name" => "name",
+        "email" => "email",
+        "groups" => "supannEntiteAffectationPrincipale",
+        "firstname" => "given_name",
+        "lastname" => "family_name",
+        "scopeGroup" => "affectation",
+        "getGroups" => 1
     ];
     /**
      * Number of tentatives of connection before block

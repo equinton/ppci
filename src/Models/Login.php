@@ -124,14 +124,14 @@ class Login
 
     function getLoginFromHeader()
     {
-        $ident_header_vars = $this->identificationConfig->ident_header_vars;
+        $headers = $this->identificationConfig->HEADER;
         if (!empty($this->identificationConfig->organizationGranted)) {
-            $ident_header_vars["organizationGranted"] = explode(",", $this->identificationConfig->organizationGranted);
+            $headers["organizationGranted"] = explode(",", $this->identificationConfig->organizationGranted);
         }
         if (!empty($this->identificationConfig->groupsGranted)) {
-            $ident_header_vars["groupsGranted"] = explode(",", $this->identificationConfig->groupsGranted);
+            $headers["groupsGranted"] = explode(",", $this->identificationConfig->groupsGranted);
         }
-        $userparams = $this->getUserParams($ident_header_vars, $_SERVER);
+        $userparams = $this->getUserParams($headers, $_SERVER);
         $login = $userparams["login"];
         $verify = false;
         if (!empty($login)) {
@@ -150,28 +150,25 @@ class Login
                 /**
                  * Create if authorized the login
                  */
-                if ($ident_header_vars["createUser"]) {
+                if ($headers["createUser"]) {
                     /**
                      * Verify if the structure is authorized
                      */
                     $createUser = true;
-                    if (!empty($ident_header_vars["organizationGranted"])) {
+                    if (!empty($headers["organizationGranted"])) {
                         $createUser = false;
-                        if (is_array($userparams[$ident_header_vars["organization"]])) {
-                            foreach ($userparams[$ident_header_vars["organization"]] as $org) {
-                                if (in_array($org, $ident_header_vars["organizationGranted"])) {
-                                    $createUser = true;
-                                    break;
-                                }
-                            }
-                        } else {
-                            if (in_array($userparams[$ident_header_vars["organization"]], $ident_header_vars["organizationGranted"])) {
+                        if (!is_array($userparams["organization"])) {
+                            $userparams["organization"] = explode(",", $userparams["organization"]);
+                        }
+                        foreach ($userparams["organization"] as $org) {
+                            if (in_array($org, $headers["organizationGranted"])) {
                                 $createUser = true;
+                                break;
                             }
                         }
                     }
                     if (!$createUser) {
-                        $this->log->setLog($login, "connection-header", "ko. The " . $userparams[$ident_header_vars["organization"]] . " is not authorized to connect to this application or the code of organization is not furnished");
+                        $this->log->setLog($login, "connection-header", "ko. The " . $userparams["organization"] . " is not authorized to connect to this application or the code of organization is not furnished");
                     }
                     if ($createUser) {
                         $dlogin = array(
@@ -179,19 +176,15 @@ class Login
                             "login" => $login,
                             "actif" => 0
                         );
-                        if (!empty($userparams["groupAttribute"]) && !empty($ident_header_vars["groupsGranted"])) {
-                            if (is_array($userparams["groupAttribute"])) {
-                                foreach ($userparams["groupAttribute"] as $group) {
-                                    if (in_array($group, $ident_header_vars["groupsGranted"])) {
-                                        $dlogin["actif"] = 1;
-                                        $verify = true;
-                                        break;
-                                    }
-                                }
-                            } else {
-                                if (in_array($userparams["groupAttribute"], $ident_header_vars["groupsGranted"])) {
+                        if (!empty($userparams["groups"]) && !empty($headers["groupsGranted"])) {
+                            if (!is_array($userparams["groups"])) {
+                                $userparams["groups"] = explode(",", $userparams["groups"]);
+                            }
+                            foreach ($userparams["groups"] as $group) {
+                                if (in_array($group, $headers["groupsGranted"])) {
                                     $dlogin["actif"] = 1;
                                     $verify = true;
+                                    break;
                                 }
                             }
                         }
@@ -210,7 +203,7 @@ class Login
                                     "login" => $login,
                                     "name" => $this->dacllogin["logindetail"],
                                     "appName" => $dbparam->params["APP_title"],
-                                    "organization" => $userparams[$ident_header_vars["organization"]],
+                                    "organization" => $userparams["organization"],
                                     "link" => $APPLI_address
                                 );
                                 $this->log->sendMailToAdmin($subject, $template, $data, "loginCreateByHeader", $login);
@@ -227,7 +220,10 @@ class Login
             throw new \Ppci\Libraries\PpciException(_("Aucun login n'a été fourni, identification refusée"));
         }
         if ($verify) {
+            $_SESSION["userAttributes"] = $userparams;
             return $login;
+        } else {
+            return "";
         }
     }
 
@@ -316,20 +312,20 @@ class Login
     public function getLoginCas()
     {
         $CAS = $this->identificationConfig->CAS;
-        if ($CAS["CAS_debug"]) {
+        if ($CAS["debug"]) {
             \phpCAS::setDebug(WRITEPATH . "logs/cas.log");
             \phpCAS::setVerbose(true);
         }
         \phpCAS::client(
             CAS_VERSION_2_0,
-            $CAS["CAS_address"],
-            $CAS["CAS_port"],
-            $CAS["CAS_uri"],
+            $CAS["address"],
+            $CAS["port"],
+            $CAS["uri"],
             "https://" . $_SERVER["HTTP_HOST"],
             false
         );
-        if (!empty($CAS["CAS_CApath"])) {
-            \phpCAS::setCasServerCACert($CAS["CAS_CApath"]);
+        if (!empty($CAS["CApath"])) {
+            \phpCAS::setCasServerCACert($CAS["CApath"]);
         } else {
             \phpCAS::setNoCasServerValidation();
         }
@@ -338,13 +334,15 @@ class Login
         $user = \phpCAS::getUser();
         $_SESSION["login"] = $user;
         if (!empty($user)) {
-            $_SESSION["CAS_attributes"] = \phpCAS::getAttributes();
-            if (!is_array($_SESSION["CAS_attributes"])) {
-                $_SESSION["CAS_attributes"] = array($_SESSION["CAS_attributes"]);
+            $attributes = \phpCAS::getAttributes();
+            if (!is_array($attributes)) {
+                $attributes = array($attributes);
             }
-            if (!empty($_SESSION["CAS_attributes"])) {
-                $params = $this->getUserParams($CAS["user_attributes"], $_SESSION["CAS_attributes"]);
+            if (!empty($attributes)) {
+                $attrs = ["name", "email", "group", "firstname", "lastname"];
+                $params = $this->getUserParams($attrs, $attributes);
                 $this->updateLoginFromIdentification($user, $params);
+                $_SESSION["userAttributes"] = $params;
             }
         }
         return $user;
@@ -441,7 +439,7 @@ class Login
         // Note : cela détruira la session et pas seulement les données de session !
         if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), "", [
-                'expires'=>time() - 42000,
+                'expires' => time() - 42000,
                 'secure'   => true,
                 'httponly' => true,
             ]);
@@ -454,7 +452,7 @@ class Login
                 "tokenIdentity",
                 "",
                 [
-                    'expires'=>time() - 42000,
+                    'expires' => time() - 42000,
                     'secure'   => true,
                     'httponly' => true,
                 ]
@@ -493,6 +491,11 @@ class Login
             $oidc->signOut($_SESSION["oidcIdToken"], $redirect);
         }
     }
+    /**
+     * Identification with OIDC server
+     *
+     * @return string
+     */
     function getOidc(): string
     {
         $oidc = new OpenIDConnectClient(
@@ -511,28 +514,17 @@ class Login
          * login
          */
         $login = $oidc->getVerifiedClaims('sub');
-        $email = $oidc->requestUserInfo('email');
         /**
          * Get attributes
          */
         $userInfo = $oidc->requestUserInfo();
         $keys = ["name", "email", "firstname", "lastname", "group"];
-        $attributes = [
-            $this->identificationConfig->OIDC["nameAttribute"],
-            $this->identificationConfig->OIDC["emailAttribute"],
-            $this->identificationConfig->OIDC["firstnameAttribute"],
-            $this->identificationConfig->OIDC["lastnameAttribute"],
-            $this->identificationConfig->OIDC["groupAttribute"]
-        ];
         $oidcAttrs = [];
-        foreach ($attributes as $attr) {
-            $oidcAttrs[$attr] = $userInfo->$attr;
+        foreach ($keys as $k) {
+            $attr = $this->identificationConfig->OIDC[$k];
+            $oidcAttrs[$k] = $userInfo->$attr;
         }
-        /*printA("Attributs demandés");
-        printA($attributes);
-        printA("Attributs récupérés");
-        printA($oidcAttrs);
-        die;*/
+        $_SESSION["userAttributes"] = $oidcAttrs;
         /**
          * Used for disconnect
          */
@@ -540,12 +532,7 @@ class Login
         /**
          * Upgrade or create acllogin
          */
-        $aclparams = [];
-        for ($i = 0; $i < count($keys); $i++) {
-            $aclparams[$keys[$i]] = $oidcAttrs[$attributes[$i]];
-        }
-        $aclparams["mail"] = $email;
-        $this->updateLoginFromIdentification($login, $aclparams);
+        $this->updateLoginFromIdentification($login, $oidcAttrs);
         return $login;
     }
 }

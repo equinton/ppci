@@ -158,11 +158,28 @@ class PpciModel extends Model
             }
         }
         $isInsert = false;
-        if ($row[$this->primaryKey] == 0) {
-            $isInsert = true;
+        if ($this->useAutoIncrement) {
+            if ($row[$this->primaryKey] == 0) {
+                $isInsert = true;
+            } else {
+                $id = $row[$this->primaryKey];
+            }
         } else {
-            $id = $row[$this->primaryKey];
+            /**
+             * Search for existent record
+             */
+            $sql = "select " . $this->qi . $this->primaryKey . $this->qi . " as id 
+            from ". $this->qi . $this->table . $this->qi .
+            " where " . $this->qi . $this->primaryKey . $this->qi . " = :id:";
+            $param["id"] = $row[$this->primaryKey];
+            $exists = $this->readParam($sql, $param);
+            if (!$exists["id"] > 0) {
+                $isInsert = true;
+            } else {
+                $id = $row[$this->primaryKey];
+            }
         }
+
         /**
          * Disable the deletion of primary key if not autoincrement in insert context
          */
@@ -303,7 +320,7 @@ class PpciModel extends Model
             $sql = "insert into $tablename (" . $k1 . "," . $k2 . ") values ( :id:, :key2:)";
             foreach ($create as $key2) {
                 $param["key2"] = $key2;
-                $this->executeQuery($sql, $param,true);
+                $this->executeQuery($sql, $param, true);
             }
         }
     }
@@ -336,7 +353,7 @@ class PpciModel extends Model
     /**
      * Delete an item
      *
-     * @param [type] $id
+     * @param int $id
      * @param boolean $purge
      * @return void
      */
@@ -439,7 +456,7 @@ class PpciModel extends Model
     {
         $data = array();
         foreach ($this->defaultValues as $k => $v) {
-            if ($v != 0 && is_callable(array($this, $v))) {
+            if ($v != 0 && method_exists($this, $v)) {
                 $data[$k] = $this->{$v}();
             } else {
                 $data[$k] = $v;

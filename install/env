@@ -73,13 +73,13 @@ Ppci\Config\IdentificationConfig.identificationMode = BDD
 
 # List of parameters to use SAML identification with apache2-mellon
 #
-# Ppci\Config\IdentificationConfig.ident_header_vars.radical = 'MELLON'
-# Ppci\Config\IdentificationConfig.ident_header_vars.login = 'MELLON_MAIL'
-# Ppci\Config\IdentificationConfig.ident_header_vars.mail = 'MELLON_MAIL'
-# Ppci\Config\IdentificationConfig.ident_header_vars.cn = 'MELLON_CN'
-# Ppci\Config\IdentificationConfig.ident_header_vars.organization = 'MELLON_SHACHOMEORGANIZATION'
-# Ppci\Config\IdentificationConfig.ident_header_vars.createUser = true
-# Ppci\Config\IdentificationConfig.ident_header_logout_address = 
+# Ppci\Config\IdentificationConfig.HEADER.login = 'MELLON_MAIL'
+# Ppci\Config\IdentificationConfig.HEADER.email = 'MELLON_MAIL'
+# Ppci\Config\IdentificationConfig.HEADER.name = 'MELLON_CN'
+# Ppci\Config\IdentificationConfig.HEADER.firstname = 'MELLON_GIVENNAME'
+# Ppci\Config\IdentificationConfig.HEADER.lastname = 'MELLON_SN'
+# Ppci\Config\IdentificationConfig.HEADER.organization = 'MELLON_SHACHOMEORGANIZATION'
+
 
 # Organizations granted for Header connection
 # each organization must be separated by a comma
@@ -91,18 +91,27 @@ Ppci\Config\IdentificationConfig.identificationMode = BDD
 
 
 # CAS parameters
-# Ppci\Config\IdentificationConfig.CAS.CAS_address = "address.without.https"
-# Ppci\Config\IdentificationConfig.CAS.CAS_uri = "/cas"
-# Ppci\Config\IdentificationConfig.CAS.CAS_Port = 443
-# Ppci\Config\IdentificationConfig.CAS.CAS_debug = false
-# Ppci\Config\IdentificationConfig.CAS.CAS_get_groups = 1
-# Ppci\Config\IdentificationConfig.CAS.CAS_group_attribute = "supannEntiteAffectation"
+# Ppci\Config\IdentificationConfig.CAS.address = "address.without.https"
+# Ppci\Config\IdentificationConfig.CAS.uri = "/cas"
+# Ppci\Config\IdentificationConfig.CAS.Port = 443
+# Ppci\Config\IdentificationConfig.CAS.debug = false
+# Ppci\Config\IdentificationConfig.CAS.getGroups = 1
+# Ppci\Config\IdentificationConfig.CAS.groups = "supannEntiteAffectation"
+# Ppci\Config\IdentificationConfig.CAS.email = 'mail'
+# Ppci\Config\IdentificationConfig.CAS.name = 'cn'
+# Ppci\Config\IdentificationConfig.CAS.firstname = 'givenName'
+# Ppci\Config\IdentificationConfig.CAS.lastname = 'sn'
 
 # OIDC parameters
 # Ppci\Config\IdentificationConfig.OIDC.name = INRAE
 # Ppci\Config\IdentificationConfig.OIDC.provider =
 # Ppci\Config\IdentificationConfig.OIDC.clientId =
 # Ppci\Config\IdentificationConfig.OIDC.clientSecret =
+# Ppci\Config\IdentificationConfig.OIDC.email = 'email'
+# Ppci\Config\IdentificationConfig.OIDC.name = 'name'
+# Ppci\Config\IdentificationConfig.OIDC.firstname = 'given_name'
+# Ppci\Config\IdentificationConfig.OIDC.lastname = 'family_name'
+# Ppci\Config\IdentificationConfig.OIDC.groups = "supannEntiteAffectationPrincipale"
 
 # Logo displayed on the button for CAS or OIDC
 Ppci\Config\IdentificationConfig.identificationLogo = "${FRONT_DIR}/favicon.png"
