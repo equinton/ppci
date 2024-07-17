@@ -6,7 +6,9 @@ cp -Rf $PPCI/app/Config/* app/Config/
 cp -Rf $PPCI/app/Libraries/* app/Libraries/
 cp -Rf $PPCI/app/Language/* app/Language/
 cp -Rf $PPCI/public/* public/
+cp -Rf $PPCI/install .
 cp -f $PPCI/.gitignore .
+cp -f $PPCI/upgradedb.sh .
 mkdir app/Views/templates
 cp -Rf $PPCI/app/Views/templates/* app/Views/templates/
 echo "add javascript components"
