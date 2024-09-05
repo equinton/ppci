@@ -92,7 +92,7 @@ class PpciLibrary
     function dataDelete($id, bool $isPartOfTransaction = false)
     {
         try {
-            $ret = $this->dataClass->delete($id);
+            $ret = $this->dataClass->supprimer($id);
             if (!$isPartOfTransaction) {
                 $this->message->set(_("Suppression effectuée"));
             }
