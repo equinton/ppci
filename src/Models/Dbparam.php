@@ -37,7 +37,7 @@ class DbParam extends PpciModel
                 "type"=>0
             )
         );
-        $this->id_auto = 0;
+        $this->useAutoIncrement = false;
         parent::__construct();
         $this->readParams();
     }
