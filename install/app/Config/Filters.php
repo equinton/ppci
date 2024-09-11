@@ -32,7 +32,7 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'rights'        => RightFilter::class,
-        'legacyRoute'   => LegacyRouteFilter::class,
+        /*'legacyRoute'   => LegacyRouteFilter::class,*/
         'startcall'     => StartCallFilter::class,
         'dbversioncheck'=> DbversioncheckFilter::class,
         "admin"         => AdminFilter::class
@@ -47,16 +47,21 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf',
+            'csrf'=>['except'=>[
+                'apiv1sampleWrite',
+                'apiv1sampleDelete',
+                'apiv1movementWrite',
+                'apiv1sampleList'
+            ]],
             'invalidchars',
-            'legacyRoute',
+            /*'legacyRoute',*/
             'startcall',
-            'dbversioncheck',
+            'dbversioncheck'=>['except' => 'CollectionsGenerateMail'],
             'rights',
             'admin'
         ],
         'after' => [
-            //'toolbar',
+            'toolbar',
             // 'honeypot',
              'secureheaders',
         ],
