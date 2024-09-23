@@ -116,7 +116,7 @@ class PpciModel extends Model
             return $query;
         }
     }
-    protected function executeSQL(string $sql, array $data = null, $onlyExecute = false)
+    public function executeSQL(string $sql, array $data = null, $onlyExecute = false)
     {
         return $this->executeQuery($sql, $data, $onlyExecute);
     }
@@ -201,7 +201,7 @@ class PpciModel extends Model
              * Remove all empty fields
              */
             foreach ($row as $k => $v) {
-                if (empty($v)) {
+                if (strlen($v) == 0) {
                     unset($row[$k]);
                 }
             }
