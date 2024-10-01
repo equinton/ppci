@@ -8,23 +8,23 @@ class Template extends PpciLibrary
     function __construct()
     {
         parent::__construct();
-        $this->dataClass = new \Ppci\Models\PpciModel();
-        $keyName = "id";
-        if (isset($_REQUEST[$keyName])) {
-            $this->id = $_REQUEST[$keyName];
+        $this->dataclass = new \Ppci\Models\PpciModel();
+        $this->keyName = "id";
+        if (isset($_REQUEST[$this->keyName])) {
+            $this->id = $_REQUEST[$this->keyName];
         }
     }
     function list()
     {
         $vue = service("Smarty");
-        $vue->set($this->dataClass->getList(), "data");
+        $vue->set($this->dataclass->getList(), "data");
         $vue->set("templateList.tpl", "corps");
         return $vue->send();
     }
     function display()
     {
         $vue = service("Smarty");
-        $vue->set($this->dataClass->lire($this->id), "data");
+        $vue->set($this->dataclass->lire($this->id), "data");
         $vue->set("templateDisplay.tpl", "corps");
     }
     function change()

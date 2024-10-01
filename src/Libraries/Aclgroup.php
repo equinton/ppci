@@ -6,23 +6,23 @@ class Aclgroup extends PpciLibrary
     function __construct()
     {
         parent::__construct();
-        $this->dataClass = new \Ppci\Models\Aclgroup();
-        $keyName = "aclgroup_id";
-        if (isset($_REQUEST[$keyName])) {
-            $this->id = $_REQUEST[$keyName];
+        $this->dataclass = new \Ppci\Models\Aclgroup();
+        $this->keyName = "aclgroup_id";
+        if (isset($_REQUEST[$this->keyName])) {
+            $this->id = $_REQUEST[$this->keyName];
         }
         
     }
     function list()
     {
         $vue = service("Smarty");
-        $vue->set($this->dataClass->getGroups(), "data");
+        $vue->set($this->dataclass->getGroups(), "data");
 		$vue->set("ppci/droits/groupList.tpl", "corps");
         return $vue->send();
     }
     function display() {
         $vue = service("Smarty");
-        $vue->set($this->dataClass->lire($this->id), "data");
+        $vue->set($this->dataclass->lire($this->id), "data");
 		$vue->set("ppci/droits/groupDisplay.tpl", "corps");
     }
     function change()
@@ -35,7 +35,7 @@ class Aclgroup extends PpciLibrary
 		/**
 		 * Get the list of the groups
 		 */
-		$vue->set($this->dataClass->getGroups(), "groups");
+		$vue->set($this->dataclass->getGroups(), "groups");
         return $vue->send();
     }
     function write()
