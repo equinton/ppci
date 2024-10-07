@@ -280,7 +280,8 @@ class LoginGestion extends PpciModel
                 if (openssl_public_encrypt($token, $crypted, $this->getKey("pub"), OPENSSL_PKCS1_OAEP_PADDING)) {
                     $data["tokenws"] = base64_encode($crypted);
                 } else {
-                    throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le chiffrement du jeton d'identification"));
+                    $this->message->set(_("Une erreur est survenue pendant le chiffrement du jeton d'identification, qui n'a pas pu être mis à jour"), true);
+                    unset ($data["tokenws"]);
                 }
             } else {
                 /**
@@ -306,7 +307,7 @@ class LoginGestion extends PpciModel
                     $this->mail = new Mail($this->paramApp->MAIL_param);
                 }
                 $APPLI_address = "https://" . $_SERVER["HTTP_HOST"];
-                $subject = $_SESSION["dbparams"]["APPLI_title"] . " - " . _("Activation de votre compte");
+                $subject = $_SESSION["dbparams"]["APP_title"] . " - " . _("Activation de votre compte");
                 $this->mail->SendMailSmarty(
                     $data["mail"],
                     $subject,
@@ -314,7 +315,7 @@ class LoginGestion extends PpciModel
                     array(
                         "prenom" => $data["prenom"],
                         "nom" => $data["nom"],
-                        "applicationName" => $_SESSION["dbparams"]["APPLI_title"],
+                        "applicationName" => $_SESSION["dbparams"]["APP_title"],
                         "APPLI_address" => $APPLI_address
                     )
                 );
@@ -334,7 +335,8 @@ class LoginGestion extends PpciModel
             if (openssl_private_decrypt(base64_decode($data["tokenws"]), $decrypted, $this->getKey("priv"), OPENSSL_PKCS1_OAEP_PADDING)) {
                 $data["tokenws"] = $decrypted;
             } else {
-                throw new \Ppci\Libraries\PpciException(_("Une erreur est survenue pendant le déchiffrement du jeton d'identification"));
+                $this->message->set(_("Une erreur est survenue pendant le déchiffrement du jeton d'identification"),true);
+                $data["tokenws"] = "";
             }
         }
         return $data;
