@@ -5,7 +5,7 @@ To facilitate web application maintenance, PrototypePHP was ported to CodeIgnite
 - web page display, which remains the responsibility of the Smarty template engine
 - identification and rights management, where PPCI is much richer in terms of functionalities, such as support for multiple identification mechanisms (database, LDAP, CAS, OIDC, TOTP, etc.) or rights management.
 
-The component is distributed under MIT licence.
+The component is distributed under BSD licence.
 
 To install it, visit these pages:
 
