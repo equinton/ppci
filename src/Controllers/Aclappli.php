@@ -1,32 +1,36 @@
 <?php
+
 namespace Ppci\Controllers;
 
 use Psr\Log\LoggerInterface;
 use Ppci\Controllers\PpciController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Ppci\Libraries\Template as Lib;// Change to the real library
+use Ppci\Libraries\Aclappli as Lib;
 
-
-class Template extends PpciController
+class Aclappli extends PpciController
 {
-    protected Lib $lib; 
+    protected Lib $lib;
+
     public function initController(
         RequestInterface $request,
         ResponseInterface $response,
         LoggerInterface $logger
     ) {
         parent::initController($request, $response, $logger);
-        $this->lib = new Lib(); 
+        $this->lib = new Lib;
     }
 
-    function list() {
+    function list()
+    {
         return $this->lib->list();
     }
-    function display() {
+    function display()
+    {
         return $this->lib->display();
     }
-    function change() {
+    function change()
+    {
         return $this->lib->change();
     }
     function write()
@@ -40,7 +44,7 @@ class Template extends PpciController
     function delete()
     {
         if ($this->lib->delete()) {
-            return $this->list();
+            return $this->display();
         } else {
             return $this->change();
         }

@@ -1,38 +1,38 @@
 <?php
+
 namespace Ppci\Controllers;
 
 use Psr\Log\LoggerInterface;
 use Ppci\Controllers\PpciController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Ppci\Libraries\Template as Lib;// Change to the real library
+use Ppci\Libraries\Aclgroup as Lib;
 
-
-class Template extends PpciController
+class Aclgroup extends PpciController
 {
-    protected Lib $lib; 
+    protected Lib $lib;
+
     public function initController(
         RequestInterface $request,
         ResponseInterface $response,
         LoggerInterface $logger
     ) {
         parent::initController($request, $response, $logger);
-        $this->lib = new Lib(); 
+        $this->lib = new Lib;
     }
 
-    function list() {
+    function list()
+    {
         return $this->lib->list();
     }
-    function display() {
-        return $this->lib->display();
-    }
-    function change() {
+    function change()
+    {
         return $this->lib->change();
     }
     function write()
     {
         if ($this->lib->write()) {
-            return $this->display();
+            return $this->list();
         } else {
             return $this->change();
         }
