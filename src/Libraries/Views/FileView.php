@@ -3,7 +3,7 @@ namespace Ppci\Libraries\Views;
 
 class FileView extends DefaultView
 {
-    private $param = array(
+    public $param = array(
         "filename" => "export.txt", /* nom du fichier tel qu'il apparaitra dans le navigateur */
         "disposition" => "attachment", /* attachment : le fichier est telecharge, inline : le fichier est affiche */
         "content_type" => "", /* type mime */
