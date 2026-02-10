@@ -20,7 +20,7 @@
     "require": {
 		"php": "^8.1",
         "jumbojett/openid-connect-php": "^1.0",
-        "smarty/smarty": "^5.7",
+        "smarty/smarty": "^4.0",
         "smarty-gettext/smarty-gettext": "^1.7",
         "apereo/phpcas": "^1.6",
         "spomky-labs/otphp": "~10.0",
